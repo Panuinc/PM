@@ -5,12 +5,12 @@ import React from "react";
 
 export default function UISignin() {
   return (
-    <div className="flex flex-row items-center justify-center w-full h-full p-2 gap-2 border-2 border-dark">
-      <div className="flex flex-col items-center justify-center w-full xl:w-4/12 h-full p-2 gap-2 border-2 border-dark">
-        <div className="flex items-center justify-center w-full h-fit p-2 gap-2 border-2 border-dark text-2xl">
+    <div className="flex flex-row items-center justify-center w-full h-full p-2 gap-2 border-2 border-default">
+      <div className="flex flex-col items-center justify-center w-full xl:w-4/12 h-full p-2 gap-2 border-2 border-default shadow">
+        <div className="flex items-center justify-center w-full h-fit p-2 gap-2 border-2 border-default text-2xl">
           maintannance
         </div>
-        <div className="flex items-center justify-center w-full h-fit p-2 gap-2 border-2 border-dark">
+        <div className="flex items-center justify-center w-full h-fit p-2 gap-2 border-2 border-default">
           <Input
             name="email"
             type="email"
@@ -25,7 +25,7 @@ export default function UISignin() {
             //   onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div className="flex items-center justify-center w-full h-fit p-2 gap-2 border-2 border-dark">
+        <div className="flex items-center justify-center w-full h-fit p-2 gap-2 border-2 border-default">
           <Input
             name="password"
             type="password"
@@ -40,24 +40,25 @@ export default function UISignin() {
             //   onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div className="flex items-center justify-center w-6/12 h-fit p-2 gap-2 border-2 border-dark">
+        <div className="flex items-center justify-center w-6/12 h-fit p-2 gap-2 border-2 border-default">
           <Button
             color="default"
             variant="faded"
             radius="none"
-            className="w-full p-2 gap-2 border-2 border-dark"
+            className="w-full p-2 gap-2 border-2 border-default"
           >
             test
           </Button>
         </div>
       </div>
-      <div className="xl:flex hidden flex-col items-center justify-center w-full xl:w-8/12 h-full p-2 gap-2 border-2 border-dark">
-        <div className="flex items-center justify-center w-full h-full p-2 gap-2 border-2 border-dark">
+      <div className="xl:flex hidden flex-col items-center justify-center w-full xl:w-8/12 h-full p-2 gap-2 border-2 border-default">
+        <div className="flex items-center justify-center w-full h-full p-2 gap-2 border-2 border-default">
           <Image
-            src="/images/images.jpg"
+            src="/images/images.png"
             alt="images"
             width={500}
             height={500}
+            className="object-cover"
             priority
           />
         </div>
