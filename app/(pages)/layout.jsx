@@ -1,5 +1,6 @@
 "use client";
 
+import { Avatar, Tooltip } from "@heroui/react";
 import {
   Bell,
   BookOpen,
@@ -15,7 +16,6 @@ import {
   LayoutDashboard,
   Wrench,
 } from "lucide-react";
-import { Avatar, Tooltip } from "@heroui/react";
 
 function MainMenu({ icons, content }) {
   return (
