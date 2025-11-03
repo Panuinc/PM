@@ -5,12 +5,12 @@ import React from "react";
 
 export default function UISignin() {
   return (
-    <div className="flex flex-row items-center justify-center w-full h-full p-2 gap-2 border-2 border-default">
-      <div className="flex flex-col items-center justify-center w-full xl:w-4/12 h-full p-2 gap-2 border-2 border-default shadow">
-        <div className="flex items-center justify-center w-full h-fit p-2 gap-2 border-2 border-default text-2xl">
+    <div className="flex flex-row items-center justify-center w-full h-full gap-2">
+      <div className="flex flex-col items-center justify-center w-full xl:w-4/12 h-full p-2 gap-2">
+        <div className="flex items-center justify-center w-full h-fit p-2 gap-2 text-2xl">
           maintannance
         </div>
-        <div className="flex items-center justify-center w-full h-fit p-2 gap-2 border-2 border-default">
+        <div className="flex items-center justify-center w-full h-fit p-2 gap-2">
           <Input
             name="email"
             type="email"
@@ -25,7 +25,7 @@ export default function UISignin() {
             //   onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div className="flex items-center justify-center w-full h-fit p-2 gap-2 border-2 border-default">
+        <div className="flex items-center justify-center w-full h-fit p-2 gap-2">
           <Input
             name="password"
             type="password"
@@ -40,19 +40,19 @@ export default function UISignin() {
             //   onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div className="flex items-center justify-center w-6/12 h-fit p-2 gap-2 border-2 border-default">
+        <div className="flex items-center justify-center w-6/12 h-fit p-2 gap-2">
           <Button
             color="default"
             variant="faded"
             radius="none"
-            className="w-full p-2 gap-2 border-2 border-default"
+            className="w-full p-2 gap-2"
           >
-            test
+            Signin
           </Button>
         </div>
       </div>
-      <div className="xl:flex hidden flex-col items-center justify-center w-full xl:w-8/12 h-full p-2 gap-2 border-2 border-default">
-        <div className="flex items-center justify-center w-full h-full p-2 gap-2 border-2 border-default">
+      <div className="xl:flex hidden flex-col items-center justify-center w-full xl:w-8/12 h-full p-14 gap-2 border-l-2 border-default">
+        <div className="flex items-center justify-center w-full h-full p- gap-2">
           <Image
             src="/images/images.png"
             alt="images"
