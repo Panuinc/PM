@@ -7,5 +7,16 @@ body {
 }
 
 .border-default-200 {
-  border: 2px solid #202020;
+  border: 2px solid #C0C0BE;
+}
+
+svg.lucide {
+  width: 24px;
+  height: 24px;
+  stroke-width: 1px;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
 }
