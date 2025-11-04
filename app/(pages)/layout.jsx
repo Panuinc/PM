@@ -140,7 +140,7 @@ export default function PagesLayout({ children }) {
       >
         <div className="flex flex-col items-center justify-between min-w-fit h-full p-2 gap-2 border-2 border-default overflow-auto">
           <div
-            className="lg:hidden flex items-center justify-center w-full h-fit p-3 gap-2 border-2 border-default border-dashed cursor-pointer hover:text-white hover:bg-dark"
+            className="lg:hidden flex items-center justify-center w-full h-fit p-3 gap-2 border-2 border-default border-dashed cursor-pointer"
             onClick={toggleMobileMenu}
           >
             <X />
