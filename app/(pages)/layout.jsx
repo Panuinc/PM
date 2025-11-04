@@ -100,7 +100,7 @@ export default function PagesLayout({ children }) {
       icon: <HardDrive />,
       label: "Mc Master",
       subMenus: [
-        { text: "Machine List", path: "/mc-master/list" },
+        { text: "Machine List", path: "/mcMaster" },
         { text: "Add Machine", path: "/mc-master/add" },
         { text: "Edit Machine", path: "/mc-master/edit" },
         { text: "Delete Machine", path: "/mc-master/delete" },
