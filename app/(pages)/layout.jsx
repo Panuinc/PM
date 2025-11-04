@@ -294,8 +294,8 @@ export default function PagesLayout({ children }) {
             <Avatar
               size="sm"
               isBordered
-              color="primary"
-              src="https://i.pravatar.cc/150?u=a04258114e29026302d"
+              color="default"
+              src="/images/images.png"
             />
           </div>
         </div>
