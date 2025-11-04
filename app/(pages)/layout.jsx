@@ -266,7 +266,7 @@ export default function PagesLayout({ children }) {
               />
             </div>
             <div className="flex items-center justify-start w-full h-fit p-3 gap-2 border-t-2 border-dark cursor-pointer">
-              <Key /> Logout
+              <Key className="hover:scale-150" /> Logout
             </div>
           </div>
         )}

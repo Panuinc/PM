@@ -8,7 +8,7 @@ export default function UISignin() {
     <div className="flex flex-row items-center justify-center w-full h-full gap-2">
       <div className="flex flex-col items-center justify-center w-full xl:w-4/12 h-full p-2 gap-2">
         <div className="flex items-center justify-center w-full h-fit p-2 gap-2 text-2xl">
-          Maintannance
+          Maintenance
         </div>
         <div className="flex items-center justify-center w-full h-fit p-2 gap-2">
           <Input
