@@ -23,8 +23,8 @@ import { useState } from "react";
 function MainMenu({ icons, content, onClick, isActive, isMobile }) {
   const menuContent = (
     <div
-      className={`flex items-center justify-center w-full aspect-square p-3 gap-2 border-2 border-default border-dashed cursor-pointer hover:text-white hover:bg-dark ${
-        isActive ? "bg-dark text-white" : ""
+      className={`flex items-center justify-center w-full aspect-square p-3 gap-2 cursor-pointer rounded-xl hover:text-dark hover:bg-white ${
+        isActive ? "bg-white text-dark" : "text-white"
       }`}
       onClick={onClick}
     >
@@ -38,11 +38,11 @@ function MainMenu({ icons, content, onClick, isActive, isMobile }) {
 
   return (
     <Tooltip
-      color="default"
+      color="none"
       content={content}
       placement="right"
-      showArrow={true}
-      className="px-4 py-2 font-semibold"
+      offset={20}
+      className="px-4 py-2 font-semibold bg-dark text-white"
     >
       {menuContent}
     </Tooltip>
@@ -52,7 +52,7 @@ function MainMenu({ icons, content, onClick, isActive, isMobile }) {
 function SubMenu({ text, onClick }) {
   return (
     <div
-      className="flex items-center justify-start w-full h-fit p-3 gap-2 border-2 border-default border-dashed hover:text-white hover:bg-dark cursor-pointer"
+      className="flex items-center justify-start w-full h-fit p-3 gap-2 cursor-pointer rounded-xl hover:text-white hover:bg-dark"
       onClick={onClick}
     >
       {text}
@@ -121,7 +121,7 @@ export default function PagesLayout({ children }) {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row items-center justify-center w-full h-full gap-2">
+    <div className="flex flex-col lg:flex-row items-center justify-center w-full h-full">
       {isMobileMenuOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-40 lg:hidden"
@@ -134,7 +134,7 @@ export default function PagesLayout({ children }) {
           fixed lg:relative inset-y-0 left-0 z-50
           flex flex-row items-center justify-center
           ${isCollapsed ? "w-fit" : "w-[300px] lg:w-[500px]"}
-          h-full gap-2 bg-white transition-all duration-300
+          h-full bg-white transition-all duration-300
           ${
             isMobileMenuOpen
               ? "translate-x-0"
@@ -142,15 +142,15 @@ export default function PagesLayout({ children }) {
           }
         `}
       >
-        <div className="flex flex-col items-center justify-between min-w-fit h-full p-2 gap-2 border-2 border-default overflow-auto">
+        <div className="flex flex-col items-center justify-between min-w-fit h-full p-2 gap-2 border-1 border-dark bg-dark overflow-auto">
           <div
-            className="lg:hidden flex items-center justify-center w-full h-fit p-3 gap-2 border-2 border-default border-dashed cursor-pointer"
+            className="lg:hidden flex items-center justify-center w-full h-fit p-3 gap-2 cursor-pointer rounded-xl text-white hover:text-dark hover:bg-white"
             onClick={toggleMobileMenu}
           >
             <X />
           </div>
 
-          <div className="flex items-center justify-center w-full h-fit p-3 gap-2 border-2 border-default border-dashed">
+          <div className="flex items-center justify-center w-full h-fit p-3 gap-2 border-b-2 border-default text-white hover:text-primary">
             <Cat />
           </div>
 
@@ -166,7 +166,7 @@ export default function PagesLayout({ children }) {
           ))}
 
           <div
-            className="flex items-center justify-center w-full h-fit p-3 gap-2 border-2 border-default border-dashed cursor-pointer hover:text-white hover:bg-dark"
+            className="flex items-center justify-center w-full h-fit p-3 gap-2 border-t-2 border-default cursor-pointer text-white hover:text-primary"
             onClick={toggleSidebar}
           >
             {isCollapsed ? <ChevronRight /> : <ChevronLeft />}
@@ -174,11 +174,11 @@ export default function PagesLayout({ children }) {
         </div>
 
         {!isCollapsed && (
-          <div className="flex flex-col items-center justify-start w-full h-full p-2 gap-2 border-2 border-default overflow-auto">
-            <div className="flex items-center justify-start w-full h-fit p-3 gap-2 border-2 border-default border-dashed">
+          <div className="flex flex-col items-center justify-start w-full h-full py-2 gap-2 border-1 border-dark overflow-auto">
+            <div className="flex items-center justify-start w-full h-fit p-3 gap-2 border-b-2 border-dark">
               <Factory /> {menuData[selectedMenu].label}
             </div>
-            <div className="flex flex-col items-center justify-start w-full h-full gap-2 overflow-auto">
+            <div className="flex flex-col items-center justify-start w-full h-full p-2 gap-2 overflow-auto">
               {menuData[selectedMenu].subMenus.map((subMenu, index) => (
                 <SubMenu
                   key={index}
@@ -187,32 +187,32 @@ export default function PagesLayout({ children }) {
                 />
               ))}
             </div>
-            <div className="flex items-center justify-start w-full h-fit p-3 gap-2 border-2 border-default border-dashed hover:text-white hover:bg-dark cursor-pointer">
+            <div className="flex items-center justify-start w-full h-fit p-3 gap-2 border-t-2 border-dark hover:text-primary cursor-pointer">
               <Key /> Logout
             </div>
           </div>
         )}
       </div>
 
-      <div className="flex flex-col items-center justify-center w-full h-full gap-2">
-        <div className="flex flex-row items-center justify-between w-full h-fit p-2 gap-2 border-2 border-default">
+      <div className="flex flex-col items-center justify-center w-full h-full">
+        <div className="flex flex-row items-center justify-between w-full h-fit p-1 gap-2 border-1 border-dark">
           <button
-            className="flex lg:hidden items-center justify-center aspect-square h-full p-2 gap-2 border-2 border-default border-dashed cursor-pointer hover:text-white hover:bg-dark"
+            className="flex lg:hidden items-center justify-center aspect-square h-full p-2 gap-2 cursor-pointer hover:text-white hover:bg-dark"
             onClick={toggleMobileMenu}
           >
             <Menu />
           </button>
-          <div className="flex items-center justify-center w-full xl:w-fit h-full p-2 gap-2 border-2 border-default border-dashed whitespace-nowrap">
+          <div className="flex items-center justify-center w-full xl:w-fit h-full p-2 gap-2 whitespace-nowrap">
             <span className="hidden sm:inline">Preventive Maintenance</span>
             <span className="sm:hidden"> </span>
           </div>
-          <div className="hidden md:flex items-center justify-center w-full h-full p-2 gap-2 border-2 border-default border-dashed">
+          <div className="hidden md:flex items-center justify-center w-full h-full p-2 gap-2">
             {" "}
           </div>
-          <div className="flex items-center justify-center aspect-square h-full p-2 gap-2 border-2 border-default border-dashed hover:text-white hover:bg-dark">
+          <div className="flex items-center justify-center aspect-square h-full p-2 gap-2 hover:scale-105">
             <Bell />
           </div>
-          <div className="flex items-center justify-center w-fit h-full p-2 gap-2 border-2 border-default border-dashed">
+          <div className="flex items-center justify-center w-fit h-full p-2 gap-2">
             <Avatar
               size="sm"
               isBordered
@@ -221,7 +221,7 @@ export default function PagesLayout({ children }) {
             />
           </div>
         </div>
-        <div className="flex flex-col items-center justify-start w-full h-full p-2 gap-2 border-2 border-default overflow-auto">
+        <div className="flex flex-col items-center justify-start w-full h-full p-2 gap-2 border-1 border-dark overflow-auto">
           {children}
         </div>
       </div>
