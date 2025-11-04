@@ -8,7 +8,6 @@ import {
   Cat,
   ChevronLeft,
   Clipboard,
-  Construction,
   Factory,
   HardDrive,
   History,
@@ -21,11 +20,11 @@ function MainMenu({ icons, content }) {
   return (
     <>
       <Tooltip
-        color="primary"
+        color="default"
         content={content}
         placement="right"
         showArrow={true}
-        className="px-4 py-2 text-white font-semibold"
+        className="px-4 py-2 font-semibold"
       >
         <div className="flex items-center justify-center w-full aspect-square p-3 gap-2 border-2 border-default border-dashed hover:text-white hover:bg-dark">
           {icons}
