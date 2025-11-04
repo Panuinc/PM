@@ -41,7 +41,11 @@ export default function UISignin() {
           />
         </div>
         <div className="flex items-center justify-center w-6/12 h-fit p-2 gap-2">
-          <Button color="primary" radius="none" className="w-full p-2 gap-2">
+          <Button
+            color="primary"
+            radius="none"
+            className="w-full p-2 gap-2 text-white font-semibold"
+          >
             Signin
           </Button>
         </div>

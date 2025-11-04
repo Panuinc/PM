@@ -207,7 +207,7 @@ export default function PagesLayout({ children }) {
             <X />
           </div>
 
-          <div className="flex items-center justify-center w-full h-fit p-3 gap-2 border-b-2 border-default text-white hover:text-primary">
+          <div className="flex items-center justify-center w-full h-fit p-3 gap-2 border-b-2 border-default text-white">
             <Cat />
           </div>
 
@@ -223,7 +223,7 @@ export default function PagesLayout({ children }) {
           ))}
 
           <div
-            className="flex items-center justify-center w-full h-fit p-3 gap-2 border-t-2 border-default cursor-pointer text-white hover:text-primary"
+            className="flex items-center justify-center w-full h-fit p-3 gap-2 border-t-2 border-default cursor-pointer text-white"
             onClick={toggleSidebar}
           >
             {isCollapsed ? <ChevronRight /> : <ChevronLeft />}
@@ -245,7 +245,7 @@ export default function PagesLayout({ children }) {
                 />
               ))}
             </div>
-            <div className="flex items-center justify-start w-full h-fit p-3 gap-2 border-t-2 border-dark hover:text-primary cursor-pointer">
+            <div className="flex items-center justify-start w-full h-fit p-3 gap-2 border-t-2 border-dark hover:text-primary  cursor-pointer">
               <Key /> Logout
             </div>
           </div>

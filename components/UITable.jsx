@@ -96,9 +96,8 @@ export default function DataTable({
         case "status":
           return (
             <Chip
-              className="capitalize"
+              className="capitalize text-white"
               color={statusColorMap[item.status] || "default"}
-              variant="flat"
             >
               {cellValue}
             </Chip>
@@ -179,9 +178,10 @@ export default function DataTable({
             <Dropdown>
               <DropdownTrigger>
                 <Button
+                  color="default"
                   endContent={<ChevronDown />}
-                  variant="flat"
                   radius="none"
+                  className="w-28 p-2 gap-2 text-dark font-semibold"
                 >
                   Status
                 </Button>
@@ -208,6 +208,7 @@ export default function DataTable({
               color="primary"
               onPress={onAddNew}
               radius="none"
+              className="w-28 p-2 gap-2 text-white font-semibold"
             >
               Add New
             </Button>
@@ -253,7 +254,7 @@ export default function DataTable({
             isCompact
             showControls
             showShadow
-            color="primary"
+            color="warning"
             radius="none"
             page={page}
             total={pages}
@@ -266,7 +267,6 @@ export default function DataTable({
 
   return (
     <Table
-    //   isHeaderSticky
       aria-label="Data table with sorting and pagination"
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
