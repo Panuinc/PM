@@ -10,6 +10,10 @@ body {
   border: 2px solid #292521;
 }
 
+.bg-content1 {
+  background-color: #f4f4f2;
+}
+
 svg.lucide {
   width: 24px;
   height: 24px;
@@ -19,4 +23,8 @@ svg.lucide {
 ::-webkit-scrollbar {
   width: 0px;
   height: 0px;
+}
+
+table {
+  box-shadow: none;
 }
