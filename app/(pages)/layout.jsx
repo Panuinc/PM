@@ -18,6 +18,7 @@ import {
   Wrench,
   X,
 } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 function MainMenu({ icons, content, onClick, isActive, isMobile }) {
@@ -49,10 +50,15 @@ function MainMenu({ icons, content, onClick, isActive, isMobile }) {
   );
 }
 
-function SubMenu({ text, onClick }) {
+function SubMenu({ text, onClick, path }) {
+  const pathname = usePathname();
+  const isActive = pathname === path;
+
   return (
     <div
-      className="flex items-center justify-start w-full h-fit p-3 gap-2 cursor-pointer rounded-xl hover:text-white hover:bg-dark"
+      className={`flex items-center justify-start w-full h-fit p-3 gap-2 cursor-pointer rounded-xl transition-colors ${
+        isActive ? "bg-dark text-white" : "hover:text-white hover:bg-dark"
+      }`}
       onClick={onClick}
     >
       {text}
@@ -64,6 +70,7 @@ export default function PagesLayout({ children }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState("dashboard");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const router = useRouter();
 
   const toggleSidebar = () => setIsCollapsed(!isCollapsed);
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -73,50 +80,81 @@ export default function PagesLayout({ children }) {
     setSelectedMenu(menuKey);
   };
 
-  const handleSubMenuClick = () => {
+  const handleSubMenuClick = (path) => {
     setIsMobileMenuOpen(false);
+    router.push(path);
   };
 
   const menuData = {
     dashboard: {
       icon: <LayoutDashboard />,
       label: "Dashboard",
-      subMenus: ["Overview", "Analytics", "Reports", "Settings"],
+      subMenus: [
+        { text: "Overview", path: "/home" },
+        { text: "Analytics", path: "/dashboard/analytics" },
+        { text: "Reports", path: "/dashboard/reports" },
+        { text: "Settings", path: "/dashboard/settings" },
+      ],
     },
     mcMaster: {
       icon: <HardDrive />,
       label: "Mc Master",
       subMenus: [
-        "Machine List",
-        "Add Machine",
-        "Edit Machine",
-        "Delete Machine",
+        { text: "Machine List", path: "/mc-master/list" },
+        { text: "Add Machine", path: "/mc-master/add" },
+        { text: "Edit Machine", path: "/mc-master/edit" },
+        { text: "Delete Machine", path: "/mc-master/delete" },
       ],
     },
     pmPlan: {
       icon: <Calendar />,
       label: "PM Plan",
-      subMenus: ["Daily Plan", "Weekly Plan", "Monthly Plan", "Yearly Plan"],
+      subMenus: [
+        { text: "Daily Plan", path: "/pm-plan/daily" },
+        { text: "Weekly Plan", path: "/pm-plan/weekly" },
+        { text: "Monthly Plan", path: "/pm-plan/monthly" },
+        { text: "Yearly Plan", path: "/pm-plan/yearly" },
+      ],
     },
     mcRepairLog: {
       icon: <Wrench />,
       label: "Mc Repair Log",
-      subMenus: ["View Logs", "Add Log", "Edit Log", "Export Logs"],
+      subMenus: [
+        { text: "View Logs", path: "/mc-repair-log/view" },
+        { text: "Add Log", path: "/mc-repair-log/add" },
+        { text: "Edit Log", path: "/mc-repair-log/edit" },
+        { text: "Export Logs", path: "/mc-repair-log/export" },
+      ],
     },
     pmRecord: {
       icon: <BookOpen />,
       label: "PM Record",
-      subMenus: ["All Records", "Pending", "Completed", "Archived"],
+      subMenus: [
+        { text: "All Records", path: "/pm-record/all" },
+        { text: "Pending", path: "/pm-record/pending" },
+        { text: "Completed", path: "/pm-record/completed" },
+        { text: "Archived", path: "/pm-record/archived" },
+      ],
     },
     mcJobOrder: {
       icon: <Clipboard />,
       label: "Mc Job Order",
-      subMenus: ["New Order", "In Progress", "Completed", "Cancelled"],
+      subMenus: [
+        { text: "New Order", path: "/mc-job-order/new" },
+        { text: "In Progress", path: "/mc-job-order/in-progress" },
+        { text: "Completed", path: "/mc-job-order/completed" },
+        { text: "Cancelled", path: "/mc-job-order/cancelled" },
+      ],
     },
     mcHistory: {
       icon: <History />,
       label: "Mc History",
-      subMenus: ["View History", "Search", "Filter", "Export"],
+      subMenus: [
+        { text: "View History", path: "/mc-history/view" },
+        { text: "Search", path: "/mc-history/search" },
+        { text: "Filter", path: "/mc-history/filter" },
+        { text: "Export", path: "/mc-history/export" },
+      ],
     },
   };
 
@@ -182,8 +220,9 @@ export default function PagesLayout({ children }) {
               {menuData[selectedMenu].subMenus.map((subMenu, index) => (
                 <SubMenu
                   key={index}
-                  text={subMenu}
-                  onClick={handleSubMenuClick}
+                  text={subMenu.text}
+                  path={subMenu.path}
+                  onClick={() => handleSubMenuClick(subMenu.path)}
                 />
               ))}
             </div>
