@@ -266,7 +266,7 @@ export default function DataTable({
 
   return (
     <Table
-      isHeaderSticky
+    //   isHeaderSticky
       aria-label="Data table with sorting and pagination"
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
@@ -284,6 +284,7 @@ export default function DataTable({
             key={column.uid}
             align={column.uid === "actions" ? "center" : "start"}
             allowsSorting={column.sortable}
+            className="bg-dark text-white p-4 gap-2"
           >
             {column.name}
           </TableColumn>
@@ -293,7 +294,7 @@ export default function DataTable({
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => (
-              <TableCell className="border-b-1 border-default">
+              <TableCell className="border-b-1 border-dark">
                 {renderCell(item, columnKey)}
               </TableCell>
             )}
