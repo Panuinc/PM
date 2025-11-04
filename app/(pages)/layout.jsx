@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { Avatar, Tooltip } from "@heroui/react";
@@ -19,7 +20,7 @@ import {
   X,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function MainMenu({ icons, content, onClick, isActive, isMobile }) {
   const menuContent = (
@@ -71,26 +72,17 @@ export default function PagesLayout({ children }) {
   const [selectedMenu, setSelectedMenu] = useState("dashboard");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   const toggleSidebar = () => setIsCollapsed(!isCollapsed);
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
-
-  const handleMenuClick = (menuKey) => {
-    if (isCollapsed) setIsCollapsed(false);
-    setSelectedMenu(menuKey);
-  };
-
-  const handleSubMenuClick = (path) => {
-    setIsMobileMenuOpen(false);
-    router.push(path);
-  };
 
   const menuData = {
     dashboard: {
       icon: <LayoutDashboard />,
       label: "Dashboard",
       subMenus: [
-        { text: "Overview", path: "/home" },
+        { text: "Overview", path: "/dashboard" },
         { text: "Analytics", path: "/dashboard/analytics" },
         { text: "Reports", path: "/dashboard/reports" },
         { text: "Settings", path: "/dashboard/settings" },
@@ -156,6 +148,33 @@ export default function PagesLayout({ children }) {
         { text: "Export", path: "/mc-history/export" },
       ],
     },
+  };
+
+  useEffect(() => {
+    const currentPath = pathname;
+
+    for (const [menuKey, menuValue] of Object.entries(menuData)) {
+      const hasMatchingPath = menuValue.subMenus.some(
+        (subMenu) =>
+          currentPath === subMenu.path ||
+          currentPath.startsWith(subMenu.path + "/")
+      );
+
+      if (hasMatchingPath) {
+        setSelectedMenu(menuKey);
+        break;
+      }
+    }
+  }, [pathname]);
+
+  const handleMenuClick = (menuKey) => {
+    if (isCollapsed) setIsCollapsed(false);
+    setSelectedMenu(menuKey);
+  };
+
+  const handleSubMenuClick = (path) => {
+    setIsMobileMenuOpen(false);
+    router.push(path);
   };
 
   return (
