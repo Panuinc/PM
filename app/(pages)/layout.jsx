@@ -134,9 +134,7 @@ export default function PagesLayout({ children }) {
           fixed lg:relative inset-y-0 left-0 z-50
           flex flex-row items-center justify-center
           ${isCollapsed ? "w-fit" : "w-[300px] lg:w-[500px]"}
-          h-full p-2 gap-2 border-2 border-default border-dashed 
-          bg-white
-          transition-all duration-300
+          h-full gap-2 bg-white transition-all duration-300
           ${
             isMobileMenuOpen
               ? "translate-x-0"
@@ -196,7 +194,7 @@ export default function PagesLayout({ children }) {
         )}
       </div>
 
-      <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2 border-2 border-default border-dashed">
+      <div className="flex flex-col items-center justify-center w-full h-full gap-2">
         <div className="flex flex-row items-center justify-between w-full h-fit p-2 gap-2 border-2 border-default">
           <button
             className="flex lg:hidden items-center justify-center aspect-square h-full p-2 gap-2 border-2 border-default border-dashed cursor-pointer hover:text-white hover:bg-dark"
