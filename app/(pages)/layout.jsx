@@ -199,12 +199,9 @@ export default function PagesLayout({ children }) {
             <span className="sm:hidden"> </span>
           </div>
           <div className="hidden md:flex items-center justify-center w-full h-full p-2 gap-2 border-2 border-default border-dashed">
-            Header
+            {" "}
           </div>
-          <div className="hidden lg:flex items-center justify-center w-full h-full p-2 gap-2 border-2 border-default border-dashed">
-            Header
-          </div>
-          <div className="flex items-center justify-center aspect-square h-full p-2 gap-2 border-2 border-default border-dashed">
+          <div className="flex items-center justify-center aspect-square h-full p-2 gap-2 border-2 border-default border-dashed hover:text-white hover:bg-dark">
             <Bell />
           </div>
           <div className="flex items-center justify-center w-fit h-full p-2 gap-2 border-2 border-default border-dashed">
