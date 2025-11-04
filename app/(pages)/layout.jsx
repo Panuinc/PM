@@ -16,9 +16,11 @@ import {
   Key,
   LayoutDashboard,
   Menu,
+  Settings,
   Wrench,
   X,
 } from "lucide-react";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
@@ -148,6 +150,15 @@ export default function PagesLayout({ children }) {
         { text: "Export", path: "/mc-history/export" },
       ],
     },
+    setting: {
+      icon: <Settings />,
+      label: "Settings",
+      subMenus: [
+        { text: "Setting", path: "/setting" },
+        { text: "Account", path: "/setting/account" },
+        { text: "Change Password", path: "/setting/changePassword" },
+      ],
+    },
   };
 
   useEffect(() => {
@@ -245,7 +256,16 @@ export default function PagesLayout({ children }) {
                 />
               ))}
             </div>
-            <div className="flex items-center justify-start w-full h-fit p-3 gap-2 border-t-2 border-dark hover:text-primary  cursor-pointer">
+            <div className="xl:flex hidden items-center justify-center w-fit h-fit p-2 gap-2">
+              <Image
+                src="/images/images.png"
+                alt="pic"
+                width={125}
+                height={125}
+                className="object-cover"
+              />
+            </div>
+            <div className="flex items-center justify-start w-full h-fit p-3 gap-2 border-t-2 border-dark cursor-pointer">
               <Key /> Logout
             </div>
           </div>
@@ -255,7 +275,7 @@ export default function PagesLayout({ children }) {
       <div className="flex flex-col items-center justify-center w-full h-full">
         <div className="flex flex-row items-center justify-between w-full h-fit p-1 gap-2 border-1 border-dark">
           <button
-            className="flex lg:hidden items-center justify-center aspect-square h-full p-2 gap-2 cursor-pointer hover:text-white hover:bg-dark"
+            className="flex lg:hidden items-center justify-center aspect-square h-full p-2 gap-2 cursor-pointer"
             onClick={toggleMobileMenu}
           >
             <Menu />
