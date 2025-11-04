@@ -8,7 +8,7 @@ export default function UISignin() {
     <div className="flex flex-row items-center justify-center w-full h-full gap-2">
       <div className="flex flex-col items-center justify-center w-full xl:w-4/12 h-full p-2 gap-2">
         <div className="flex items-center justify-center w-full h-fit p-2 gap-2 text-2xl">
-          maintannance
+          Maintannance
         </div>
         <div className="flex items-center justify-center w-full h-fit p-2 gap-2">
           <Input
@@ -41,17 +41,12 @@ export default function UISignin() {
           />
         </div>
         <div className="flex items-center justify-center w-6/12 h-fit p-2 gap-2">
-          <Button
-            color="default"
-            variant="faded"
-            radius="none"
-            className="w-full p-2 gap-2"
-          >
+          <Button color="primary" radius="none" className="w-full p-2 gap-2">
             Signin
           </Button>
         </div>
       </div>
-      <div className="xl:flex hidden flex-col items-center justify-center w-full xl:w-8/12 h-full p-14 gap-2 border-l-2 border-default">
+      <div className="xl:flex hidden flex-col items-center justify-center w-full xl:w-8/12 h-full p-14 gap-2 border-l-2 border-dark">
         <div className="flex items-center justify-center w-full h-full p- gap-2">
           <Image
             src="/images/images.png"

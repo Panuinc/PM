@@ -24,7 +24,7 @@ import { useState } from "react";
 function MainMenu({ icons, content, onClick, isActive, isMobile }) {
   const menuContent = (
     <div
-      className={`flex items-center justify-center w-full aspect-square p-3 gap-2 cursor-pointer rounded-xl hover:text-dark hover:bg-white ${
+      className={`flex items-center justify-center w-full aspect-square p-3 gap-2 cursor-pointer hover:text-dark hover:bg-white ${
         isActive ? "bg-white text-dark" : "text-white"
       }`}
       onClick={onClick}
@@ -56,7 +56,7 @@ function SubMenu({ text, onClick, path }) {
 
   return (
     <div
-      className={`flex items-center justify-start w-full h-fit p-3 gap-2 cursor-pointer rounded-xl transition-colors ${
+      className={`flex items-center justify-start w-full h-fit p-3 gap-2 cursor-pointer transition-colors ${
         isActive ? "bg-dark text-white" : "hover:text-white hover:bg-dark"
       }`}
       onClick={onClick}
@@ -182,7 +182,7 @@ export default function PagesLayout({ children }) {
       >
         <div className="flex flex-col items-center justify-between min-w-fit h-full p-2 gap-2 border-1 border-dark bg-dark overflow-auto">
           <div
-            className="lg:hidden flex items-center justify-center w-full h-fit p-3 gap-2 cursor-pointer rounded-xl text-white hover:text-dark hover:bg-white"
+            className="lg:hidden flex items-center justify-center w-full h-fit p-3 gap-2 cursor-pointer text-white hover:text-dark hover:bg-white"
             onClick={toggleMobileMenu}
           >
             <X />
