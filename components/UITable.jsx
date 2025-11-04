@@ -105,7 +105,7 @@ export default function DataTable({
           );
         case "actions":
           return (
-            <div className="relative flex justify-end items-center gap-2">
+            <div className="flex items-center justify-center w-full h-full p-2 gap-2">
               <Dropdown>
                 <DropdownTrigger>
                   <Button isIconOnly variant="light">
@@ -163,11 +163,10 @@ export default function DataTable({
 
   const topContent = React.useMemo(() => {
     return (
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
+      <div className="flex flex-col items-center justify-center w-full h-fit gap-2">
+        <div className="flex flex-row items-center justify-center w-full h-full gap-2">
           <Input
             isClearable
-            className="w-full sm:max-w-[44%]"
             placeholder={searchPlaceholder}
             startContent={<Search />}
             value={filterValue}
@@ -176,54 +175,52 @@ export default function DataTable({
             radius="none"
             variant="faded"
           />
-          <div className="flex gap-3">
-            {statusOptions.length > 0 && (
-              <Dropdown>
-                <DropdownTrigger className="hidden sm:flex">
-                  <Button
-                    endContent={<ChevronDown />}
-                    variant="flat"
-                    radius="none"
-                  >
-                    Status
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu
-                  disallowEmptySelection
-                  aria-label="Status Filter"
-                  closeOnSelect={false}
-                  selectedKeys={statusFilter}
-                  selectionMode="multiple"
-                  onSelectionChange={setStatusFilter}
+          {statusOptions.length > 0 && (
+            <Dropdown>
+              <DropdownTrigger>
+                <Button
+                  endContent={<ChevronDown />}
+                  variant="flat"
+                  radius="none"
                 >
-                  {statusOptions.map((status) => (
-                    <DropdownItem key={status.uid} className="capitalize">
-                      {capitalize(status.name)}
-                    </DropdownItem>
-                  ))}
-                </DropdownMenu>
-              </Dropdown>
-            )}
-            {onAddNew && (
-              <Button
-                startContent={<Plus />}
-                color="primary"
-                onPress={onAddNew}
-                radius="none"
+                  Status
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu
+                disallowEmptySelection
+                aria-label="Status Filter"
+                closeOnSelect={false}
+                selectedKeys={statusFilter}
+                selectionMode="multiple"
+                onSelectionChange={setStatusFilter}
               >
-                Add New
-              </Button>
-            )}
-          </div>
+                {statusOptions.map((status) => (
+                  <DropdownItem key={status.uid} className="capitalize">
+                    {capitalize(status.name)}
+                  </DropdownItem>
+                ))}
+              </DropdownMenu>
+            </Dropdown>
+          )}
+          {onAddNew && (
+            <Button
+              startContent={<Plus />}
+              color="primary"
+              onPress={onAddNew}
+              radius="none"
+            >
+              Add New
+            </Button>
+          )}
         </div>
-        <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">
+        <div className="flex flex-row items-center justify-between w-full h-full gap-2">
+          <div className="flex items-center justify-between w-full h-full p-2 gap-2">
             Total {data.length} {itemName}
-          </span>
-          <label className="flex items-center text-default-400 text-small">
+          </div>
+          <label className="flex items-center justify-between w-fit h-full p-2 gap-2 whitespace-nowrap">
             Rows per page:
             <select
-              className="bg-transparent outline-none text-default-400 text-small ml-2"
+              className="flex items-center justify-between w-fit h-full p-2 gap-2"
               onChange={onRowsPerPageChange}
               defaultValue="5"
             >
@@ -250,23 +247,26 @@ export default function DataTable({
 
   const bottomContent = React.useMemo(() => {
     return (
-      <div className="py-2 px-2 flex justify-between items-center">
-        <span className="w-[30%] text-small text-default-400">
+      <div className="flex flex-row items-center justify-between w-full h-fit gap-2">
+        <div className="flex items-center justify-start w-full h-full p-2 gap-2">
           {selectedKeys === "all"
             ? "All items selected"
             : `${selectedKeys.size} of ${filteredItems.length} selected`}
-        </span>
-        <Pagination
-          isCompact
-          showControls
-          showShadow
-          color="primary"
-          radius="none"
-          page={page}
-          total={pages}
-          onChange={setPage}
-        />
-        <div className="hidden sm:flex w-[30%] justify-end gap-2">
+        </div>
+        <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+          <Pagination
+            isCompact
+            showControls
+            showShadow
+            color="primary"
+            radius="none"
+            page={page}
+            total={pages}
+            onChange={setPage}
+          />
+        </div>
+
+        <div className="xl:flex hidden items-center justify-end w-full h-full p-2 gap-2">
           <Button
             isDisabled={pages === 1}
             variant="flat"
