@@ -49,9 +49,12 @@ function MainMenu({ icons, content, onClick, isActive, isMobile }) {
   );
 }
 
-function SubMenu({ text }) {
+function SubMenu({ text, onClick }) {
   return (
-    <div className="flex items-center justify-start w-full h-fit p-3 gap-2 border-2 border-default border-dashed hover:text-white hover:bg-dark cursor-pointer">
+    <div
+      className="flex items-center justify-start w-full h-fit p-3 gap-2 border-2 border-default border-dashed hover:text-white hover:bg-dark cursor-pointer"
+      onClick={onClick}
+    >
       {text}
     </div>
   );
@@ -68,6 +71,9 @@ export default function PagesLayout({ children }) {
   const handleMenuClick = (menuKey) => {
     if (isCollapsed) setIsCollapsed(false);
     setSelectedMenu(menuKey);
+  };
+
+  const handleSubMenuClick = () => {
     setIsMobileMenuOpen(false);
   };
 
@@ -176,7 +182,11 @@ export default function PagesLayout({ children }) {
             </div>
             <div className="flex flex-col items-center justify-start w-full h-full gap-2 overflow-auto">
               {menuData[selectedMenu].subMenus.map((subMenu, index) => (
-                <SubMenu key={index} text={subMenu} />
+                <SubMenu
+                  key={index}
+                  text={subMenu}
+                  onClick={handleSubMenuClick}
+                />
               ))}
             </div>
             <div className="flex items-center justify-start w-full h-fit p-3 gap-2 border-2 border-default border-dashed hover:text-white hover:bg-dark cursor-pointer">
