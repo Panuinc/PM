@@ -82,7 +82,7 @@ export default function PagesLayout({ children }) {
       icon: <LayoutDashboard />,
       label: "Dashboard",
       subMenus: [
-        { text: "Overview", path: "/dashboard" },
+        { text: "Home", path: "/home" },
         { text: "Analytics", path: "/dashboard/analytics" },
         { text: "Reports", path: "/dashboard/reports" },
         { text: "Settings", path: "/dashboard/settings" },
