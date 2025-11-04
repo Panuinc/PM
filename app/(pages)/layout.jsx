@@ -129,6 +129,7 @@ export default function PagesLayout({ children }) {
           flex flex-row items-center justify-center
           ${isCollapsed ? "w-fit" : "w-[300px] lg:w-[500px]"}
           h-full p-2 gap-2 border-2 border-default border-dashed 
+          bg-white
           transition-all duration-300
           ${
             isMobileMenuOpen
