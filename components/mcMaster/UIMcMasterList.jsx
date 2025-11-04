@@ -123,7 +123,7 @@ export default function UIMcMasterList({ headerTopic }) {
           4
         </div>
       </div>
-      <div className="flex flex-col items-center justify-start w-full h-fit gap-2">
+      <div className="flex flex-col items-center justify-start w-full h-fit gap-2 overflow-auto">
         {loading ? (
           <div className="flex items-center justify-center w-full h-full p-2 gap-2">
             <UILoading />
