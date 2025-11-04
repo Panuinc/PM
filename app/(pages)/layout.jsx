@@ -38,11 +38,11 @@ function MainMenu({ icons, content, onClick, isActive, isMobile }) {
 
   return (
     <Tooltip
-      color="none"
+      color="primary"
       content={content}
       placement="right"
-      offset={20}
-      className="px-4 py-2 font-semibold bg-dark text-white"
+      offset={15}
+      className="px-4 py-2 font-semibold text-white"
     >
       {menuContent}
     </Tooltip>
