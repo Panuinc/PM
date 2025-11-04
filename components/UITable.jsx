@@ -247,13 +247,8 @@ export default function DataTable({
 
   const bottomContent = React.useMemo(() => {
     return (
-      <div className="flex flex-row items-center justify-between w-full h-fit gap-2">
-        <div className="flex items-center justify-start w-full h-full p-2 gap-2">
-          {selectedKeys === "all"
-            ? "All items selected"
-            : `${selectedKeys.size} of ${filteredItems.length} selected`}
-        </div>
-        <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+      <div className="flex flex-row items-center justify-center w-full h-fit gap-2">
+        <div className="flex items-center justify-end w-full h-full p-2 gap-2">
           <Pagination
             isCompact
             showControls
@@ -265,35 +260,9 @@ export default function DataTable({
             onChange={setPage}
           />
         </div>
-
-        <div className="xl:flex hidden items-center justify-end w-full h-full p-2 gap-2">
-          <Button
-            isDisabled={pages === 1}
-            variant="flat"
-            onPress={onPreviousPage}
-            radius="none"
-          >
-            Previous
-          </Button>
-          <Button
-            isDisabled={pages === 1}
-            variant="flat"
-            onPress={onNextPage}
-            radius="none"
-          >
-            Next
-          </Button>
-        </div>
       </div>
     );
-  }, [
-    selectedKeys,
-    filteredItems.length,
-    page,
-    pages,
-    onNextPage,
-    onPreviousPage,
-  ]);
+  }, [page, pages]);
 
   return (
     <Table
@@ -302,12 +271,9 @@ export default function DataTable({
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       classNames={{ wrapper: "max-h-[500px]" }}
-      selectedKeys={selectedKeys}
-      selectionMode="multiple"
       sortDescriptor={sortDescriptor}
       topContent={topContent}
       topContentPlacement="outside"
-      onSelectionChange={setSelectedKeys}
       onSortChange={setSortDescriptor}
       radius="none"
       shadow="none"
