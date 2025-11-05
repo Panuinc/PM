@@ -18,17 +18,18 @@ enum Status {
 }
 
 model User {
-  userId        String     @id @default(cuid())
-  userFirstName String
-  userLastName  String
-  userEmail     String     @unique
-  userPassword  String
-  userRoleId    String
-  userStatus    UserStatus @default(Enable)
-  userCreateBy  String
-  userCreateAt  DateTime
-  userUpdateBy  String?
-  userUpdateAt  DateTime?
+  userId           String     @id @default(cuid())
+  userFirstName    String
+  userLastName     String
+  userEmail        String     @unique
+  userPassword     String
+  userRoleId       String
+  userDepartmentId String
+  userStatus       UserStatus @default(Enable)
+  userCreateBy     String
+  userCreateAt     DateTime
+  userUpdateBy     String?
+  userUpdateAt     DateTime?
 
   createdBy    User?  @relation("UserCreatedBy", fields: [userCreateBy], references: [userId])
   createdUsers User[] @relation("UserCreatedBy")
@@ -36,23 +37,35 @@ model User {
   updatedBy    User?  @relation("UserUpdatedBy", fields: [userUpdateBy], references: [userId])
   updatedUsers User[] @relation("UserUpdatedBy")
 
-  role Role @relation(fields: [userRoleId], references: [roleId])
+  role       Role       @relation(fields: [userRoleId], references: [roleId])
+  department Department @relation(fields: [userDepartmentId], references: [departmentId])
 
   rolesCreated Role[] @relation("RoleCreatedBy")
   rolesUpdated Role[] @relation("RoleUpdatedBy")
+
+  departmentsCreated Department[] @relation("DepartmentCreatedBy")
+  departmentsUpdated Department[] @relation("DepartmentUpdatedBy")
 
   @@index([userCreateBy])
   @@index([userUpdateBy])
 }
 
 model Department {
-  departmentId String @id @default(cuid)
-  departmentName String 
-  departmentRoleId String
+  departmentId       String    @id @default(cuid())
+  departmentName     String
+  departmentRoleId   String
   departmentCreateBy String
   departmentCreateAt DateTime
   departmentUpdateBy String?
   departmentUpdateAt DateTime?
+
+  users User[]
+
+  createdBy User? @relation("DepartmentCreatedBy", fields: [departmentCreateBy], references: [userId])
+  updatedBy User? @relation("DepartmentUpdatedBy", fields: [departmentUpdateBy], references: [userId])
+
+  @@index([departmentCreateBy])
+  @@index([departmentUpdateBy])
 }
 
 model Role {
