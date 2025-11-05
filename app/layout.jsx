@@ -1,5 +1,5 @@
 import { Gruppo } from "next/font/google";
-import "./globals.css";
+import "@/style/globals.css"
 import { Providers } from "./providers";
 import { SessionProviders } from "./sessionProvider";
 
