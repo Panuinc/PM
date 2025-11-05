@@ -1,6 +1,7 @@
 import { Gruppo } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+import { SessionProviders } from "./sessionProvider";
 
 const gruppo = Gruppo({
   subsets: ["latin"],
@@ -16,22 +17,22 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <SessionProviders>
+      <html lang="en">
         <head>
           <link rel="icon" href="/images/images.png" />
         </head>
-      <body
-        className={`${gruppo.variable} font-[var(--gruppo)] antialiased`}
-      >
-        <Providers>
-          <div
-            className="flex items-center justify-center w-full h-screen gap-2 bg-white text-dark
+        <body className={`${gruppo.variable} font-[var(--gruppo)] antialiased`}>
+          <Providers>
+            <div
+              className="flex items-center justify-center w-full h-screen gap-2 bg-white text-dark
            text-sm font-semibold"
-          >
-            {children}
-          </div>
-        </Providers>
-      </body>
-    </html>
+            >
+              {children}
+            </div>
+          </Providers>
+        </body>
+      </html>
+    </SessionProviders>
   );
 }

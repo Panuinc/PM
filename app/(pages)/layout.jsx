@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
-import { Avatar, Tooltip } from "@heroui/react";
+import { Avatar, Button, Tooltip } from "@heroui/react";
 import {
   Bell,
   BookOpen,
@@ -23,12 +23,16 @@ import {
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { signOut, useSession } from "next-auth/react";
+import UILoading from "@/components/UILoading";
 
 function MainMenu({ icons, content, onClick, isActive, isMobile }) {
   const menuContent = (
     <div
       className={`flex items-center justify-center w-full aspect-square p-3 gap-2 cursor-pointer ${
-        isActive ? "border-1 border-white text-white" : "hover:border-1 border-white text-white"
+        isActive
+          ? "border-1 border-white text-white"
+          : "hover:border-1 border-white text-white"
       }`}
       onClick={onClick}
     >
@@ -70,6 +74,7 @@ function SubMenu({ text, onClick, path }) {
 }
 
 export default function PagesLayout({ children }) {
+  const { data: session, status } = useSession();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState("dashboard");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -187,6 +192,13 @@ export default function PagesLayout({ children }) {
     setIsMobileMenuOpen(false);
     router.push(path);
   };
+  useEffect(() => {
+    if (status === "unauthenticated") router.push("/");
+  }, [status, router]);
+
+  if (status === "loading" || !session) {
+    return <UILoading />;
+  }
 
   return (
     <div className="flex flex-col lg:flex-row items-center justify-center w-full h-full">
@@ -265,7 +277,10 @@ export default function PagesLayout({ children }) {
                 className="object-cover"
               />
             </div>
-            <div className="flex items-center justify-start w-full h-fit p-3 gap-2 border-t-2 border-dark cursor-pointer">
+            <div
+              onClick={() => signOut({ callbackUrl: "/" })}
+              className="flex items-center justify-start w-full h-fit p-3 gap-2 border-t-2 border-dark cursor-pointer"
+            >
               <Key className="hover:scale-150" /> Logout
             </div>
           </div>

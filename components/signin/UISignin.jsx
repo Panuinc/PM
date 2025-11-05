@@ -3,7 +3,13 @@ import { Button, Input } from "@heroui/react";
 import Image from "next/image";
 import React from "react";
 
-export default function UISignin() {
+export default function UISignin({
+  email,
+  password,
+  setEmail,
+  setPassword,
+  handleLogin,
+}) {
   return (
     <div className="flex flex-row items-center justify-center w-full h-full gap-2">
       <div className="flex flex-col items-center justify-center w-full xl:w-4/12 h-full p-2 gap-2">
@@ -21,8 +27,8 @@ export default function UISignin() {
             labelPlacement="outside"
             placeholder="Enter your email"
             isRequired
-            //   value={email}
-            //   onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div className="flex items-center justify-center w-full h-fit p-2 gap-2">
@@ -36,12 +42,14 @@ export default function UISignin() {
             labelPlacement="outside"
             placeholder="Enter your password"
             isRequired
-            //   value={email}
-            //   onChange={(e) => setEmail(e.target.value)}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         <div className="flex items-center justify-center w-6/12 h-fit p-2 gap-2">
           <Button
+            onPress={handleLogin}
+            type="submit"
             color="primary"
             radius="none"
             className="w-full p-2 gap-2 text-white font-semibold"

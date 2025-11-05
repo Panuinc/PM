@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserStatus {
+  Enable
+  Disable
+}
+
+enum Status {
+  Enable
+  Disable
+}
+
+model User {
+  userId        String     @id @default(cuid())
+  userFirstName String
+  userLastName  String
+  userEmail     String     @unique
+  userPassword  String
+  userRoleId    String
+  userStatus    UserStatus @default(Enable)
+  userCreateBy  String
+  userCreateAt  DateTime
+  userUpdateBy  String?
+  userUpdateAt  DateTime?
+
+  createdBy    User?  @relation("UserCreatedBy", fields: [userCreateBy], references: [userId])
+  createdUsers User[] @relation("UserCreatedBy")
+
+  updatedBy    User?  @relation("UserUpdatedBy", fields: [userUpdateBy], references: [userId])
+  updatedUsers User[] @relation("UserUpdatedBy")
+
+  role Role @relation(fields: [userRoleId], references: [roleId])
+
+  rolesCreated Role[] @relation("RoleCreatedBy")
+  rolesUpdated Role[] @relation("RoleUpdatedBy")
+
+  @@index([userCreateBy])
+  @@index([userUpdateBy])
+}
+
+model Role {
+  roleId       String    @id @default(cuid())
+  roleName     String
+  roleCreateBy String
+  roleCreateAt DateTime
+  roleUpdateBy String?
+  roleUpdateAt DateTime?
+
+  users User[]
+
+  createdBy User? @relation("RoleCreatedBy", fields: [roleCreateBy], references: [userId])
+  updatedBy User? @relation("RoleUpdatedBy", fields: [roleUpdateBy], references: [userId])
+
+  @@index([roleCreateBy])
+  @@index([roleUpdateBy])
+}
