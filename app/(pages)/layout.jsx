@@ -27,8 +27,8 @@ import { useState, useEffect } from "react";
 function MainMenu({ icons, content, onClick, isActive, isMobile }) {
   const menuContent = (
     <div
-      className={`flex items-center justify-center w-full aspect-square p-3 gap-2 cursor-pointer hover:text-dark hover:bg-white ${
-        isActive ? "bg-white text-dark" : "text-white"
+      className={`flex items-center justify-center w-full aspect-square p-3 gap-2 cursor-pointer ${
+        isActive ? "border-1 border-white text-white" : "hover:border-1 border-white text-white"
       }`}
       onClick={onClick}
     >
@@ -59,8 +59,8 @@ function SubMenu({ text, onClick, path }) {
 
   return (
     <div
-      className={`flex items-center justify-start w-full h-fit p-3 gap-2 cursor-pointer transition-colors ${
-        isActive ? "bg-dark text-white" : "hover:text-white hover:bg-dark"
+      className={`flex items-center justify-start w-full h-fit p-3 gap-2 cursor-pointer ${
+        isActive ? "border-1 border-dark" : "hover:border-1 border-dark"
       }`}
       onClick={onClick}
     >

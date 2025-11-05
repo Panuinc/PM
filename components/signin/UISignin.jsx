@@ -50,7 +50,7 @@ export default function UISignin() {
           </Button>
         </div>
       </div>
-      <div className="xl:flex hidden flex-col items-center justify-center w-full xl:w-8/12 h-full p-14 gap-2 border-l-2 border-dark">
+      <div className="xl:flex hidden flex-col items-center justify-center w-full xl:w-8/12 h-full p-14 gap-2 border-l-1 border-dark">
         <div className="flex items-center justify-center w-full h-full p- gap-2">
           <Image
             src="/images/images.png"
