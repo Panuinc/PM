@@ -18,7 +18,7 @@ enum Status {
 }
 
 model User {
-  userUserId       String     @id @default(cuid())
+  userId           String     @id @default(cuid())
   userFirstName    String
   userLastName     String
   userEmail        String     @unique
@@ -30,10 +30,10 @@ model User {
   userUpdatedBy    String?
   userUpdatedAt    DateTime?
 
-  department Department @relation(fields: [userDepartmentId], references: [departmentDepartmentId])
+  department Department @relation(fields: [userDepartmentId], references: [departmentId])
 
-  createdByUser User?  @relation("UserCreatedByUser", fields: [userCreatedBy], references: [userUserId])
-  updatedByUser User?  @relation("UserUpdatedByUser", fields: [userUpdatedBy], references: [userUserId])
+  createdByUser User?  @relation("UserCreatedByUser", fields: [userCreatedBy], references: [userId])
+  updatedByUser User?  @relation("UserUpdatedByUser", fields: [userUpdatedBy], references: [userId])
   createdUsers  User[] @relation("UserCreatedByUser")
   updatedUsers  User[] @relation("UserUpdatedByUser")
 
@@ -52,24 +52,24 @@ model User {
 }
 
 model Department {
-  departmentDepartmentId String    @id @default(cuid())
-  departmentName         String
-  departmentStatus       Status    @default(Enable)
-  departmentCreatedBy    String
-  departmentCreatedAt    DateTime  @default(now())
-  departmentUpdatedBy    String?
-  departmentUpdatedAt    DateTime?
+  departmentId        String    @id @default(cuid())
+  departmentName      String
+  departmentStatus    Status    @default(Enable)
+  departmentCreatedBy String
+  departmentCreatedAt DateTime  @default(now())
+  departmentUpdatedBy String?
+  departmentUpdatedAt DateTime?
 
   users         User[]
-  createdByUser User?  @relation("DepartmentCreatedByUser", fields: [departmentCreatedBy], references: [userUserId])
-  updatedByUser User?  @relation("DepartmentUpdatedByUser", fields: [departmentUpdatedBy], references: [userUserId])
+  createdByUser User?  @relation("DepartmentCreatedByUser", fields: [departmentCreatedBy], references: [userId])
+  updatedByUser User?  @relation("DepartmentUpdatedByUser", fields: [departmentUpdatedBy], references: [userId])
 
   @@index([departmentCreatedBy])
   @@index([departmentUpdatedBy])
 }
 
 model Role {
-  roleRoleId    String    @id @default(cuid())
+  roleId        String    @id @default(cuid())
   roleName      String
   roleStatus    Status    @default(Enable)
   roleCreatedBy String
@@ -80,27 +80,27 @@ model Role {
   userRoles       UserRole[]
   rolePermissions RolePermission[]
 
-  createdByUser User? @relation("RoleCreatedByUser", fields: [roleCreatedBy], references: [userUserId])
-  updatedByUser User? @relation("RoleUpdatedByUser", fields: [roleUpdatedBy], references: [userUserId])
+  createdByUser User? @relation("RoleCreatedByUser", fields: [roleCreatedBy], references: [userId])
+  updatedByUser User? @relation("RoleUpdatedByUser", fields: [roleUpdatedBy], references: [userId])
 
   @@index([roleCreatedBy])
   @@index([roleUpdatedBy])
 }
 
 model Permission {
-  permissionPermissionId String    @id @default(cuid())
-  permissionName         String
-  permissionKey          String    @unique
-  permissionStatus       Status    @default(Enable)
-  permissionCreatedBy    String
-  permissionCreatedAt    DateTime  @default(now())
-  permissionUpdatedBy    String?
-  permissionUpdatedAt    DateTime?
+  permissionId        String    @id @default(cuid())
+  permissionName      String
+  permissionKey       String    @unique
+  permissionStatus    Status    @default(Enable)
+  permissionCreatedBy String
+  permissionCreatedAt DateTime  @default(now())
+  permissionUpdatedBy String?
+  permissionUpdatedAt DateTime?
 
   rolePermissions RolePermission[]
 
-  createdByUser User? @relation("PermissionCreatedByUser", fields: [permissionCreatedBy], references: [userUserId])
-  updatedByUser User? @relation("PermissionUpdatedByUser", fields: [permissionUpdatedBy], references: [userUserId])
+  createdByUser User? @relation("PermissionCreatedByUser", fields: [permissionCreatedBy], references: [userId])
+  updatedByUser User? @relation("PermissionUpdatedByUser", fields: [permissionUpdatedBy], references: [userId])
 
   @@index([permissionCreatedBy])
   @@index([permissionUpdatedBy])
@@ -114,9 +114,9 @@ model RolePermission {
   rolePermissionCreatedBy    String
   rolePermissionCreatedAt    DateTime @default(now())
 
-  role          Role       @relation(fields: [rolePermissionRoleId], references: [roleRoleId])
-  permission    Permission @relation(fields: [rolePermissionPermissionId], references: [permissionPermissionId])
-  createdByUser User       @relation("RolePermissionCreatedByUser", fields: [rolePermissionCreatedBy], references: [userUserId])
+  role          Role       @relation(fields: [rolePermissionRoleId], references: [roleId])
+  permission    Permission @relation(fields: [rolePermissionPermissionId], references: [permissionId])
+  createdByUser User       @relation("RolePermissionCreatedByUser", fields: [rolePermissionCreatedBy], references: [userId])
 
   @@unique([rolePermissionRoleId, rolePermissionPermissionId])
   @@index([rolePermissionRoleId])
@@ -131,9 +131,9 @@ model UserRole {
   userRoleCreatedBy String
   userRoleCreatedAt DateTime @default(now())
 
-  user          User @relation(fields: [userRoleUserId], references: [userUserId])
-  role          Role @relation(fields: [userRoleRoleId], references: [roleRoleId])
-  createdByUser User @relation("UserRoleCreatedByUser", fields: [userRoleCreatedBy], references: [userUserId])
+  user          User @relation(fields: [userRoleUserId], references: [userId])
+  role          Role @relation(fields: [userRoleRoleId], references: [roleId])
+  createdByUser User @relation("UserRoleCreatedByUser", fields: [userRoleCreatedBy], references: [userId])
 
   @@unique([userRoleUserId, userRoleRoleId])
   @@index([userRoleUserId])
