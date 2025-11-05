@@ -10,6 +10,12 @@ export default function UISignin({
   setPassword,
   handleLogin,
 }) {
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleLogin();
+    }
+  };
+
   return (
     <div className="flex flex-row items-center justify-center w-full h-full gap-2">
       <div className="flex flex-col items-center justify-center w-full xl:w-4/12 h-full p-2 gap-2">
@@ -29,6 +35,7 @@ export default function UISignin({
             isRequired
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            onPress={handleKeyPress}
           />
         </div>
         <div className="flex items-center justify-center w-full h-fit p-2 gap-2">
@@ -44,6 +51,7 @@ export default function UISignin({
             isRequired
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onPress={handleKeyPress}
           />
         </div>
         <div className="flex items-center justify-center w-6/12 h-fit p-2 gap-2">

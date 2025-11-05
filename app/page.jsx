@@ -24,10 +24,7 @@ export default function Signin() {
     });
 
     if (res?.ok) {
-      if (session?.toast) {
-        const { type, message } = session.toast;
-        showToast(type, message);
-      }
+      showToast("success", "Login successful!");
     } else {
       try {
         const { message, type } = JSON.parse(res?.error);

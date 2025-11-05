@@ -5,10 +5,24 @@ const RATE_LIMIT_WINDOW = 60 * 1000;
 const RATE_LIMIT_MAX = 1000;
 const ipRequests = new Map();
 
+function cleanupOldRequests() {
+  const now = Date.now();
+  for (const [ip, requests] of ipRequests.entries()) {
+    const validRequests = requests.filter((t) => now - t < RATE_LIMIT_WINDOW);
+    if (validRequests.length === 0) {
+      ipRequests.delete(ip);
+    } else {
+      ipRequests.set(ip, validRequests);
+    }
+  }
+}
+
 export function middleware(req) {
   const { pathname } = req.nextUrl;
   const ip = req.headers.get("x-forwarded-for") || req.ip || "unknown";
   const now = Date.now();
+
+  if (Math.random() < 0.01) cleanupOldRequests();
 
   logger.info({ message: "Incoming request", pathname, ip });
 
