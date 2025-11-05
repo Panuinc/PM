@@ -57,7 +57,7 @@ export default function UIMcMasterList({ headerTopic }) {
           type: "Lathe",
           status: "inactive",
         },
-           {
+        {
           id: 3,
           machineCode: "MC-002",
           machineName: "Lathe Machine",
@@ -65,7 +65,7 @@ export default function UIMcMasterList({ headerTopic }) {
           type: "Lathe",
           status: "inactive",
         },
-           {
+        {
           id: 4,
           machineCode: "MC-002",
           machineName: "Lathe Machine",
@@ -73,7 +73,7 @@ export default function UIMcMasterList({ headerTopic }) {
           type: "Lathe",
           status: "inactive",
         },
-           {
+        {
           id: 5,
           machineCode: "MC-002",
           machineName: "Lathe Machine",
@@ -81,7 +81,7 @@ export default function UIMcMasterList({ headerTopic }) {
           type: "Lathe",
           status: "inactive",
         },
-           {
+        {
           id: 6,
           machineCode: "MC-002",
           machineName: "Lathe Machine",
@@ -110,17 +110,37 @@ export default function UIMcMasterList({ headerTopic }) {
     <>
       <UIHeader header={headerTopic} />
       <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit gap-2">
-        <div className="flex items-center justify-center w-full h-24 p-2 gap-2 border-2 border-dark">
-          1
+        <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2 border-2 border-dark">
+          <div className="flex items-center justify-start w-full h-full p-2 gap-2">
+            Total Machines
+          </div>
+          <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-dark text-lg">
+            62
+          </div>
         </div>
-        <div className="flex items-center justify-center w-full h-24 p-2 gap-2 border-2 border-dark">
-          2
+        <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2 border-2 border-dark">
+          <div className="flex items-center justify-start w-full h-full p-2 gap-2">
+            Machine Active
+          </div>
+          <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-success text-lg">
+            58
+          </div>
         </div>
-        <div className="flex items-center justify-center w-full h-24 p-2 gap-2 border-2 border-dark">
-          3
+        <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2 border-2 border-dark">
+          <div className="flex items-center justify-start w-full h-full p-2 gap-2">
+            Machine InActive
+          </div>
+          <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-danger text-lg">
+            2
+          </div>
         </div>
-        <div className="flex items-center justify-center w-full h-24 p-2 gap-2 border-2 border-dark">
-          4
+        <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2 border-2 border-dark">
+          <div className="flex items-center justify-start w-full h-full p-2 gap-2">
+            Machine Maintenance
+          </div>
+          <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-warning text-lg">
+            2
+          </div>
         </div>
       </div>
       <div className="flex flex-col items-center justify-start w-full h-fit gap-2 overflow-auto">
