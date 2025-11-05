@@ -36,7 +36,6 @@ export default function DataTable({
   renderCustomCell,
 }) {
   const [filterValue, setFilterValue] = React.useState("");
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
@@ -132,14 +131,6 @@ export default function DataTable({
     },
     [statusColorMap, renderCustomCell, onView, onEdit]
   );
-
-  const onNextPage = React.useCallback(() => {
-    if (page < pages) setPage(page + 1);
-  }, [page, pages]);
-
-  const onPreviousPage = React.useCallback(() => {
-    if (page > 1) setPage(page - 1);
-  }, [page]);
 
   const onRowsPerPageChange = React.useCallback((e) => {
     setRowsPerPage(Number(e.target.value));
