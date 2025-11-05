@@ -45,6 +45,16 @@ model User {
   @@index([userUpdateBy])
 }
 
+model Department {
+  departmentId String @id @default(cuid)
+  departmentName String 
+  departmentRoleId String
+  departmentCreateBy String
+  departmentCreateAt DateTime
+  departmentUpdateBy String?
+  departmentUpdateAt DateTime?
+}
+
 model Role {
   roleId       String    @id @default(cuid())
   roleName     String
