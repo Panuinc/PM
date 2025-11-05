@@ -6,7 +6,7 @@ import UILoading from "@/components/UILoading";
 import UISignin from "@/components/signin/UISignin";
 import { showToast } from "@/components/UIToast";
 
-export default function Index() {
+export default function Signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { data: session, status } = useSession();
