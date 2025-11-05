@@ -95,8 +95,9 @@ export default function DataTable({
         case "status":
           return (
             <Chip
-              className="capitalize text-white"
+              className="capitalize"
               color={statusColorMap[item.status] || "default"}
+              variant="dot"
             >
               {cellValue}
             </Chip>
@@ -132,129 +133,110 @@ export default function DataTable({
     [statusColorMap, renderCustomCell, onView, onEdit]
   );
 
-  const onRowsPerPageChange = React.useCallback((e) => {
+  const onRowsPerPageChange = (e) => {
     setRowsPerPage(Number(e.target.value));
     setPage(1);
-  }, []);
+  };
 
-  const onSearchChange = React.useCallback((value) => {
-    if (value) {
-      setFilterValue(value);
-      setPage(1);
-    } else {
-      setFilterValue("");
-    }
-  }, []);
+  const onSearchChange = (value) => {
+    setFilterValue(value);
+    setPage(1);
+  };
 
-  const onClear = React.useCallback(() => {
+  const onClear = () => {
     setFilterValue("");
     setPage(1);
-  }, []);
+  };
 
-  const topContent = React.useMemo(() => {
-    return (
-      <div className="flex flex-col items-center justify-center w-full h-fit gap-2">
-        <div className="flex flex-row items-center justify-center w-full h-full gap-2">
-          <Input
-            isClearable
-            placeholder={searchPlaceholder}
-            startContent={<Search />}
-            value={filterValue}
-            onClear={onClear}
-            onValueChange={onSearchChange}
-            radius="none"
-            variant="faded"
-          />
-          {statusOptions.length > 0 && (
-            <Dropdown>
-              <DropdownTrigger>
-                <Button
-                  color="default"
-                  endContent={<ChevronDown />}
-                  radius="none"
-                  className="w-28 p-2 gap-2 text-dark font-semibold"
-                >
-                  Status
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Status Filter"
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
-                selectionMode="multiple"
-                onSelectionChange={setStatusFilter}
+  const topContent = (
+    <div className="flex flex-col items-center justify-center w-full h-fit gap-2">
+      <div className="flex flex-row items-center justify-center w-full h-full gap-2">
+        <Input
+          isClearable
+          placeholder={searchPlaceholder}
+          startContent={<Search />}
+          value={filterValue}
+          onClear={onClear}
+          onValueChange={onSearchChange}
+          radius="none"
+          variant="faded"
+        />
+        {statusOptions.length > 0 && (
+          <Dropdown>
+            <DropdownTrigger>
+              <Button
+                color="default"
+                endContent={<ChevronDown />}
+                radius="none"
+                className="w-28 p-2 gap-2 text-dark font-semibold"
               >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {capitalize(status.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
-          )}
-          {onAddNew && (
-            <Button
-              startContent={<Plus />}
-              color="primary"
-              onPress={onAddNew}
-              radius="none"
-              className="w-28 p-2 gap-2 text-white font-semibold"
+                Status
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              disallowEmptySelection
+              aria-label="Status Filter"
+              closeOnSelect={false}
+              selectedKeys={statusFilter}
+              selectionMode="multiple"
+              onSelectionChange={setStatusFilter}
             >
-              Add New
-            </Button>
-          )}
-        </div>
-        <div className="flex flex-row items-center justify-between w-full h-full gap-2">
-          <div className="flex items-center justify-between w-full h-full p-2 gap-2">
-            Total {data.length} {itemName}
-          </div>
-          <label className="flex items-center justify-between w-fit h-full p-2 gap-2 whitespace-nowrap">
-            Rows per page:
-            <select
-              className="flex items-center justify-between w-fit h-full p-2 gap-2"
-              onChange={onRowsPerPageChange}
-              defaultValue="5"
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
-            </select>
-          </label>
-        </div>
-      </div>
-    );
-  }, [
-    filterValue,
-    statusFilter,
-    onSearchChange,
-    searchPlaceholder,
-    statusOptions,
-    onAddNew,
-    data.length,
-    itemName,
-    onRowsPerPageChange,
-    onClear,
-  ]);
-
-  const bottomContent = React.useMemo(() => {
-    return (
-      <div className="flex flex-row items-center justify-center w-full h-fit gap-2">
-        <div className="flex items-center justify-end w-full h-full p-2 gap-2">
-          <Pagination
-            isCompact
-            showControls
-            showShadow
-            color="warning"
+              {statusOptions.map((status) => (
+                <DropdownItem key={status.uid} className="capitalize">
+                  {capitalize(status.name)}
+                </DropdownItem>
+              ))}
+            </DropdownMenu>
+          </Dropdown>
+        )}
+        {onAddNew && (
+          <Button
+            startContent={<Plus />}
+            color="primary"
+            onPress={onAddNew}
             radius="none"
-            page={page}
-            total={pages}
-            onChange={setPage}
-          />
-        </div>
+            className="w-28 p-2 gap-2 text-white font-semibold"
+          >
+            Add New
+          </Button>
+        )}
       </div>
-    );
-  }, [page, pages]);
+      <div className="flex flex-row items-center justify-between w-full h-full gap-2">
+        <div className="flex items-center justify-between w-full h-full p-2 gap-2">
+          Total {data.length} {itemName}
+        </div>
+        <label className="flex items-center justify-between w-fit h-full p-2 gap-2 whitespace-nowrap">
+          Rows per page:
+          <select
+            className="flex items-center justify-between w-fit h-full p-2 gap-2"
+            onChange={onRowsPerPageChange}
+            defaultValue="5"
+          >
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+          </select>
+        </label>
+      </div>
+    </div>
+  );
+
+  const bottomContent = (
+    <div className="flex flex-row items-center justify-center w-full h-fit gap-2">
+      <div className="flex items-center justify-end w-full h-full p-2 gap-2">
+        <Pagination
+          isCompact
+          showControls
+          showShadow
+          color="warning"
+          radius="none"
+          page={page}
+          total={pages}
+          onChange={setPage}
+        />
+      </div>
+    </div>
+  );
 
   return (
     <Table
