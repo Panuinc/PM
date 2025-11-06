@@ -62,3 +62,40 @@
 [2025-11-06 15:58:50] [INFO] {"message":"User schema loaded"}
 [2025-11-06 15:58:50] [INFO] {"message":"Department schema loaded"}
 [2025-11-06 15:58:50] [INFO] {"message":"User schema loaded"}
+[2025-11-06 15:58:55] [INFO] {"message":"Department schema loaded"}
+[2025-11-06 15:58:55] [INFO] {"message":"User schema loaded"}
+[2025-11-06 15:59:05] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 15:59:05] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 15:59:05] [INFO] {"message":"UserService.countAll"}
+[2025-11-06 15:59:05] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-06 15:59:05] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-06 15:59:09] [INFO] {"message":"DepartmentService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 15:59:09] [INFO] {"message":"DepartmentRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 15:59:09] [INFO] {"message":"DepartmentService.countAll"}
+[2025-11-06 15:59:09] [INFO] {"message":"GetAllDepartmentUseCase success","total":7}
+[2025-11-06 15:59:09] [INFO] {"message":"Formatting department data","count":7}
+[2025-11-06 15:59:22] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 15:59:22] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 15:59:22] [INFO] {"message":"UserService.countAll"}
+[2025-11-06 15:59:22] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-06 15:59:22] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-06 16:00:55] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:00:55] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:00:55] [INFO] {"message":"UserService.countAll"}
+[2025-11-06 16:00:55] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-06 16:00:55] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-06 16:01:24] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:01:24] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:01:24] [INFO] {"message":"UserService.countAll"}
+[2025-11-06 16:01:24] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-06 16:01:24] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-06 16:01:46] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:01:46] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:01:46] [INFO] {"message":"UserService.countAll"}
+[2025-11-06 16:01:46] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-06 16:01:46] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-06 16:01:53] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:01:53] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:01:53] [INFO] {"message":"UserService.countAll"}
+[2025-11-06 16:01:53] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-06 16:01:53] [INFO] {"message":"Formatting user data","count":2}
