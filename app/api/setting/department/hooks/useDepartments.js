@@ -23,14 +23,14 @@ export function useDepartments(apiUrl = "/api/setting/department") {
 
         if (active) {
           const formatted = Array.isArray(data.departments)
-            ? data.departments.map((d, index) => ({
-                ...d,
+            ? data.departments.map((department, index) => ({
+                ...department,
                 departmentIndex: index + 1,
-                departmentCreatedBy: d.createdByUser
-                  ? `${d.createdByUser.userFirstName} ${d.createdByUser.userLastName}`
+                departmentCreatedBy: department.createdByUser
+                  ? `${department.createdByUser.userFirstName} ${department.createdByUser.userLastName}`
                   : "-",
-                departmentUpdatedBy: d.updatedByUser
-                  ? `${d.updatedByUser.userFirstName} ${d.updatedByUser.userLastName}`
+                departmentUpdatedBy: department.updatedByUser
+                  ? `${department.updatedByUser.userFirstName} ${department.updatedByUser.userLastName}`
                   : "-",
               }))
             : [];
@@ -76,18 +76,18 @@ export function useDepartment(departmentId) {
           throw new Error(result.error || "Failed to load Department.");
 
         if (active) {
-          const dept =
+          const department =
             result.department ||
             (Array.isArray(result.departments) ? result.departments[0] : null);
 
-          if (dept) {
+          if (department) {
             const formatted = {
-              ...dept,
-              departmentCreatedBy: dept.createdByUser
-                ? `${dept.createdByUser.userFirstName} ${dept.createdByUser.userLastName}`
+              ...department,
+              departmentCreatedBy: department.createdByUser
+                ? `${department.createdByUser.userFirstName} ${department.createdByUser.userLastName}`
                 : "-",
-              departmentUpdatedBy: dept.updatedByUser
-                ? `${dept.updatedByUser.userFirstName} ${dept.updatedByUser.userLastName}`
+              departmentUpdatedBy: department.updatedByUser
+                ? `${department.updatedByUser.userFirstName} ${department.updatedByUser.userLastName}`
                 : "-",
             };
             setDepartment(formatted);

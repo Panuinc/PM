@@ -46,26 +46,26 @@ export default function UIUserList({
   onEdit,
 }) {
   const total = Users.length;
-  const enabled = Users.filter((d) => d.userStatus === "Enable").length;
-  const disabled = Users.filter((d) => d.userStatus === "Disable").length;
+  const enabled = Users.filter((user) => user.userStatus === "Enable").length;
+  const disabled = Users.filter((user) => user.userStatus === "Disable").length;
 
 const normalized = Array.isArray(Users)
-  ? Users.map((u, i) => ({
-      ...u,
-      id: u.userId,
+  ? Users.map((user, i) => ({
+      ...user,
+      id: user.userId,
       userIndex: i + 1,
-      userDepartmentId: u.department?.departmentName || "-",
-      userCreatedBy: u.createdByUser
-        ? `${u.createdByUser.userFirstName} ${u.createdByUser.userLastName}`
-        : u.userCreatedBy,
-      userUpdatedBy: u.updatedByUser
-        ? `${u.updatedByUser.userFirstName} ${u.updatedByUser.userLastName}`
-        : u.userUpdatedBy || "-",
-      userCreatedAt: u.userCreatedAt
-        ? new Date(u.userCreatedAt).toISOString().split("T")[0]
+      userDepartmentId: user.department?.departmentName || "-",
+      userCreatedBy: user.createdByUser
+        ? `${user.createdByUser.userFirstName} ${user.createdByUser.userLastName}`
+        : user.userCreatedBy,
+      userUpdatedBy: user.updatedByUser
+        ? `${user.updatedByUser.userFirstName} ${user.updatedByUser.userLastName}`
+        : user.userUpdatedBy || "-",
+      userCreatedAt: user.userCreatedAt
+        ? new Date(user.userCreatedAt).toISOString().split("T")[0]
         : "-",
-      userUpdatedAt: u.userUpdatedAt
-        ? new Date(u.userUpdatedAt).toISOString().split("T")[0]
+      userUpdatedAt: user.userUpdatedAt
+        ? new Date(user.userUpdatedAt).toISOString().split("T")[0]
         : "-",
     }))
   : [];

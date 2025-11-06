@@ -23,14 +23,14 @@ export function useRoles(apiUrl = "/api/setting/role") {
 
         if (active) {
           const formatted = Array.isArray(data.roles)
-            ? data.roles.map((d, index) => ({
-                ...d,
+            ? data.roles.map((role, index) => ({
+                ...role,
                 roleIndex: index + 1,
-                roleCreatedBy: d.createdByUser
-                  ? `${d.createdByUser.userFirstName} ${d.createdByUser.userLastName}`
+                roleCreatedBy: role.createdByUser
+                  ? `${role.createdByUser.userFirstName} ${role.createdByUser.userLastName}`
                   : "-",
-                roleUpdatedBy: d.updatedByUser
-                  ? `${d.updatedByUser.userFirstName} ${d.updatedByUser.userLastName}`
+                roleUpdatedBy: role.updatedByUser
+                  ? `${role.updatedByUser.userFirstName} ${role.updatedByUser.userLastName}`
                   : "-",
               }))
             : [];
@@ -76,18 +76,18 @@ export function useRole(roleId) {
           throw new Error(result.error || "Failed to load Role.");
 
         if (active) {
-          const dept =
+          const role =
             result.role ||
             (Array.isArray(result.roles) ? result.roles[0] : null);
 
-          if (dept) {
+          if (role) {
             const formatted = {
-              ...dept,
-              roleCreatedBy: dept.createdByUser
-                ? `${dept.createdByUser.userFirstName} ${dept.createdByUser.userLastName}`
+              ...role,
+              roleCreatedBy: role.createdByUser
+                ? `${role.createdByUser.userFirstName} ${role.createdByUser.userLastName}`
                 : "-",
-              roleUpdatedBy: dept.updatedByUser
-                ? `${dept.updatedByUser.userFirstName} ${dept.updatedByUser.userLastName}`
+              roleUpdatedBy: role.updatedByUser
+                ? `${role.updatedByUser.userFirstName} ${role.updatedByUser.userLastName}`
                 : "-",
             };
             setRole(formatted);

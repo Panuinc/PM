@@ -23,14 +23,14 @@ export function usePermissions(apiUrl = "/api/setting/permission") {
 
         if (active) {
           const formatted = Array.isArray(data.permissions)
-            ? data.permissions.map((d, index) => ({
-                ...d,
+            ? data.permissions.map((permission, index) => ({
+                ...permission,
                 permissionIndex: index + 1,
-                permissionCreatedBy: d.createdByUser
-                  ? `${d.createdByUser.userFirstName} ${d.createdByUser.userLastName}`
+                permissionCreatedBy: permission.createdByUser
+                  ? `${permission.createdByUser.userFirstName} ${permission.createdByUser.userLastName}`
                   : "-",
-                permissionUpdatedBy: d.updatedByUser
-                  ? `${d.updatedByUser.userFirstName} ${d.updatedByUser.userLastName}`
+                permissionUpdatedBy: permission.updatedByUser
+                  ? `${permission.updatedByUser.userFirstName} ${permission.updatedByUser.userLastName}`
                   : "-",
               }))
             : [];
@@ -76,18 +76,18 @@ export function usePermission(permissionId) {
           throw new Error(result.error || "Failed to load Permission.");
 
         if (active) {
-          const dept =
+          const permission =
             result.permission ||
             (Array.isArray(result.permissions) ? result.permissions[0] : null);
 
-          if (dept) {
+          if (permission) {
             const formatted = {
-              ...dept,
-              permissionCreatedBy: dept.createdByUser
-                ? `${dept.createdByUser.userFirstName} ${dept.createdByUser.userLastName}`
+              ...permission,
+              permissionCreatedBy: permission.createdByUser
+                ? `${permission.createdByUser.userFirstName} ${permission.createdByUser.userLastName}`
                 : "-",
-              permissionUpdatedBy: dept.updatedByUser
-                ? `${dept.updatedByUser.userFirstName} ${dept.updatedByUser.userLastName}`
+              permissionUpdatedBy: permission.updatedByUser
+                ? `${permission.updatedByUser.userFirstName} ${permission.updatedByUser.userLastName}`
                 : "-",
             };
             setPermission(formatted);

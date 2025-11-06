@@ -23,19 +23,19 @@ export function useUsers(apiUrl = "/api/setting/user") {
 
         if (active) {
           const formatted = Array.isArray(data.users)
-            ? data.users.map((u, index) => ({
-                ...u,
+            ? data.users.map((user, index) => ({
+                ...user,
                 userIndex: index + 1,
-                userFullName: `${u.userFirstName} ${u.userLastName}`,
-                userDepartment: u.department
-                  ? u.department.departmentName
+                userFullName: `${user.userFirstName} ${user.userLastName}`,
+                userDepartment: user.department
+                  ? user.department.departmentName
                   : "-",
-                userStatus: u.userStatus || "-",
-                userCreatedBy: u.createdByUser
-                  ? `${u.createdByUser.userFirstName} ${u.createdByUser.userLastName}`
+                userStatus: user.userStatus || "-",
+                userCreatedBy: user.createdByUser
+                  ? `${user.createdByUser.userFirstName} ${user.createdByUser.userLastName}`
                   : "-",
-                userUpdatedBy: u.updatedByUser
-                  ? `${u.updatedByUser.userFirstName} ${u.updatedByUser.userLastName}`
+                userUpdatedBy: user.updatedByUser
+                  ? `${user.updatedByUser.userFirstName} ${user.updatedByUser.userLastName}`
                   : "-",
               }))
             : [];
@@ -82,20 +82,20 @@ export function useUser(userId) {
         if (!res.ok) throw new Error(result.error || "Failed to load User.");
 
         if (active) {
-          const u =
+          const user =
             result.user ||
             (Array.isArray(result.users) ? result.users[0] : null);
 
-          if (u) {
+          if (user) {
             const formatted = {
-              ...u,
-              userFullName: `${u.userFirstName} ${u.userLastName}`,
-              userDepartment: u.department ? u.department.departmentName : "-",
-              userCreatedBy: u.createdByUser
-                ? `${u.createdByUser.userFirstName} ${u.createdByUser.userLastName}`
+              ...user,
+              userFullName: `${user.userFirstName} ${user.userLastName}`,
+              userDepartment: user.department ? user.department.departmentName : "-",
+              userCreatedBy: user.createdByUser
+                ? `${user.createdByUser.userFirstName} ${user.createdByUser.userLastName}`
                 : "-",
-              userUpdatedBy: u.updatedByUser
-                ? `${u.updatedByUser.userFirstName} ${u.updatedByUser.userLastName}`
+              userUpdatedBy: user.updatedByUser
+                ? `${user.updatedByUser.userFirstName} ${user.updatedByUser.userLastName}`
                 : "-",
             };
             setUser(formatted);

@@ -42,28 +42,28 @@ export default function UIRoleList({
 }) {
   const total = Roles.length;
   const enabled = Roles.filter(
-    (d) => d.roleStatus === "Enable"
+    (role) => role.roleStatus === "Enable"
   ).length;
   const disabled = Roles.filter(
-    (d) => d.roleStatus === "Disable"
+    (role) => role.roleStatus === "Disable"
   ).length;
 
   const normalized = Array.isArray(Roles)
-    ? Roles.map((d, i) => ({
-        ...d,
-        id: d.roleId,
+    ? Roles.map((role, i) => ({
+        ...role,
+        id: role.roleId,
         roleIndex: i + 1,
-        roleCreatedBy: d.createdByUser
-          ? `${d.createdByUser.userFirstName} ${d.createdByUser.userLastName}`
-          : d.roleCreatedBy || "-",
-        roleUpdatedBy: d.updatedByUser
-          ? `${d.updatedByUser.userFirstName} ${d.updatedByUser.userLastName}`
-          : d.roleUpdatedBy || "-",
-        roleCreatedAt: d.roleCreatedAt
-          ? new Date(d.roleCreatedAt).toISOString().split("T")[0]
+        roleCreatedBy: role.createdByUser
+          ? `${role.createdByUser.userFirstName} ${role.createdByUser.userLastName}`
+          : role.roleCreatedBy || "-",
+        roleUpdatedBy: role.updatedByUser
+          ? `${role.updatedByUser.userFirstName} ${role.updatedByUser.userLastName}`
+          : role.roleUpdatedBy || "-",
+        roleCreatedAt: role.roleCreatedAt
+          ? new Date(role.roleCreatedAt).toISOString().split("T")[0]
           : "-",
-        roleUpdatedAt: d.roleUpdatedAt
-          ? new Date(d.roleUpdatedAt).toISOString().split("T")[0]
+        roleUpdatedAt: role.roleUpdatedAt
+          ? new Date(role.roleUpdatedAt).toISOString().split("T")[0]
           : "-",
       }))
     : [];

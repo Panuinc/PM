@@ -42,28 +42,28 @@ export default function UIDepartmentList({
 }) {
   const total = Departments.length;
   const enabled = Departments.filter(
-    (d) => d.departmentStatus === "Enable"
+    (department) => department.departmentStatus === "Enable"
   ).length;
   const disabled = Departments.filter(
-    (d) => d.departmentStatus === "Disable"
+    (department) => department.departmentStatus === "Disable"
   ).length;
 
   const normalized = Array.isArray(Departments)
-    ? Departments.map((d, i) => ({
-        ...d,
-        id: d.departmentId,
+    ? Departments.map((department, i) => ({
+        ...department,
+        id: department.departmentId,
         departmentIndex: i + 1,
-        departmentCreatedBy: d.createdByUser
-          ? `${d.createdByUser.userFirstName} ${d.createdByUser.userLastName}`
-          : d.departmentCreatedBy || "-",
-        departmentUpdatedBy: d.updatedByUser
-          ? `${d.updatedByUser.userFirstName} ${d.updatedByUser.userLastName}`
-          : d.departmentUpdatedBy || "-",
-        departmentCreatedAt: d.departmentCreatedAt
-          ? new Date(d.departmentCreatedAt).toISOString().split("T")[0]
+        departmentCreatedBy: department.createdByUser
+          ? `${department.createdByUser.userFirstName} ${department.createdByUser.userLastName}`
+          : department.departmentCreatedBy || "-",
+        departmentUpdatedBy: department.updatedByUser
+          ? `${department.updatedByUser.userFirstName} ${department.updatedByUser.userLastName}`
+          : department.departmentUpdatedBy || "-",
+        departmentCreatedAt: department.departmentCreatedAt
+          ? new Date(department.departmentCreatedAt).toISOString().split("T")[0]
           : "-",
-        departmentUpdatedAt: d.departmentUpdatedAt
-          ? new Date(d.departmentUpdatedAt).toISOString().split("T")[0]
+        departmentUpdatedAt: department.departmentUpdatedAt
+          ? new Date(department.departmentUpdatedAt).toISOString().split("T")[0]
           : "-",
       }))
     : [];

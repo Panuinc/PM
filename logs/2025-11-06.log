@@ -146,3 +146,93 @@
 [2025-11-06 16:06:06] [INFO] {"message":"DepartmentService.countAll"}
 [2025-11-06 16:06:06] [INFO] {"message":"GetAllDepartmentUseCase success","total":7}
 [2025-11-06 16:06:06] [INFO] {"message":"Formatting department data","count":7}
+[2025-11-06 16:13:33] [INFO] {"message":"Role schema loaded"}
+[2025-11-06 16:13:33] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:13:33] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:13:33] [INFO] {"message":"RoleService.countAll"}
+[2025-11-06 16:13:33] [INFO] {"message":"GetAllRoleUseCase success","total":0}
+[2025-11-06 16:13:33] [INFO] {"message":"Formatting role data","count":0}
+[2025-11-06 16:13:33] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:13:33] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:13:33] [INFO] {"message":"RoleService.countAll"}
+[2025-11-06 16:13:33] [INFO] {"message":"GetAllRoleUseCase success","total":0}
+[2025-11-06 16:13:33] [INFO] {"message":"Formatting role data","count":0}
+[2025-11-06 16:13:58] [INFO] {"message":"CreateRoleUseCase start","data":{"roleName":"Manager Information Technology","roleCreatedBy":"cmhmrsz8x000004l8gxrk9sqp"}}
+[2025-11-06 16:13:58] [INFO] {"message":"RoleValidator.isDuplicateRoleName","roleName":"Manager Information Technology"}
+[2025-11-06 16:13:58] [INFO] {"message":"RoleRepository.findByRoleName","roleName":"Manager Information Technology"}
+[2025-11-06 16:13:58] [INFO] {"message":"Role code available","roleName":"Manager Information Technology"}
+[2025-11-06 16:13:58] [INFO] {"message":"RoleService.create","data":{"roleName":"Manager Information Technology","roleCreatedBy":"cmhmrsz8x000004l8gxrk9sqp","roleCreatedAt":"2025-11-06T16:13:58.000Z"}}
+[2025-11-06 16:13:58] [INFO] {"message":"RoleRepository.create","data":{"roleName":"Manager Information Technology","roleCreatedBy":"cmhmrsz8x000004l8gxrk9sqp","roleCreatedAt":"2025-11-06T16:13:58.000Z"}}
+[2025-11-06 16:13:58] [INFO] {"message":"Role created successfully","roleId":"cmhn7mhha0001crvkb6efkug7"}
+[2025-11-06 16:13:58] [INFO] {"message":"Formatting role data","count":1}
+[2025-11-06 16:14:00] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:14:00] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:14:00] [INFO] {"message":"RoleService.countAll"}
+[2025-11-06 16:14:00] [INFO] {"message":"GetAllRoleUseCase success","total":1}
+[2025-11-06 16:14:00] [INFO] {"message":"Formatting role data","count":1}
+[2025-11-06 16:14:00] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:14:00] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:14:00] [INFO] {"message":"RoleService.countAll"}
+[2025-11-06 16:14:00] [INFO] {"message":"GetAllRoleUseCase success","total":1}
+[2025-11-06 16:14:00] [INFO] {"message":"Formatting role data","count":1}
+[2025-11-06 16:14:23] [INFO] {"message":"CreateRoleUseCase start","data":{"roleName":"Staff Information Technology","roleCreatedBy":"cmhmrsz8x000004l8gxrk9sqp"}}
+[2025-11-06 16:14:23] [INFO] {"message":"RoleValidator.isDuplicateRoleName","roleName":"Staff Information Technology"}
+[2025-11-06 16:14:23] [INFO] {"message":"RoleRepository.findByRoleName","roleName":"Staff Information Technology"}
+[2025-11-06 16:14:23] [INFO] {"message":"Role code available","roleName":"Staff Information Technology"}
+[2025-11-06 16:14:23] [INFO] {"message":"RoleService.create","data":{"roleName":"Staff Information Technology","roleCreatedBy":"cmhmrsz8x000004l8gxrk9sqp","roleCreatedAt":"2025-11-06T16:14:23.000Z"}}
+[2025-11-06 16:14:23] [INFO] {"message":"RoleRepository.create","data":{"roleName":"Staff Information Technology","roleCreatedBy":"cmhmrsz8x000004l8gxrk9sqp","roleCreatedAt":"2025-11-06T16:14:23.000Z"}}
+[2025-11-06 16:14:23] [INFO] {"message":"Role created successfully","roleId":"cmhn7n0w30003crvklbuhbw1t"}
+[2025-11-06 16:14:23] [INFO] {"message":"Formatting role data","count":1}
+[2025-11-06 16:14:25] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:14:25] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:14:25] [INFO] {"message":"RoleService.countAll"}
+[2025-11-06 16:14:25] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-06 16:14:25] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-06 16:14:25] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:14:25] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:14:25] [INFO] {"message":"RoleService.countAll"}
+[2025-11-06 16:14:25] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-06 16:14:25] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-06 16:33:53] [INFO] {"message":"Role schema loaded"}
+[2025-11-06 16:33:53] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:33:53] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:33:53] [INFO] {"message":"RoleService.countAll"}
+[2025-11-06 16:33:53] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-06 16:33:53] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-06 16:33:53] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:33:53] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:33:53] [INFO] {"message":"RoleService.countAll"}
+[2025-11-06 16:33:53] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-06 16:33:53] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-06 16:33:55] [INFO] {"message":"User schema loaded"}
+[2025-11-06 16:33:55] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:33:55] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:33:55] [INFO] {"message":"UserService.countAll"}
+[2025-11-06 16:33:55] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-06 16:33:55] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-06 16:33:55] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:33:55] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:33:55] [INFO] {"message":"UserService.countAll"}
+[2025-11-06 16:33:55] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-06 16:33:55] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-06 16:33:58] [INFO] {"message":"Department schema loaded"}
+[2025-11-06 16:33:58] [INFO] {"message":"DepartmentService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:33:58] [INFO] {"message":"DepartmentRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:33:58] [INFO] {"message":"DepartmentService.countAll"}
+[2025-11-06 16:33:58] [INFO] {"message":"GetAllDepartmentUseCase success","total":7}
+[2025-11-06 16:33:58] [INFO] {"message":"Formatting department data","count":7}
+[2025-11-06 16:33:58] [INFO] {"message":"DepartmentService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:33:58] [INFO] {"message":"DepartmentRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:33:58] [INFO] {"message":"DepartmentService.countAll"}
+[2025-11-06 16:33:58] [INFO] {"message":"GetAllDepartmentUseCase success","total":7}
+[2025-11-06 16:33:58] [INFO] {"message":"Formatting department data","count":7}
+[2025-11-06 16:35:18] [INFO] {"message":"DepartmentService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:35:18] [INFO] {"message":"DepartmentRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:35:18] [INFO] {"message":"DepartmentService.countAll"}
+[2025-11-06 16:35:18] [INFO] {"message":"GetAllDepartmentUseCase success","total":7}
+[2025-11-06 16:35:18] [INFO] {"message":"Formatting department data","count":7}
+[2025-11-06 16:35:18] [INFO] {"message":"DepartmentService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:35:18] [INFO] {"message":"DepartmentRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:35:18] [INFO] {"message":"DepartmentService.countAll"}
+[2025-11-06 16:35:18] [INFO] {"message":"GetAllDepartmentUseCase success","total":7}
+[2025-11-06 16:35:18] [INFO] {"message":"Formatting department data","count":7}
