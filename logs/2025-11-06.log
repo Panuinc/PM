@@ -58,3 +58,7 @@
 [2025-11-06 15:55:42] [INFO] {"message":"DepartmentService.countAll"}
 [2025-11-06 15:55:42] [INFO] {"message":"GetAllDepartmentUseCase success","total":7}
 [2025-11-06 15:55:42] [INFO] {"message":"Formatting department data","count":7}
+[2025-11-06 15:58:50] [INFO] {"message":"Department schema loaded"}
+[2025-11-06 15:58:50] [INFO] {"message":"User schema loaded"}
+[2025-11-06 15:58:50] [INFO] {"message":"Department schema loaded"}
+[2025-11-06 15:58:50] [INFO] {"message":"User schema loaded"}
