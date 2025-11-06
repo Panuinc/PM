@@ -83,7 +83,8 @@ export default function UIDepartmentForm({
               <Button
                 type="submit"
                 color="success"
-                className="w-full p-2 gap-2 font-semibold"
+                radius="none"
+                className="w-full p-2 gap-2 text-white font-semibold"
               >
                 Submit
               </Button>
@@ -92,6 +93,7 @@ export default function UIDepartmentForm({
               <Button
                 type="button"
                 color="default"
+                radius="none"
                 className="w-full p-2 gap-2 font-semibold"
                 onPress={() => history.back()}
               >

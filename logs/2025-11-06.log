@@ -1,0 +1,66 @@
+[2025-11-06 11:14:39] [INFO] {"message":"CreateDepartmentUseCase start","data":{"departmentName":"","departmentCreatedBy":"cmhmrsz8x000004l8gxrk9sqp"}}
+[2025-11-06 11:14:39] [WARN] {"message":"Validation failed","errors":{"departmentName":["Please provide the department name"]}}
+[2025-11-06 11:14:39] [ERROR] {"message":"Invalid input","status":422,"details":{"departmentName":["Please provide the department name"]}}
+[2025-11-06 11:15:05] [INFO] {"message":"CreateDepartmentUseCase start","data":{"departmentName":"","departmentCreatedBy":"cmhmrsz8x000004l8gxrk9sqp"}}
+[2025-11-06 11:15:05] [WARN] {"message":"Validation failed","errors":{"departmentName":["Please provide the department name"]}}
+[2025-11-06 11:15:05] [ERROR] {"message":"Invalid input","status":422,"details":{"departmentName":["Please provide the department name"]}}
+[2025-11-06 11:15:17] [INFO] {"message":"CreateDepartmentUseCase start","data":{"departmentName":"","departmentCreatedBy":"cmhmrsz8x000004l8gxrk9sqp"}}
+[2025-11-06 11:15:17] [WARN] {"message":"Validation failed","errors":{"departmentName":["Please provide the department name"]}}
+[2025-11-06 11:15:17] [ERROR] {"message":"Invalid input","status":422,"details":{"departmentName":["Please provide the department name"]}}
+[2025-11-06 11:20:04] [INFO] {"message":"Department schema loaded"}
+[2025-11-06 11:20:04] [INFO] {"message":"DepartmentService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 11:20:04] [INFO] {"message":"DepartmentRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 11:20:05] [INFO] {"message":"DepartmentService.countAll"}
+[2025-11-06 11:20:05] [INFO] {"message":"GetAllDepartmentUseCase success","total":3}
+[2025-11-06 11:20:05] [INFO] {"message":"Formatting department data","count":3}
+[2025-11-06 11:20:05] [INFO] {"message":"DepartmentService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 11:20:05] [INFO] {"message":"DepartmentRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 11:20:05] [INFO] {"message":"DepartmentService.countAll"}
+[2025-11-06 11:20:05] [INFO] {"message":"GetAllDepartmentUseCase success","total":3}
+[2025-11-06 11:20:05] [INFO] {"message":"Formatting department data","count":3}
+[2025-11-06 11:21:14] [INFO] {"message":"CreateDepartmentUseCase start","data":{"departmentName":"c","departmentCreatedBy":"cmhmrsz8x000004l8gxrk9sqp"}}
+[2025-11-06 11:21:14] [INFO] {"message":"DepartmentValidator.isDuplicateDepartmentName","departmentName":"c"}
+[2025-11-06 11:21:14] [INFO] {"message":"DepartmentRepository.findByName","departmentName":"c"}
+[2025-11-06 11:21:14] [INFO] {"message":"Department code available","departmentName":"c"}
+[2025-11-06 11:21:14] [INFO] {"message":"DepartmentService.create","data":{"departmentName":"c","departmentCreatedBy":"cmhmrsz8x000004l8gxrk9sqp","departmentCreatedAt":"2025-11-06T11:21:14.000Z"}}
+[2025-11-06 11:21:14] [INFO] {"message":"DepartmentRepository.create","data":{"departmentName":"c","departmentCreatedBy":"cmhmrsz8x000004l8gxrk9sqp","departmentCreatedAt":"2025-11-06T11:21:14.000Z"}}
+[2025-11-06 11:21:14] [INFO] {"message":"Department created successfully","departmentId":"cmhmx60z30001crscbuxit3lc"}
+[2025-11-06 11:21:14] [INFO] {"message":"Formatting department data","count":1}
+[2025-11-06 11:21:16] [INFO] {"message":"DepartmentService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 11:21:16] [INFO] {"message":"DepartmentRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 11:21:16] [INFO] {"message":"DepartmentService.countAll"}
+[2025-11-06 11:21:16] [INFO] {"message":"GetAllDepartmentUseCase success","total":4}
+[2025-11-06 11:21:16] [INFO] {"message":"Formatting department data","count":4}
+[2025-11-06 11:21:16] [INFO] {"message":"DepartmentService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 11:21:16] [INFO] {"message":"DepartmentRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 11:21:16] [INFO] {"message":"DepartmentService.countAll"}
+[2025-11-06 11:21:16] [INFO] {"message":"GetAllDepartmentUseCase success","total":4}
+[2025-11-06 11:21:16] [INFO] {"message":"Formatting department data","count":4}
+[2025-11-06 11:21:23] [INFO] {"message":"Department schema loaded"}
+[2025-11-06 11:21:23] [INFO] {"message":"DepartmentService.getById","departmentId":"cmhmwgwjl000bcrwo34jm429a"}
+[2025-11-06 11:21:23] [INFO] {"message":"DepartmentRepository.findById","departmentId":"cmhmwgwjl000bcrwo34jm429a"}
+[2025-11-06 11:21:23] [INFO] {"message":"GetDepartmentByIdUseCase success","departmentId":"cmhmwgwjl000bcrwo34jm429a"}
+[2025-11-06 11:21:23] [INFO] {"message":"Formatting department data","count":1}
+[2025-11-06 11:21:24] [INFO] {"message":"DepartmentService.getById","departmentId":"cmhmwgwjl000bcrwo34jm429a"}
+[2025-11-06 11:21:24] [INFO] {"message":"DepartmentRepository.findById","departmentId":"cmhmwgwjl000bcrwo34jm429a"}
+[2025-11-06 11:21:24] [INFO] {"message":"GetDepartmentByIdUseCase success","departmentId":"cmhmwgwjl000bcrwo34jm429a"}
+[2025-11-06 11:21:24] [INFO] {"message":"Formatting department data","count":1}
+[2025-11-06 11:21:24] [INFO] {"message":"Department schema loaded"}
+[2025-11-06 11:21:26] [INFO] {"message":"UpdateDepartmentUseCase start","data":{"departmentId":"cmhmwgwjl000bcrwo34jm429a","departmentName":"fff","departmentStatus":"Disable","departmentCreatedBy":"Panuwat Jangchudjai","departmentCreatedAt":"2025-11-06","departmentUpdatedBy":"cmhmrsz8x000004l8gxrk9sqp","departmentUpdatedAt":null,"createdByUser":{"userId":"cmhmrsz8x000004l8gxrk9sqp","userFirstName":"Panuwat","userLastName":"Jangchudjai"},"updatedByUser":null}}
+[2025-11-06 11:21:26] [INFO] {"message":"DepartmentService.getById","departmentId":"cmhmwgwjl000bcrwo34jm429a"}
+[2025-11-06 11:21:26] [INFO] {"message":"DepartmentRepository.findById","departmentId":"cmhmwgwjl000bcrwo34jm429a"}
+[2025-11-06 11:21:26] [INFO] {"message":"DepartmentService.update","departmentId":"cmhmwgwjl000bcrwo34jm429a","data":{"departmentName":"fff","departmentStatus":"Disable","departmentUpdatedBy":"cmhmrsz8x000004l8gxrk9sqp","departmentUpdatedAt":"2025-11-06T11:21:26.000Z"}}
+[2025-11-06 11:21:26] [INFO] {"message":"DepartmentRepository.update","departmentId":"cmhmwgwjl000bcrwo34jm429a"}
+[2025-11-06 11:21:26] [INFO] {"message":"Department updated successfully","departmentId":"cmhmwgwjl000bcrwo34jm429a"}
+[2025-11-06 11:21:26] [INFO] {"message":"Formatting department data","count":1}
+[2025-11-06 11:21:27] [INFO] {"message":"Department schema loaded"}
+[2025-11-06 11:21:28] [INFO] {"message":"DepartmentService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 11:21:28] [INFO] {"message":"DepartmentRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 11:21:28] [INFO] {"message":"DepartmentService.countAll"}
+[2025-11-06 11:21:28] [INFO] {"message":"GetAllDepartmentUseCase success","total":4}
+[2025-11-06 11:21:28] [INFO] {"message":"Formatting department data","count":4}
+[2025-11-06 11:21:28] [INFO] {"message":"DepartmentService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 11:21:28] [INFO] {"message":"DepartmentRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 11:21:28] [INFO] {"message":"DepartmentService.countAll"}
+[2025-11-06 11:21:28] [INFO] {"message":"GetAllDepartmentUseCase success","total":4}
+[2025-11-06 11:21:28] [INFO] {"message":"Formatting department data","count":4}
