@@ -161,7 +161,6 @@ export default function PagesLayout({ children }) {
       subMenus: [
         { text: "User", path: "/setting/user" },
         { text: "Department", path: "/setting/department" },
-        { text: "Change Password", path: "/setting/changePassword" },
       ],
     },
   };
