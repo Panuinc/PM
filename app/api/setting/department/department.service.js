@@ -24,9 +24,9 @@ export class DepartmentService {
 
   static async create(data) {
     logger.info({ message: "DepartmentService.create", data });
-    if (!data.departmentName || !data.departmentCreateBy)
+    if (!data.departmentName || !data.departmentCreatedBy)
       throw new Error(
-        "Missing required fields: departmentName, departmentCreateBy"
+        "Missing required fields: departmentName, departmentCreatedBy"
       );
 
     return await DepartmentRepository.create(data);
@@ -34,9 +34,9 @@ export class DepartmentService {
 
   static async update(departmentId, data) {
     logger.info({ message: "DepartmentService.update", departmentId, data });
-    if (!data.departmentName || !data.departmentUpdateBy)
+    if (!data.departmentName || !data.departmentUpdatedBy)
       throw new Error(
-        "Missing required fields: departmentName, departmentStatus, departmentUpdateBy"
+        "Missing required fields: departmentName, departmentStatus, departmentUpdatedBy"
       );
 
     return await DepartmentRepository.update(departmentId, data);

@@ -7,7 +7,7 @@ export function useSubmitDepartment({ mode = "create", departmentId, userId }) {
   return useCallback(
     async (formRef, formData, setErrors) => {
       const byField =
-        mode === "create" ? "departmentCreateBy" : "departmentUpdateBy";
+        mode === "create" ? "departmentCreatedBy" : "departmentUpdatedBy";
 
       const payload = { ...formData, [byField]: userId };
       const url =
@@ -30,7 +30,7 @@ export function useSubmitDepartment({ mode = "create", departmentId, userId }) {
 
         if (res.ok) {
           showToast("success", result.message || "Success");
-          setTimeout(() => router.push("/department"), 1500);
+          setTimeout(() => router.push("/setting/department"), 1500);
         } else {
           setErrors(result.details || {});
           showToast("danger", result.error || "Failed to submit Department.");

@@ -42,7 +42,7 @@ export async function UpdateDepartmentUseCase(data) {
     {
       departmentName: parsed.data.departmentName.trim(),
       departmentStatus: parsed.data.departmentStatus.trim(),
-      departmentUpdateBy: parsed.data.departmentUpdateBy,
+      departmentUpdatedBy: parsed.data.departmentUpdatedBy,
       departmentUpdatedAt: getLocalNow(),
     }
   );

@@ -6,7 +6,7 @@ logger.info({ message: "Department schema loaded" });
 
 export const departmentPostSchema = z.object({
   departmentName: preprocessString("Please provide the department name"),
-  departmentCreateBy: preprocessString("Please provide the creator ID"),
+  departmentCreatedBy: preprocessString("Please provide the creator ID"),
 });
 
 export const departmentPutSchema = z.object({
@@ -16,7 +16,7 @@ export const departmentPutSchema = z.object({
     ["Enable", "Disable"],
     "Please provide department status'"
   ),
-  departmentUpdateBy: preprocessString("Please provide the updater ID"),
+  departmentUpdatedBy: preprocessString("Please provide the updater ID"),
 });
 
 export const formatDepartmentData = (departments) => {

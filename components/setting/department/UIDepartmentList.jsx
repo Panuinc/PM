@@ -5,7 +5,7 @@ import DataTable from "@/components/UITable";
 import UILoading from "@/components/UILoading";
 
 const columns = [
-  { name: "ID", uid: "departmentId", sortable: true },
+  { name: "ID", uid: "departmentIndex", sortable: true },
   { name: "DEPARTMENT NAME", uid: "departmentName", sortable: true },
   { name: "STATUS", uid: "departmentStatus", sortable: true },
   { name: "CREATED BY", uid: "departmentCreatedBy", sortable: true },
@@ -39,6 +39,9 @@ export default function UIDepartmentList({
   headerTopic,
   Departments = [],
   loading,
+  onAddNew,
+  onView,
+  onEdit,
 }) {
   const total = Departments.length;
   const enabled = Departments.filter(
@@ -48,15 +51,8 @@ export default function UIDepartmentList({
     (d) => d.departmentStatus === "Disable"
   ).length;
 
-  const handleAddNew = () => console.log("Add new department");
-  const handleView = (item) => console.log("View department:", item);
-  const handleEdit = (item) => console.log("Edit department:", item);
-
   const normalized = Array.isArray(Departments)
-    ? Departments.map((d) => ({
-        ...d,
-        id: d.departmentId,
-      }))
+    ? Departments.map((d) => ({ ...d, id: d.departmentId }))
     : [];
 
   return (
@@ -72,7 +68,6 @@ export default function UIDepartmentList({
             {total}
           </div>
         </div>
-
         <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2 border-1 border-dark">
           <div className="flex items-center justify-start w-full h-full p-2 gap-2">
             Enabled Departments
@@ -81,7 +76,6 @@ export default function UIDepartmentList({
             {enabled}
           </div>
         </div>
-
         <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2 border-1 border-dark">
           <div className="flex items-center justify-start w-full h-full p-2 gap-2">
             Disabled Departments
@@ -107,9 +101,9 @@ export default function UIDepartmentList({
             searchPlaceholder="Search by department name..."
             emptyContent="No departments found"
             itemName="departments"
-            onAddNew={handleAddNew}
-            onView={handleView}
-            onEdit={handleEdit}
+            onAddNew={onAddNew}
+            onView={onView}
+            onEdit={onEdit}
           />
         )}
       </div>

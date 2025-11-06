@@ -27,7 +27,8 @@ export function useFetchDepartments(apiUrl = "/api/setting/department") {
           const formatted = Array.isArray(data.departments)
             ? data.departments.map((d, index) => ({
                 ...d,
-                departmentId: index + 1,
+                departmentIndex: index + 1,
+                departmentId: d.departmentId,
                 departmentCreatedBy: d.createdByUser
                   ? `${d.createdByUser.userFirstName} ${d.createdByUser.userLastName}`
                   : "-",

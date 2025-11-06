@@ -31,7 +31,7 @@ export async function CreateDepartmentUseCase(data) {
 
   const department = await DepartmentService.create({
     departmentName: parsed.data.departmentName.trim(),
-    departmentCreateBy: parsed.data.departmentCreateBy,
+    departmentCreatedBy: parsed.data.departmentCreatedBy,
     departmentCreatedAt: getLocalNow(),
   });
 
