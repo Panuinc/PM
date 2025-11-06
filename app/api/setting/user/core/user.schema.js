@@ -2,31 +2,31 @@ import { z } from "zod";
 import { preprocessString, preprocessEnum, formatData } from "@/lib/zodSchema";
 import logger from "@/lib/logger.node";
 
-logger.info({ message: "Department schema loaded" });
+logger.info({ message: "User schema loaded" });
 
-export const departmentPostSchema = z.object({
-  departmentName: preprocessString("Please provide the department name"),
-  departmentCreatedBy: preprocessString("Please provide the creator ID"),
+export const userPostSchema = z.object({
+  userName: preprocessString("Please provide the user name"),
+  userCreatedBy: preprocessString("Please provide the creator ID"),
 });
 
-export const departmentPutSchema = z.object({
-  departmentId: preprocessString("Please provide the department ID"),
-  departmentName: preprocessString("Please provide the department name"),
-  departmentStatus: preprocessEnum(
+export const userPutSchema = z.object({
+  userId: preprocessString("Please provide the user ID"),
+  userName: preprocessString("Please provide the user name"),
+  userStatus: preprocessEnum(
     ["Enable", "Disable"],
-    "Please provide department status'"
+    "Please provide user status'"
   ),
-  departmentUpdatedBy: preprocessString("Please provide the updater ID"),
+  userUpdatedBy: preprocessString("Please provide the updater ID"),
 });
 
-export const formatDepartmentData = (departments) => {
+export const formatUserData = (users) => {
   logger.info({
-    message: "Formatting department data",
-    count: departments.length,
+    message: "Formatting user data",
+    count: users.length,
   });
   return formatData(
-    departments,
-    ["departmentCreatedAt", "departmentUpdatedAt"],
+    users,
+    ["userCreatedAt", "userUpdatedAt"],
     []
   );
 };

@@ -1,27 +1,27 @@
-import { DepartmentRepository } from "@/app/api/setting/department/core/department.repository";
+import { UserRepository } from "@/app/api/setting/user/core/user.repository";
 import logger from "@/lib/logger.node";
 
-export const DepartmentValidator = {
-  async isDuplicateDepartmentName(departmentName) {
+export const UserValidator = {
+  async isDuplicateUserName(userName) {
     logger.info({
-      message: "DepartmentValidator.isDuplicateDepartmentName",
-      departmentName,
+      message: "UserValidator.isDuplicateUserName",
+      userName,
     });
 
-    if (!departmentName || typeof departmentName !== "string") {
-      logger.warn({ message: "Invalid department code input", departmentName });
-      throw new Error("Invalid department code");
+    if (!userName || typeof userName !== "string") {
+      logger.warn({ message: "Invalid user code input", userName });
+      throw new Error("Invalid user code");
     }
 
-    const existing = await DepartmentRepository.findByName(departmentName);
+    const existing = await UserRepository.findByUserName(userName);
     const isDuplicate = !!existing;
 
     if (isDuplicate)
       logger.warn({
-        message: "Duplicate department code detected",
-        departmentName,
+        message: "Duplicate user code detected",
+        userName,
       });
-    else logger.info({ message: "Department code available", departmentName });
+    else logger.info({ message: "User code available", userName });
 
     return isDuplicate;
   },

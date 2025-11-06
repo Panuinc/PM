@@ -36,8 +36,8 @@ export const DepartmentRepository = {
     });
   },
 
-  findByName: async (departmentName) => {
-    logger.info({ message: "DepartmentRepository.findByName", departmentName });
+  findByDepartmentName: async (departmentName) => {
+    logger.info({ message: "DepartmentRepository.findByDepartmentName", departmentName });
     return await prisma.department.findFirst({
       where: {
         departmentName: { equals: departmentName.trim(), mode: "insensitive" },

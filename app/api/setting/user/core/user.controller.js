@@ -1,26 +1,26 @@
 import { NextResponse } from "next/server";
 import {
-  GetAllDepartmentUseCase,
-  GetDepartmentByIdUseCase,
-  CreateDepartmentUseCase,
-  UpdateDepartmentUseCase,
-} from "@/app/api/setting/department/usecases/departments.usecase";
-import { formatDepartmentData } from "@/app/api/setting/department/core/department.schema";
+  GetAllUserUseCase,
+  GetUserByIdUseCase,
+  CreateUserUseCase,
+  UpdateUserUseCase,
+} from "@/app/api/setting/user/usecases/users.usecase";
+import { formatUserData } from "@/app/api/setting/user/core/user.schema";
 import logger from "@/lib/logger.node";
 
-export async function getAllDepartment(request) {
+export async function getAllUser(request) {
   try {
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get("page") || "1", 10);
     const limit = parseInt(searchParams.get("limit") || "1000000", 10);
 
-    const { departments, total } = await GetAllDepartmentUseCase(page, limit);
+    const { users, total } = await GetAllUserUseCase(page, limit);
     return NextResponse.json({
       message: "Success",
       total,
       page,
       limit,
-      departments: formatDepartmentData(departments),
+      users: formatUserData(users),
     });
   } catch (error) {
     logger.error(error);
@@ -31,12 +31,12 @@ export async function getAllDepartment(request) {
   }
 }
 
-export async function getDepartmentById(request, departmentId) {
+export async function getUserById(request, userId) {
   try {
-    const department = await GetDepartmentByIdUseCase(departmentId);
+    const user = await GetUserByIdUseCase(userId);
     return NextResponse.json({
       message: "Success",
-      department: formatDepartmentData([department])[0],
+      user: formatUserData([user])[0],
     });
   } catch (error) {
     logger.error(error);
@@ -47,13 +47,13 @@ export async function getDepartmentById(request, departmentId) {
   }
 }
 
-export async function createDepartment(request) {
+export async function createUser(request) {
   try {
     const data = await request.json();
-    const department = await CreateDepartmentUseCase(data);
+    const user = await CreateUserUseCase(data);
     return NextResponse.json({
       message: "Created",
-      department: formatDepartmentData([department])[0],
+      user: formatUserData([user])[0],
     });
   } catch (error) {
     logger.error(error);
@@ -64,13 +64,13 @@ export async function createDepartment(request) {
   }
 }
 
-export async function updateDepartment(request, departmentId) {
+export async function updateUser(request, userId) {
   try {
     const data = await request.json();
-    const department = await UpdateDepartmentUseCase({ ...data, departmentId });
+    const user = await UpdateUserUseCase({ ...data, userId });
     return NextResponse.json({
       message: "Updated",
-      department: formatDepartmentData([department])[0],
+      user: formatUserData([user])[0],
     });
   } catch (error) {
     logger.error(error);

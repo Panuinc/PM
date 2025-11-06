@@ -19,7 +19,7 @@ export class DepartmentService {
 
   static async getByName(departmentName) {
     logger.info({ message: "DepartmentService.getByName", departmentName });
-    return await DepartmentRepository.findByName(departmentName);
+    return await DepartmentRepository.findByDepartmentName(departmentName);
   }
 
   static async create(data) {

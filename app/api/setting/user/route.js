@@ -1,11 +1,11 @@
-import { getAllDepartment, createDepartment } from "@/app/api/setting/department/core/department.controller";
+import { getAllUser, createUser } from "@/app/api/setting/user/core/user.controller";
 
 export async function GET(request) {
-  return getAllDepartment(request);
+  return getAllUser(request);
 }
 
 export async function POST(request) {
-  return createDepartment(request);
+  return createUser(request);
 }
 
 export const dynamic = "force-dynamic";

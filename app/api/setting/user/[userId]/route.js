@@ -1,13 +1,13 @@
-import { getDepartmentById, updateDepartment } from "@/app/api/setting/department/core/department.controller";
+import { getUserById, updateUser } from "@/app/api/setting/user/core/user.controller";
 
 export async function GET(request, context) {
-  const { departmentId } = await context.params;
-  return getDepartmentById(request, departmentId);
+  const { userId } = await context.params;
+  return getUserById(request, userId);
 }
 
 export async function PUT(request, context) {
-  const { departmentId } = await context.params;
-  return updateDepartment(request, departmentId);
+  const { userId } = await context.params;
+  return updateUser(request, userId);
 }
 
 export const dynamic = "force-dynamic";

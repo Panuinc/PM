@@ -13,7 +13,7 @@ export const DepartmentValidator = {
       throw new Error("Invalid department code");
     }
 
-    const existing = await DepartmentRepository.findByName(departmentName);
+    const existing = await DepartmentRepository.findByDepartmentName(departmentName);
     const isDuplicate = !!existing;
 
     if (isDuplicate)
