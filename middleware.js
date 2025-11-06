@@ -1,19 +1,16 @@
 import { NextResponse } from "next/server";
 import logger from "@/lib/logger.edge";
 
-const RATE_LIMIT_WINDOW = 60 * 1000;
-const RATE_LIMIT_MAX = 1000;
-const ipRequests = new Map();
+const RATE_WINDOW = 60 * 1000;
+const RATE_LIMIT = 1000;
+const requests = new Map();
 
-function cleanupOldRequests() {
+function cleanOldRequests() {
   const now = Date.now();
-  for (const [ip, requests] of ipRequests.entries()) {
-    const validRequests = requests.filter((t) => now - t < RATE_LIMIT_WINDOW);
-    if (validRequests.length === 0) {
-      ipRequests.delete(ip);
-    } else {
-      ipRequests.set(ip, validRequests);
-    }
+  for (const [ip, times] of requests.entries()) {
+    const recent = times.filter((t) => now - t < RATE_WINDOW);
+    if (recent.length) requests.set(ip, recent);
+    else requests.delete(ip);
   }
 }
 
@@ -22,39 +19,27 @@ export function middleware(req) {
   const ip = req.headers.get("x-forwarded-for") || req.ip || "unknown";
   const now = Date.now();
 
-  if (Math.random() < 0.01) cleanupOldRequests();
+  if (Math.random() < 0.02) cleanOldRequests();
+  logger.info({ message: "Incoming request", ip, pathname });
 
-  logger.info({ message: "Incoming request", pathname, ip });
+  if (pathname.startsWith("/api/auth")) return NextResponse.next();
 
-  if (pathname.startsWith("/api/auth")) {
-    logger.info({ message: "Auth route bypassed", pathname });
-    return NextResponse.next();
-  }
+  const hits = requests.get(ip) || [];
+  const filtered = hits.filter((t) => now - t < RATE_WINDOW);
+  filtered.push(now);
+  requests.set(ip, filtered);
 
-  const requestLog = ipRequests.get(ip) || [];
-  const recentRequests = requestLog.filter((t) => now - t < RATE_LIMIT_WINDOW);
-  recentRequests.push(now);
-  ipRequests.set(ip, recentRequests);
-
-  if (recentRequests.length > RATE_LIMIT_MAX) {
-    logger.warn({
-      message: "Rate limit exceeded",
-      ip,
-      count: recentRequests.length,
-    });
+  if (filtered.length > RATE_LIMIT) {
+    logger.warn({ message: "Rate limit exceeded", ip, count: filtered.length });
     return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
   }
 
-  const authHeader = req.headers.get("authorization");
-  const apiKey = req.headers.get("x-api-key");
+  const token = req.headers.get("authorization");
+  const key = req.headers.get("x-api-key");
+  const secret = process.env.SECRET_TOKEN;
 
-  if (
-    authHeader === `Bearer ${process.env.SECRET_TOKEN}` ||
-    apiKey === process.env.SECRET_TOKEN
-  ) {
-    logger.info({ message: "Authorized request", ip });
+  if (token === `Bearer ${secret}` || key === secret)
     return NextResponse.next();
-  }
 
   logger.warn({ message: "Unauthorized request", ip });
   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
