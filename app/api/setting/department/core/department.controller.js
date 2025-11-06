@@ -5,7 +5,7 @@ import {
   CreateDepartmentUseCase,
   UpdateDepartmentUseCase,
 } from "@/app/api/setting/department/usecases/departments.usecase";
-import { formatDepartmentData } from "@/app/api/setting/department/department.schema";
+import { formatDepartmentData } from "@/app/api/setting/department/core/department.schema";
 import logger from "@/lib/logger.node";
 
 export async function getAllDepartment(request) {

@@ -1,4 +1,4 @@
-import { DepartmentRepository } from "@/app/api/setting/department/department.repository";
+import { DepartmentRepository } from "@/app/api/setting/department/core/department.repository";
 import logger from "@/lib/logger.node";
 
 export const DepartmentValidator = {
