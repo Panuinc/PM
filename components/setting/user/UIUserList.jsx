@@ -6,7 +6,10 @@ import UILoading from "@/components/UILoading";
 
 const columns = [
   { name: "ID", uid: "userIndex", sortable: true },
-  { name: "USER NAME", uid: "userFirstName", sortable: true },
+  { name: "USER Firstname", uid: "userFirstName", sortable: true },
+  { name: "USER Lastname", uid: "userLastName", sortable: true },
+  { name: "USER Email", uid: "userEmail", sortable: true },
+  { name: "DEPARTMENT", uid: "userDepartmentId", sortable: true },
   { name: "STATUS", uid: "userStatus", sortable: true },
   { name: "CREATED BY", uid: "userCreatedBy", sortable: true },
   { name: "CREATED AT", uid: "userCreatedAt", sortable: true },
@@ -44,15 +47,27 @@ export default function UIUserList({
   onEdit,
 }) {
   const total = Users.length;
-  const enabled = Users.filter(
-    (d) => d.userStatus === "Enable"
-  ).length;
-  const disabled = Users.filter(
-    (d) => d.userStatus === "Disable"
-  ).length;
+  const enabled = Users.filter((d) => d.userStatus === "Enable").length;
+  const disabled = Users.filter((d) => d.userStatus === "Disable").length;
 
+  // ✅ normalize ให้สัมพันธ์กับ schema และ relation
   const normalized = Array.isArray(Users)
-    ? Users.map((d) => ({ ...d, id: d.userId }))
+    ? Users.map((u, i) => ({
+        ...u,
+        id: u.userId,
+        userIndex: i + 1,
+        userDepartmentId: u.department?.departmentName || "-",
+        userCreatedBy: u.createdByUser
+          ? `${u.createdByUser.userFirstName} ${u.createdByUser.userLastName}`
+          : u.userCreatedBy,
+        userUpdatedBy: u.updatedByUser
+          ? `${u.updatedByUser.userFirstName} ${u.updatedByUser.userLastName}`
+          : u.userUpdatedBy || "-",
+        userCreatedAt: new Date(u.userCreatedAt).toLocaleString(),
+        userUpdatedAt: u.userUpdatedAt
+          ? new Date(u.userUpdatedAt).toLocaleString()
+          : "-",
+      }))
     : [];
 
   return (

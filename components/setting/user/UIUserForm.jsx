@@ -9,6 +9,7 @@ export default function UIUserForm({
   mode,
   isUpdate,
   operatedBy,
+  departments = [],
 }) {
   const { formRef, formData, handleChange, handleSubmit, errors } = formHandler;
 
@@ -35,18 +36,102 @@ export default function UIUserForm({
               <Input
                 name="userFirstName"
                 type="text"
-                label="User Name"
+                label="User Firstname"
                 color="default"
                 variant="faded"
                 radius="none"
                 labelPlacement="outside"
-                placeholder="Enter User Name"
+                placeholder="Enter User Firstname"
                 isRequired
                 value={formData.userFirstName}
                 onChange={handleChange("userFirstName")}
                 isInvalid={!!errors.userFirstName}
                 errorMessage={errors.userFirstName}
               />
+            </div>
+            <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+              <Input
+                name="userLastName"
+                type="text"
+                label="User Lastname"
+                color="default"
+                variant="faded"
+                radius="none"
+                labelPlacement="outside"
+                placeholder="Enter User Lastname"
+                isRequired
+                value={formData.userLastName}
+                onChange={handleChange("userLastName")}
+                isInvalid={!!errors.userLastName}
+                errorMessage={errors.userLastName}
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit p-2 gap-2">
+            <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+              <Input
+                name="userEmail"
+                type="email"
+                label="User Email"
+                color="default"
+                variant="faded"
+                radius="none"
+                labelPlacement="outside"
+                placeholder="Enter User Email"
+                isRequired
+                value={formData.userEmail}
+                onChange={handleChange("userEmail")}
+                isInvalid={!!errors.userEmail}
+                errorMessage={errors.userEmail}
+              />
+            </div>
+            {!isUpdate && (
+              <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+                <Input
+                  name="userPassword"
+                  type="password"
+                  label="User Password"
+                  color="default"
+                  variant="faded"
+                  radius="none"
+                  labelPlacement="outside"
+                  placeholder="Enter Password"
+                  isRequired
+                  value={formData.userPassword}
+                  onChange={handleChange("userPassword")}
+                  isInvalid={!!errors.userPassword}
+                  errorMessage={errors.userPassword}
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="flex flex-col xl:flex-row items-center justify-end w-full h-fit p-2 gap-2">
+            <div className="flex items-center justify-center w-full xl:w-6/12 h-full p-2 gap-2">
+              <Select
+                name="userDepartmentId"
+                label="Department"
+                labelPlacement="outside"
+                placeholder="Please Select"
+                color="default"
+                variant="faded"
+                radius="none"
+                selectedKeys={
+                  formData.userDepartmentId ? [formData.userDepartmentId] : []
+                }
+                onSelectionChange={(keys) =>
+                  handleChange("userDepartmentId")([...keys][0])
+                }
+                isInvalid={!!errors.userDepartmentId}
+                errorMessage={errors.userDepartmentId}
+              >
+                {departments.map((d) => (
+                  <SelectItem key={d.departmentId}>
+                    {d.departmentName}
+                  </SelectItem>
+                ))}
+              </Select>
             </div>
           </div>
 

@@ -21,6 +21,9 @@ export default function UserUpdate() {
   const formHandler = useFormHandler(
     {
       userFirstName: "",
+      userLastName: "",
+      userEmail: "",
+      userDepartmentId: "",
       userStatus: "",
     },
     submitUser
