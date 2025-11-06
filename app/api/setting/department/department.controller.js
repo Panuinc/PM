@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
-import { CreateDepartmentUseCase } from "@/app/api/setting/department/usecases/createDepartment.usecase";
-import { UpdateDepartmentUseCase } from "@/app/api/setting/department/usecases/updateDepartment.usecase";
-import { GetAllDepartmentUseCase } from "@/app/api/setting/department/usecases/getAllDepartments.usecase";
-import { GetDepartmentByIdUseCase } from "@/app/api/setting/department/usecases/getDepartmentById.usecase";
+import {
+  GetAllDepartmentUseCase,
+  GetDepartmentByIdUseCase,
+  CreateDepartmentUseCase,
+  UpdateDepartmentUseCase,
+} from "@/app/api/setting/department/usecases/departments.usecase";
 import { formatDepartmentData } from "@/app/api/setting/department/department.schema";
 import logger from "@/lib/logger.node";
 
