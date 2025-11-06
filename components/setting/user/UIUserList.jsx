@@ -49,25 +49,27 @@ export default function UIUserList({
   const enabled = Users.filter((d) => d.userStatus === "Enable").length;
   const disabled = Users.filter((d) => d.userStatus === "Disable").length;
 
-  const normalized = Array.isArray(Users)
-    ? Users.map((u, i) => ({
-        ...u,
-        id: u.userId,
-        userIndex: i + 1,
-        userDepartmentId: u.department?.departmentName || "-",
-        userCreatedBy: u.createdByUser
-          ? `${u.createdByUser.userFirstName} ${u.createdByUser.userLastName}`
-          : u.userCreatedBy,
-        userUpdatedBy: u.updatedByUser
-          ? `${u.updatedByUser.userFirstName} ${u.updatedByUser.userLastName}`
-          : u.userUpdatedBy || "-",
-        userCreatedAt: new Date(u.userCreatedAt).toLocaleString(),
-        userUpdatedAt: u.userUpdatedAt
-          ? new Date(u.userUpdatedAt).toLocaleString()
-          : "-",
-      }))
-    : [];
-
+const normalized = Array.isArray(Users)
+  ? Users.map((u, i) => ({
+      ...u,
+      id: u.userId,
+      userIndex: i + 1,
+      userDepartmentId: u.department?.departmentName || "-",
+      userCreatedBy: u.createdByUser
+        ? `${u.createdByUser.userFirstName} ${u.createdByUser.userLastName}`
+        : u.userCreatedBy,
+      userUpdatedBy: u.updatedByUser
+        ? `${u.updatedByUser.userFirstName} ${u.updatedByUser.userLastName}`
+        : u.userUpdatedBy || "-",
+      userCreatedAt: u.userCreatedAt
+        ? new Date(u.userCreatedAt).toISOString().split("T")[0]
+        : "-",
+      userUpdatedAt: u.userUpdatedAt
+        ? new Date(u.userUpdatedAt).toISOString().split("T")[0]
+        : "-",
+    }))
+  : [];
+  
   return (
     <>
       <UIHeader header={headerTopic} />

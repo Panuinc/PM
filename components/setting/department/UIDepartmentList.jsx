@@ -59,9 +59,11 @@ export default function UIDepartmentList({
         departmentUpdatedBy: d.updatedByUser
           ? `${d.updatedByUser.userFirstName} ${d.updatedByUser.userLastName}`
           : d.departmentUpdatedBy || "-",
-        departmentCreatedAt: new Date(d.departmentCreatedAt).toLocaleString(),
+        departmentCreatedAt: d.departmentCreatedAt
+          ? new Date(d.departmentCreatedAt).toISOString().split("T")[0]
+          : "-",
         departmentUpdatedAt: d.departmentUpdatedAt
-          ? new Date(d.departmentUpdatedAt).toLocaleString()
+          ? new Date(d.departmentUpdatedAt).toISOString().split("T")[0]
           : "-",
       }))
     : [];

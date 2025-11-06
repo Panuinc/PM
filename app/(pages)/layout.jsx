@@ -159,8 +159,9 @@ export default function PagesLayout({ children }) {
       icon: <Settings />,
       label: "Settings",
       subMenus: [
-        { text: "User", path: "/setting/user" },
         { text: "Department", path: "/setting/department" },
+        { text: "Role", path: "/setting/Role" },
+        { text: "User", path: "/setting/user" },
       ],
     },
   };

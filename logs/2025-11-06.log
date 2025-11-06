@@ -99,3 +99,28 @@
 [2025-11-06 16:01:53] [INFO] {"message":"UserService.countAll"}
 [2025-11-06 16:01:53] [INFO] {"message":"GetAllUserUseCase success","total":2}
 [2025-11-06 16:01:53] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-06 16:02:33] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:02:33] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:02:34] [INFO] {"message":"UserService.countAll"}
+[2025-11-06 16:02:34] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-06 16:02:34] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-06 16:02:50] [INFO] {"message":"DepartmentService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:02:50] [INFO] {"message":"DepartmentRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:02:50] [INFO] {"message":"DepartmentService.countAll"}
+[2025-11-06 16:02:50] [INFO] {"message":"GetAllDepartmentUseCase success","total":7}
+[2025-11-06 16:02:50] [INFO] {"message":"Formatting department data","count":7}
+[2025-11-06 16:03:30] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:03:30] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:03:31] [INFO] {"message":"UserService.countAll"}
+[2025-11-06 16:03:31] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-06 16:03:31] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-06 16:03:37] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:03:37] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:03:37] [INFO] {"message":"UserService.countAll"}
+[2025-11-06 16:03:37] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-06 16:03:37] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-06 16:04:46] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 16:04:46] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 16:04:46] [INFO] {"message":"UserService.countAll"}
+[2025-11-06 16:04:46] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-06 16:04:46] [INFO] {"message":"Formatting user data","count":2}
