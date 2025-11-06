@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
-import UIHeader from "../UIHeader";
-import DataTable from "../UITable";
-import UILoading from "../UILoading";
+import UIHeader from "@/components/UIHeader";
+import DataTable from "@/components/UITable";
+import UILoading from "@/components/UILoading";
 
 const columns = [
   { name: "ID", uid: "id", sortable: true },
