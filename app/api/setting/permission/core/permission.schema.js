@@ -6,14 +6,12 @@ logger.info({ message: "Permission schema loaded" });
 
 export const permissionPostSchema = z.object({
   permissionName: preprocessString("Please provide the permission name"),
-  permissionKey: preprocessString("Please provide the permission key"),
   permissionCreatedBy: preprocessString("Please provide the creator ID"),
 });
 
 export const permissionPutSchema = z.object({
   permissionId: preprocessString("Please provide the permission ID"),
   permissionName: preprocessString("Please provide the permission name"),
-  permissionKey: preprocessString("Please provide the permission key"),
   permissionStatus: preprocessEnum(
     ["Enable", "Disable"],
     "Please provide permission status'"
