@@ -60,10 +60,13 @@ export default function DataTable({
       statusOptions.length > 0 &&
       Array.from(statusFilter).length !== statusOptions.length
     ) {
-      filtered = filtered.filter((item) =>
-        Array.from(statusFilter).includes(item.status)
-      );
+      filtered = filtered.filter((item) => {
+        return Object.values(item).some((value) =>
+          Array.from(statusFilter).includes(String(value))
+        );
+      });
     }
+
     return filtered;
   }, [data, filterValue, statusFilter, statusOptions.length, hasSearchFilter]);
 
@@ -91,17 +94,20 @@ export default function DataTable({
         const customRender = renderCustomCell(item, columnKey);
         if (customRender !== undefined) return customRender;
       }
+
+      if (statusColorMap && statusColorMap[cellValue]) {
+        return (
+          <Chip
+            className="capitalize"
+            color={statusColorMap[cellValue] || "default"}
+            variant="dot"
+          >
+            {cellValue}
+          </Chip>
+        );
+      }
+
       switch (columnKey) {
-        case "status":
-          return (
-            <Chip
-              className="capitalize"
-              color={statusColorMap[item.status] || "default"}
-              variant="dot"
-            >
-              {cellValue}
-            </Chip>
-          );
         case "actions":
           return (
             <div className="flex items-center justify-center w-full h-full p-2 gap-2">
