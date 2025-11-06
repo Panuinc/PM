@@ -286,7 +286,7 @@ export default function PagesLayout({ children }) {
         )}
       </div>
 
-      <div className="flex flex-col items-center justify-center w-full h-full">
+      <div className="flex flex-col items-stretch justify-start w-full h-screen overflow-hidden">
         <div className="flex flex-row items-center justify-between w-full h-fit p-1 gap-2 border-1 border-dark">
           <button
             className="flex lg:hidden items-center justify-center aspect-square h-full p-2 gap-2 cursor-pointer"
@@ -313,7 +313,7 @@ export default function PagesLayout({ children }) {
             />
           </div>
         </div>
-        <div className="flex flex-col items-center justify-start w-full h-full p-2 gap-2 border-1 border-dark overflow-auto">
+        <div className="flex flex-col items-stretch justify-start w-full flex-1 p-2 gap-2 border-1 border-dark overflow-y-auto overflow-x-hidden">
           {children}
         </div>
       </div>

@@ -6,9 +6,9 @@ import UILoading from "@/components/UILoading";
 
 const columns = [
   { name: "ID", uid: "userIndex", sortable: true },
-  { name: "USER Firstname", uid: "userFirstName", sortable: true },
-  { name: "USER Lastname", uid: "userLastName", sortable: true },
-  { name: "USER Email", uid: "userEmail", sortable: true },
+  { name: "Firstname", uid: "userFirstName", sortable: true },
+  { name: "Lastname", uid: "userLastName", sortable: true },
+  { name: "Email", uid: "userEmail", sortable: true },
   { name: "DEPARTMENT", uid: "userDepartmentId", sortable: true },
   { name: "STATUS", uid: "userStatus", sortable: true },
   { name: "CREATED BY", uid: "userCreatedBy", sortable: true },
@@ -29,12 +29,11 @@ const statusColorMap = {
 };
 
 const INITIAL_VISIBLE_COLUMNS = [
+  "userIndex",
   "userFirstName",
+  "userLastName",
+  "userDepartmentId",
   "userStatus",
-  "userCreatedBy",
-  "userCreatedAt",
-  "userUpdatedBy",
-  "userUpdatedAt",
   "actions",
 ];
 
@@ -50,7 +49,6 @@ export default function UIUserList({
   const enabled = Users.filter((d) => d.userStatus === "Enable").length;
   const disabled = Users.filter((d) => d.userStatus === "Disable").length;
 
-  // ✅ normalize ให้สัมพันธ์กับ schema และ relation
   const normalized = Array.isArray(Users)
     ? Users.map((u, i) => ({
         ...u,

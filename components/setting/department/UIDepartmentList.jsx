@@ -26,12 +26,9 @@ const statusColorMap = {
 };
 
 const INITIAL_VISIBLE_COLUMNS = [
+  "departmentIndex",
   "departmentName",
   "departmentStatus",
-  "departmentCreatedBy",
-  "departmentCreatedAt",
-  "departmentUpdatedBy",
-  "departmentUpdatedAt",
   "actions",
 ];
 
@@ -52,7 +49,21 @@ export default function UIDepartmentList({
   ).length;
 
   const normalized = Array.isArray(Departments)
-    ? Departments.map((d) => ({ ...d, id: d.departmentId }))
+    ? Departments.map((d, i) => ({
+        ...d,
+        id: d.departmentId,
+        departmentIndex: i + 1,
+        departmentCreatedBy: d.createdByUser
+          ? `${d.createdByUser.userFirstName} ${d.createdByUser.userLastName}`
+          : d.departmentCreatedBy || "-",
+        departmentUpdatedBy: d.updatedByUser
+          ? `${d.updatedByUser.userFirstName} ${d.updatedByUser.userLastName}`
+          : d.departmentUpdatedBy || "-",
+        departmentCreatedAt: new Date(d.departmentCreatedAt).toLocaleString(),
+        departmentUpdatedAt: d.departmentUpdatedAt
+          ? new Date(d.departmentUpdatedAt).toLocaleString()
+          : "-",
+      }))
     : [];
 
   return (
@@ -68,6 +79,7 @@ export default function UIDepartmentList({
             {total}
           </div>
         </div>
+
         <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2 border-1 border-dark">
           <div className="flex items-center justify-start w-full h-full p-2 gap-2">
             Enabled Departments
@@ -76,6 +88,7 @@ export default function UIDepartmentList({
             {enabled}
           </div>
         </div>
+
         <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2 border-1 border-dark">
           <div className="flex items-center justify-start w-full h-full p-2 gap-2">
             Disabled Departments

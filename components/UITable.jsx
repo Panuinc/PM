@@ -30,6 +30,7 @@ export default function DataTable({
   searchPlaceholder = "Search...",
   emptyContent = "No data found",
   itemName = "items",
+  initialVisibleColumns = [],
   onAddNew,
   onView,
   onEdit,
@@ -44,7 +45,22 @@ export default function DataTable({
   });
   const [page, setPage] = React.useState(1);
 
+  const [visibleColumns, setVisibleColumns] = React.useState(
+    new Set(
+      initialVisibleColumns.length > 0
+        ? initialVisibleColumns
+        : columns.map((c) => c.uid)
+    )
+  );
+
   const hasSearchFilter = Boolean(filterValue);
+
+  const headerColumns = React.useMemo(() => {
+    if (visibleColumns === "all") return columns;
+    return columns.filter((column) =>
+      Array.from(visibleColumns).includes(column.uid)
+    );
+  }, [columns, visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
     let filtered = [...data];
@@ -156,7 +172,7 @@ export default function DataTable({
 
   const topContent = (
     <div className="flex flex-col items-center justify-center w-full h-fit gap-2">
-      <div className="flex flex-row items-center justify-center w-full h-full gap-2">
+      <div className="flex flex-col sm:flex-row items-center justify-center w-full h-full gap-2">
         <Input
           isClearable
           placeholder={searchPlaceholder}
@@ -166,7 +182,36 @@ export default function DataTable({
           onValueChange={onSearchChange}
           radius="none"
           variant="faded"
+          className="w-full"
         />
+
+        <Dropdown>
+          <DropdownTrigger>
+            <Button
+              color="default"
+              endContent={<ChevronDown />}
+              radius="none"
+              className="w-full sm:w-32 p-2 gap-2 text-dark font-semibold"
+            >
+              Columns
+            </Button>
+          </DropdownTrigger>
+          <DropdownMenu
+            disallowEmptySelection
+            aria-label="Column Visibility"
+            closeOnSelect={false}
+            selectedKeys={visibleColumns}
+            selectionMode="multiple"
+            onSelectionChange={setVisibleColumns}
+          >
+            {columns.map((column) => (
+              <DropdownItem key={column.uid} className="capitalize">
+                {column.name}
+              </DropdownItem>
+            ))}
+          </DropdownMenu>
+        </Dropdown>
+
         {statusOptions.length > 0 && (
           <Dropdown>
             <DropdownTrigger>
@@ -174,7 +219,7 @@ export default function DataTable({
                 color="default"
                 endContent={<ChevronDown />}
                 radius="none"
-                className="w-28 p-2 gap-2 text-dark font-semibold"
+                className="w-full sm:w-32 p-2 gap-2 text-dark font-semibold"
               >
                 Status
               </Button>
@@ -195,19 +240,20 @@ export default function DataTable({
             </DropdownMenu>
           </Dropdown>
         )}
+
         {onAddNew && (
           <Button
             startContent={<Plus />}
             color="primary"
             onPress={onAddNew}
             radius="none"
-            className="w-28 p-2 gap-2 text-white font-semibold"
+            className="w-full sm:w-32 p-2 gap-2 text-white font-semibold"
           >
             Add New
           </Button>
         )}
       </div>
-      <div className="flex flex-row items-center justify-between w-full h-full gap-2">
+      <div className="flex flex-col sm:flex-row items-center justify-between w-full h-full gap-2">
         <div className="flex items-center justify-between w-full h-full p-2 gap-2">
           Total {data.length} {itemName}
         </div>
@@ -249,7 +295,9 @@ export default function DataTable({
       aria-label="Data table with sorting and pagination"
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
-      classNames={{ wrapper: "max-h-[500px]" }}
+      classNames={{
+        wrapper: "max-h-[500px] overflow-auto",
+      }}
       sortDescriptor={sortDescriptor}
       topContent={topContent}
       topContentPlacement="outside"
@@ -257,7 +305,7 @@ export default function DataTable({
       radius="none"
       shadow="none"
     >
-      <TableHeader columns={columns}>
+      <TableHeader columns={headerColumns}>
         {(column) => (
           <TableColumn
             key={column.uid}
