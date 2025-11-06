@@ -160,7 +160,7 @@ export default function PagesLayout({ children }) {
       label: "Settings",
       subMenus: [
         { text: "Department", path: "/setting/department" },
-        { text: "Role", path: "/setting/Role" },
+        { text: "Role", path: "/setting/role" },
         { text: "User", path: "/setting/user" },
       ],
     },
