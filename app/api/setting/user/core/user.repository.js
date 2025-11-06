@@ -9,6 +9,7 @@ export const UserRepository = {
       take,
       orderBy: { userCreatedAt: "asc" },
       include: {
+        department: true,
         createdByUser: {
           select: { userId: true, userFirstName: true, userLastName: true },
         },
@@ -26,6 +27,7 @@ export const UserRepository = {
     return await prisma.user.findUnique({
       where: { userId },
       include: {
+        department: true,
         createdByUser: {
           select: { userId: true, userFirstName: true, userLastName: true },
         },
@@ -36,12 +38,10 @@ export const UserRepository = {
     });
   },
 
-  findByUserName: async (userName) => {
-    logger.info({ message: "UserRepository.findByUserName", userName });
-    return await prisma.user.findFirst({
-      where: {
-        userName: { equals: userName.trim(), mode: "insensitive" },
-      },
+  findByEmail: async (userEmail) => {
+    logger.info({ message: "UserRepository.findByEmail", userEmail });
+    return await prisma.user.findUnique({
+      where: { userEmail },
     });
   },
 
@@ -50,6 +50,7 @@ export const UserRepository = {
     return await prisma.user.create({
       data,
       include: {
+        department: true,
         createdByUser: {
           select: { userId: true, userFirstName: true, userLastName: true },
         },
@@ -63,6 +64,7 @@ export const UserRepository = {
       where: { userId },
       data,
       include: {
+        department: true,
         updatedByUser: {
           select: { userId: true, userFirstName: true, userLastName: true },
         },

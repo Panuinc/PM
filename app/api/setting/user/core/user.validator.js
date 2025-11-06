@@ -2,26 +2,26 @@ import { UserRepository } from "@/app/api/setting/user/core/user.repository";
 import logger from "@/lib/logger.node";
 
 export const UserValidator = {
-  async isDuplicateUserName(userName) {
+  async isDuplicateEmail(userEmail) {
     logger.info({
-      message: "UserValidator.isDuplicateUserName",
-      userName,
+      message: "UserValidator.isDuplicateEmail",
+      userEmail,
     });
 
-    if (!userName || typeof userName !== "string") {
-      logger.warn({ message: "Invalid user code input", userName });
-      throw new Error("Invalid user code");
+    if (!userEmail || typeof userEmail !== "string") {
+      logger.warn({ message: "Invalid email input", userEmail });
+      throw new Error("Invalid email");
     }
 
-    const existing = await UserRepository.findByUserName(userName);
+    const existing = await UserRepository.findByEmail(userEmail);
     const isDuplicate = !!existing;
 
     if (isDuplicate)
       logger.warn({
-        message: "Duplicate user code detected",
-        userName,
+        message: "Duplicate email detected",
+        userEmail,
       });
-    else logger.info({ message: "User code available", userName });
+    else logger.info({ message: "Email available", userEmail });
 
     return isDuplicate;
   },

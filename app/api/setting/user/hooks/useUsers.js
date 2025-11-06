@@ -3,8 +3,8 @@ import { useState, useEffect, useCallback } from "react";
 import { showToast } from "@/components/UIToast";
 import { useRouter } from "next/navigation";
 
-export function useDepartments(apiUrl = "/api/setting/department") {
-  const [departments, setDepartments] = useState([]);
+export function useUsers(apiUrl = "/api/setting/user") {
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,23 +18,29 @@ export function useDepartments(apiUrl = "/api/setting/department") {
           },
         });
         const data = await res.json();
-        if (!res.ok)
-          throw new Error(data.error || "Failed to load departments.");
+
+        if (!res.ok) throw new Error(data.error || "Failed to load users.");
 
         if (active) {
-          const formatted = Array.isArray(data.departments)
-            ? data.departments.map((d, index) => ({
-                ...d,
-                departmentIndex: index + 1,
-                departmentCreatedBy: d.createdByUser
-                  ? `${d.createdByUser.userFirstName} ${d.createdByUser.userLastName}`
+          const formatted = Array.isArray(data.users)
+            ? data.users.map((u, index) => ({
+                ...u,
+                userIndex: index + 1,
+                userFullName: `${u.userFirstName} ${u.userLastName}`,
+                userDepartment: u.department
+                  ? u.department.departmentName
                   : "-",
-                departmentUpdatedBy: d.updatedByUser
-                  ? `${d.updatedByUser.userFirstName} ${d.updatedByUser.userLastName}`
+                userStatus: u.userStatus || "-",
+                userCreatedBy: u.createdByUser
+                  ? `${u.createdByUser.userFirstName} ${u.createdByUser.userLastName}`
+                  : "-",
+                userUpdatedBy: u.updatedByUser
+                  ? `${u.updatedByUser.userFirstName} ${u.updatedByUser.userLastName}`
                   : "-",
               }))
             : [];
-          setDepartments(formatted);
+
+          setUsers(formatted);
         }
       } catch (err) {
         showToast("danger", "Error: " + err.message);
@@ -48,15 +54,15 @@ export function useDepartments(apiUrl = "/api/setting/department") {
     };
   }, [apiUrl]);
 
-  return { departments, loading };
+  return { users, loading };
 }
 
-export function useDepartment(departmentId) {
-  const [department, setDepartment] = useState(null);
+export function useUser(userId) {
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!departmentId) {
+    if (!userId) {
       setLoading(false);
       return;
     }
@@ -66,32 +72,34 @@ export function useDepartment(departmentId) {
 
     (async () => {
       try {
-        const res = await fetch(`/api/setting/department/${departmentId}`, {
+        const res = await fetch(`/api/setting/user/${userId}`, {
           headers: {
             "x-api-key": process.env.NEXT_PUBLIC_SECRET_TOKEN || "",
           },
         });
         const result = await res.json();
-        if (!res.ok)
-          throw new Error(result.error || "Failed to load Department.");
+
+        if (!res.ok) throw new Error(result.error || "Failed to load User.");
 
         if (active) {
-          const dept =
-            result.department ||
-            (Array.isArray(result.departments) ? result.departments[0] : null);
+          const u =
+            result.user ||
+            (Array.isArray(result.users) ? result.users[0] : null);
 
-          if (dept) {
+          if (u) {
             const formatted = {
-              ...dept,
-              departmentCreatedBy: dept.createdByUser
-                ? `${dept.createdByUser.userFirstName} ${dept.createdByUser.userLastName}`
+              ...u,
+              userFullName: `${u.userFirstName} ${u.userLastName}`,
+              userDepartment: u.department ? u.department.departmentName : "-",
+              userCreatedBy: u.createdByUser
+                ? `${u.createdByUser.userFirstName} ${u.createdByUser.userLastName}`
                 : "-",
-              departmentUpdatedBy: dept.updatedByUser
-                ? `${dept.updatedByUser.userFirstName} ${dept.updatedByUser.userLastName}`
+              userUpdatedBy: u.updatedByUser
+                ? `${u.updatedByUser.userFirstName} ${u.updatedByUser.userLastName}`
                 : "-",
             };
-            setDepartment(formatted);
-          } else showToast("warning", "No Department data found.");
+            setUser(formatted);
+          } else showToast("warning", "No User data found.");
         }
       } catch (err) {
         showToast("danger", "Error: " + err.message);
@@ -103,24 +111,26 @@ export function useDepartment(departmentId) {
     return () => {
       active = false;
     };
-  }, [departmentId]);
+  }, [userId]);
 
-  return { department, loading };
+  return { user, loading };
 }
 
-export function useSubmitDepartment({ mode = "create", departmentId, userId }) {
+export function useSubmitUser({ mode = "create", userId, currentUserId }) {
   const router = useRouter();
 
   return useCallback(
     async (formRef, formData, setErrors) => {
-      const byField =
-        mode === "create" ? "departmentCreatedBy" : "departmentUpdatedBy";
+      const byField = mode === "create" ? "userCreatedBy" : "userUpdatedBy";
 
-      const payload = { ...formData, [byField]: userId };
+      const payload = {
+        ...formData,
+        [byField]: currentUserId,
+      };
+
       const url =
-        mode === "create"
-          ? "/api/setting/department"
-          : `/api/setting/department/${departmentId}`;
+        mode === "create" ? "/api/setting/user" : `/api/setting/user/${userId}`;
+
       const method = mode === "create" ? "POST" : "PUT";
 
       try {
@@ -136,15 +146,15 @@ export function useSubmitDepartment({ mode = "create", departmentId, userId }) {
         const result = await res.json();
         if (res.ok) {
           showToast("success", result.message || "Success");
-          setTimeout(() => router.push("/setting/department"), 1500);
+          setTimeout(() => router.push("/setting/user"), 1500);
         } else {
           setErrors(result.details || {});
-          showToast("danger", result.error || "Failed to submit Department.");
+          showToast("danger", result.error || "Failed to submit User.");
         }
       } catch (err) {
-        showToast("danger", `Failed to submit Department: ${err.message}`);
+        showToast("danger", `Failed to submit User: ${err.message}`);
       }
     },
-    [mode, departmentId, userId, router]
+    [mode, userId, currentUserId, router]
   );
 }

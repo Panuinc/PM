@@ -43,18 +43,17 @@ export async function CreateUserUseCase(data) {
     };
   }
 
-  const duplicate = await UserValidator.isDuplicateUserName(
-    parsed.data.userName
-  );
+  const duplicate = await UserValidator.isDuplicateEmail(parsed.data.userEmail);
   if (duplicate)
     throw {
       status: 409,
-      message: `User '${parsed.data.userName}' already exists`,
+      message: `Email '${parsed.data.userEmail}' already exists`,
     };
 
   const user = await UserService.create({
-    userName: parsed.data.userName.trim(),
-    userCreatedBy: parsed.data.userCreatedBy,
+    ...parsed.data,
+    userEmail: parsed.data.userEmail.trim().toLowerCase(),
+    userStatus: "Enable",
     userCreatedAt: getLocalNow(),
   });
 
@@ -86,28 +85,23 @@ export async function UpdateUserUseCase(data) {
   if (!existing) throw { status: 404, message: "User not found" };
 
   if (
-    parsed.data.userName.trim().toLowerCase() !==
-    existing.userName.trim().toLowerCase()
+    parsed.data.userEmail.trim().toLowerCase() !==
+    existing.userEmail.trim().toLowerCase()
   ) {
-    const duplicate = await UserValidator.isDuplicateUserName(
-      parsed.data.userName
+    const duplicate = await UserValidator.isDuplicateEmail(
+      parsed.data.userEmail
     );
     if (duplicate)
       throw {
         status: 409,
-        message: `User '${parsed.data.userName}' already exists`,
+        message: `Email '${parsed.data.userEmail}' already exists`,
       };
   }
 
-  const updatedUser = await UserService.update(
-    parsed.data.userId,
-    {
-      userName: parsed.data.userName.trim(),
-      userStatus: parsed.data.userStatus.trim(),
-      userUpdatedBy: parsed.data.userUpdatedBy,
-      userUpdatedAt: getLocalNow(),
-    }
-  );
+  const updatedUser = await UserService.update(parsed.data.userId, {
+    ...parsed.data,
+    userUpdatedAt: getLocalNow(),
+  });
 
   logger.info({
     message: "User updated successfully",
