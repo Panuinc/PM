@@ -200,30 +200,30 @@ export default function PagesLayout({ children }) {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row items-center justify-center w-full h-full">
+    <div className="flex flex-col xl:flex-row items-center justify-center w-full h-full">
       {isMobileMenuOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/50 z-40 xl:hidden"
           onClick={toggleMobileMenu}
         />
       )}
 
       <div
         className={`
-          fixed lg:relative inset-y-0 left-0 z-50
+          fixed xl:relative inset-y-0 left-0 z-50
           flex flex-row items-center justify-center
-          ${isCollapsed ? "w-fit" : "w-[300px] lg:w-[500px]"}
+          ${isCollapsed ? "w-fit" : "w-[300px] xl:w-[500px]"}
           h-full bg-white transition-all duration-300
           ${
             isMobileMenuOpen
               ? "translate-x-0"
-              : "-translate-x-full lg:translate-x-0"
+              : "-translate-x-full xl:translate-x-0"
           }
         `}
       >
         <div className="flex flex-col items-center justify-between min-w-fit h-full p-2 gap-2 border-1 border-dark bg-dark overflow-auto">
           <div
-            className="lg:hidden flex items-center justify-center w-full h-fit p-3 gap-2 cursor-pointer text-white hover:text-dark hover:bg-white"
+            className="xl:hidden flex items-center justify-center w-full h-fit p-3 gap-2 cursor-pointer text-white hover:text-dark hover:bg-white"
             onClick={toggleMobileMenu}
           >
             <X />
@@ -289,16 +289,15 @@ export default function PagesLayout({ children }) {
       <div className="flex flex-col items-stretch justify-start w-full h-screen overflow-hidden">
         <div className="flex flex-row items-center justify-between w-full h-fit p-1 gap-2 border-1 border-dark">
           <button
-            className="flex lg:hidden items-center justify-center aspect-square h-full p-2 gap-2 cursor-pointer"
+            className="flex xl:hidden items-center justify-center aspect-square h-full p-2 gap-2 cursor-pointer"
             onClick={toggleMobileMenu}
           >
             <Menu />
           </button>
-          <div className="flex items-center justify-center w-full xl:w-fit h-full p-2 gap-2 whitespace-nowrap">
-            <span className="hidden sm:inline">Preventive Maintenance</span>
-            <span className="sm:hidden"> </span>
+          <div className="flex items-center justify-start w-full xl:w-fit h-full p-2 gap-2 whitespace-nowrap">
+            Preventive Maintenance
           </div>
-          <div className="hidden md:flex items-center justify-center w-full h-full p-2 gap-2">
+          <div className="hidden xl:flex items-center justify-center w-full h-full p-2 gap-2">
             {" "}
           </div>
           <div className="flex items-center justify-center aspect-square h-full p-2 gap-2 hover:scale-105">

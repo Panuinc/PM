@@ -172,7 +172,7 @@ export default function DataTable({
 
   const topContent = (
     <div className="flex flex-col items-center justify-center w-full h-fit gap-2">
-      <div className="flex flex-col sm:flex-row items-center justify-center w-full h-full gap-2">
+      <div className="flex flex-col xl:flex-row items-center justify-center w-full h-full gap-2">
         <Input
           isClearable
           placeholder={searchPlaceholder}
@@ -191,7 +191,7 @@ export default function DataTable({
               color="default"
               endContent={<ChevronDown />}
               radius="none"
-              className="w-full sm:w-32 p-2 gap-2 text-dark font-semibold"
+              className="w-full xl:w-32 p-2 gap-2 text-dark font-semibold"
             >
               Columns
             </Button>
@@ -219,7 +219,7 @@ export default function DataTable({
                 color="default"
                 endContent={<ChevronDown />}
                 radius="none"
-                className="w-full sm:w-32 p-2 gap-2 text-dark font-semibold"
+                className="w-full xl:w-32 p-2 gap-2 text-dark font-semibold"
               >
                 Status
               </Button>
@@ -247,13 +247,13 @@ export default function DataTable({
             color="primary"
             onPress={onAddNew}
             radius="none"
-            className="w-full sm:w-32 p-2 gap-2 text-white font-semibold"
+            className="w-full xl:w-32 p-2 gap-2 text-white font-semibold"
           >
             Add New
           </Button>
         )}
       </div>
-      <div className="flex flex-col sm:flex-row items-center justify-between w-full h-full gap-2">
+      <div className="flex flex-col xl:flex-row items-center justify-between w-full h-full gap-2">
         <div className="flex items-center justify-between w-full h-full p-2 gap-2">
           Total {data.length} {itemName}
         </div>

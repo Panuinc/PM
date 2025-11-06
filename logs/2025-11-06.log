@@ -1,0 +1,60 @@
+[2025-11-06 15:51:42] [INFO] {"message":"DepartmentService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 15:51:42] [INFO] {"message":"DepartmentRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 15:51:42] [INFO] {"message":"DepartmentService.countAll"}
+[2025-11-06 15:51:42] [INFO] {"message":"GetAllDepartmentUseCase success","total":7}
+[2025-11-06 15:51:42] [INFO] {"message":"Formatting department data","count":7}
+[2025-11-06 15:51:42] [INFO] {"message":"DepartmentService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 15:51:42] [INFO] {"message":"DepartmentRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 15:51:42] [INFO] {"message":"DepartmentService.countAll"}
+[2025-11-06 15:51:42] [INFO] {"message":"GetAllDepartmentUseCase success","total":7}
+[2025-11-06 15:51:42] [INFO] {"message":"Formatting department data","count":7}
+[2025-11-06 15:51:43] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 15:51:43] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 15:51:44] [INFO] {"message":"UserService.countAll"}
+[2025-11-06 15:51:44] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-06 15:51:44] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-06 15:51:44] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 15:51:44] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 15:51:44] [INFO] {"message":"UserService.countAll"}
+[2025-11-06 15:51:44] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-06 15:51:44] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-06 15:51:53] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 15:51:53] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 15:51:54] [INFO] {"message":"UserService.countAll"}
+[2025-11-06 15:51:54] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-06 15:51:54] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-06 15:51:54] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 15:51:54] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 15:51:54] [INFO] {"message":"UserService.countAll"}
+[2025-11-06 15:51:54] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-06 15:51:54] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-06 15:52:05] [INFO] {"message":"DepartmentService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 15:52:05] [INFO] {"message":"DepartmentRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 15:52:05] [INFO] {"message":"DepartmentService.countAll"}
+[2025-11-06 15:52:05] [INFO] {"message":"GetAllDepartmentUseCase success","total":7}
+[2025-11-06 15:52:05] [INFO] {"message":"Formatting department data","count":7}
+[2025-11-06 15:52:06] [INFO] {"message":"DepartmentService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 15:52:06] [INFO] {"message":"DepartmentRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 15:52:06] [INFO] {"message":"DepartmentService.countAll"}
+[2025-11-06 15:52:06] [INFO] {"message":"GetAllDepartmentUseCase success","total":7}
+[2025-11-06 15:52:06] [INFO] {"message":"Formatting department data","count":7}
+[2025-11-06 15:53:48] [INFO] {"message":"DepartmentService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 15:53:48] [INFO] {"message":"DepartmentRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 15:53:49] [INFO] {"message":"DepartmentService.countAll"}
+[2025-11-06 15:53:49] [INFO] {"message":"GetAllDepartmentUseCase success","total":7}
+[2025-11-06 15:53:49] [INFO] {"message":"Formatting department data","count":7}
+[2025-11-06 15:53:49] [INFO] {"message":"DepartmentService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 15:53:49] [INFO] {"message":"DepartmentRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 15:53:49] [INFO] {"message":"DepartmentService.countAll"}
+[2025-11-06 15:53:49] [INFO] {"message":"GetAllDepartmentUseCase success","total":7}
+[2025-11-06 15:53:49] [INFO] {"message":"Formatting department data","count":7}
+[2025-11-06 15:55:41] [INFO] {"message":"DepartmentService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 15:55:41] [INFO] {"message":"DepartmentRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 15:55:42] [INFO] {"message":"DepartmentService.countAll"}
+[2025-11-06 15:55:42] [INFO] {"message":"GetAllDepartmentUseCase success","total":7}
+[2025-11-06 15:55:42] [INFO] {"message":"Formatting department data","count":7}
+[2025-11-06 15:55:42] [INFO] {"message":"DepartmentService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-06 15:55:42] [INFO] {"message":"DepartmentRepository.getAll","skip":0,"take":1000000}
+[2025-11-06 15:55:42] [INFO] {"message":"DepartmentService.countAll"}
+[2025-11-06 15:55:42] [INFO] {"message":"GetAllDepartmentUseCase success","total":7}
+[2025-11-06 15:55:42] [INFO] {"message":"Formatting department data","count":7}
