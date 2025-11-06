@@ -23,14 +23,14 @@ model User {
   userLastName     String
   userEmail        String     @unique
   userPassword     String
-  userDepartmentId String
+  userDepartmentId String?
   userStatus       UserStatus @default(Enable)
   userCreatedBy    String
-  userCreatedAt    DateTime   @default(now())
+  userCreatedAt    DateTime
   userUpdatedBy    String?
   userUpdatedAt    DateTime?
 
-  department Department @relation(fields: [userDepartmentId], references: [departmentId])
+  department Department? @relation(fields: [userDepartmentId], references: [departmentId])
 
   createdByUser User?  @relation("UserCreatedByUser", fields: [userCreatedBy], references: [userId])
   updatedByUser User?  @relation("UserUpdatedByUser", fields: [userUpdatedBy], references: [userId])
@@ -56,7 +56,7 @@ model Department {
   departmentName      String
   departmentStatus    Status    @default(Enable)
   departmentCreatedBy String
-  departmentCreatedAt DateTime  @default(now())
+  departmentCreatedAt DateTime
   departmentUpdatedBy String?
   departmentUpdatedAt DateTime?
 
@@ -73,7 +73,7 @@ model Role {
   roleName      String
   roleStatus    Status    @default(Enable)
   roleCreatedBy String
-  roleCreatedAt DateTime  @default(now())
+  roleCreatedAt DateTime
   roleUpdatedBy String?
   roleUpdatedAt DateTime?
 
@@ -93,7 +93,7 @@ model Permission {
   permissionKey       String    @unique
   permissionStatus    Status    @default(Enable)
   permissionCreatedBy String
-  permissionCreatedAt DateTime  @default(now())
+  permissionCreatedAt DateTime
   permissionUpdatedBy String?
   permissionUpdatedAt DateTime?
 
@@ -112,7 +112,7 @@ model RolePermission {
   rolePermissionPermissionId String
   rolePermissionStatus       Status   @default(Enable)
   rolePermissionCreatedBy    String
-  rolePermissionCreatedAt    DateTime @default(now())
+  rolePermissionCreatedAt    DateTime
 
   role          Role       @relation(fields: [rolePermissionRoleId], references: [roleId])
   permission    Permission @relation(fields: [rolePermissionPermissionId], references: [permissionId])
@@ -129,7 +129,7 @@ model UserRole {
   userRoleRoleId    String
   userRoleStatus    Status   @default(Enable)
   userRoleCreatedBy String
-  userRoleCreatedAt DateTime @default(now())
+  userRoleCreatedAt DateTime
 
   user          User @relation(fields: [userRoleUserId], references: [userId])
   role          Role @relation(fields: [userRoleRoleId], references: [roleId])
