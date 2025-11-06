@@ -7,15 +7,18 @@ import { useParams } from "next/navigation";
 import { useSessionUser } from "@/hooks/useSessionUser";
 import { useUser, useSubmitUser } from "@/app/api/setting/user/hooks";
 import { useFormHandler } from "@/hooks/useFormHandler";
+import { useDepartments } from "@/app/api/setting/department/hooks";
 
 export default function UserUpdate() {
   const { userId } = useParams();
   const { userId: sessionUserId, userName } = useSessionUser();
-  const { user, loading } = useUser(userId);
+  const { user, loading: userLoading } = useUser(userId);
+  const { departments, loading: deptLoading } = useDepartments();
+
   const submitUser = useSubmitUser({
     mode: "update",
     userId,
-    userId: sessionUserId,
+    currentUserId: sessionUserId,
   });
 
   const formHandler = useFormHandler(
@@ -33,7 +36,7 @@ export default function UserUpdate() {
     if (user) formHandler.setFormData(user);
   }, [user]);
 
-  if (loading) return <UILoading />;
+  if (userLoading || deptLoading) return <UILoading />;
 
   return (
     <UIUserForm
@@ -42,6 +45,7 @@ export default function UserUpdate() {
       mode="update"
       operatedBy={userName}
       isUpdate
+      departments={departments}
     />
   );
 }

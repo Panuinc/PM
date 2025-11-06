@@ -18,13 +18,11 @@ export default function DepartmentCreate() {
   );
 
   return (
-    <>
-      <UIDepartmentForm
-        headerTopic="Department Create"
-        formHandler={formHandler}
-        mode="create"
-        operatedBy={userName}
-      />
-    </>
+    <UIDepartmentForm
+      headerTopic="Department Create"
+      formHandler={formHandler}
+      mode="create"
+      operatedBy={userName}
+    />
   );
 }

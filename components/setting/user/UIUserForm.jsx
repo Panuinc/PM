@@ -108,7 +108,7 @@ export default function UIUserForm({
           </div>
 
           <div className="flex flex-col xl:flex-row items-center justify-end w-full h-fit p-2 gap-2">
-            <div className="flex items-center justify-center w-full xl:w-6/12 h-full p-2 gap-2">
+            <div className="flex items-center justify-center w-full h-full p-2 gap-2">
               <Select
                 name="userDepartmentId"
                 label="Department"
@@ -140,7 +140,7 @@ export default function UIUserForm({
               <div className="flex items-center justify-center w-full xl:w-6/12 h-full p-2 gap-2">
                 <Select
                   name="userStatus"
-                  label="Mc Master Status"
+                  label="User Status"
                   labelPlacement="outside"
                   placeholder="Please Select"
                   color="default"
