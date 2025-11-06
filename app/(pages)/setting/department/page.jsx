@@ -2,11 +2,11 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import UIDepartmentList from "@/components/setting/department/UIDepartmentList";
-import { useFetchDepartments } from "@/app/api/setting/department/hooks";
+import { useDepartments } from "@/app/api/setting/department/hooks";
 
 export default function DepartmentPage() {
   const router = useRouter();
-  const { departments, loading } = useFetchDepartments();
+  const { departments, loading } = useDepartments();
 
   const handleAddNew = () => {
     router.push("/setting/department/create");
