@@ -105,3 +105,60 @@
 [2025-11-07 11:23:31] [INFO] {"message":"PermissionService.countAll"}
 [2025-11-07 11:23:31] [INFO] {"message":"GetAllPermissionUseCase success","total":1}
 [2025-11-07 11:23:31] [INFO] {"message":"Formatting permission data","count":1}
+[2025-11-07 16:03:41] [INFO] {"message":"RolePermission schema loaded"}
+[2025-11-07 16:03:41] [INFO] {"message":"RolePermissionService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-07 16:03:41] [INFO] {"message":"RolePermissionRepository.getAll","skip":0,"take":1000000}
+[2025-11-07 16:03:41] [INFO] {"message":"Formatting rolePermission data","count":0}
+[2025-11-07 16:03:41] [INFO] {"message":"RolePermissionService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-07 16:03:41] [INFO] {"message":"RolePermissionRepository.getAll","skip":0,"take":1000000}
+[2025-11-07 16:03:42] [INFO] {"message":"Formatting rolePermission data","count":0}
+[2025-11-07 16:03:50] [INFO] {"message":"RolePermissionValidator.isDuplicate","rolePermissionRoleId":"ds","rolePermissionPermissionId":"ds"}
+[2025-11-07 16:03:50] [INFO] {"message":"RolePermissionRepository.findDuplicate","rolePermissionRoleId":"ds","rolePermissionPermissionId":"ds"}
+[2025-11-07 16:03:50] [INFO] {"message":"RolePermission pair available"}
+[2025-11-07 16:03:50] [INFO] {"message":"RolePermissionService.create","data":{"rolePermissionRoleId":"ds","rolePermissionPermissionId":"ds","rolePermissionStatus":"Enable","rolePermissionCreatedBy":"cmhmrsz8x000004l8gxrk9sqp","rolePermissionCreatedAt":"2025-11-07T16:03:50.000Z"}}
+[2025-11-07 16:03:50] [INFO] {"message":"RolePermissionRepository.create","data":{"rolePermissionRoleId":"ds","rolePermissionPermissionId":"ds","rolePermissionStatus":"Enable","rolePermissionCreatedBy":"cmhmrsz8x000004l8gxrk9sqp","rolePermissionCreatedAt":"2025-11-07T16:03:50.000Z"}}
+[2025-11-07 16:03:50] [ERROR] {"message":"\nInvalid `__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$prisma$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[\"default\"].rolePermission.create()` invocation in\nE:\\pm\\.next\\dev\\server\\chunks\\[root-of-the-server]__f6f38b22._.js:310:160\n\n  307     message: \"RolePermissionRepository.create\",\n  308     data\n  309 });\n→ 310 return await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$prisma$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[\"default\"].rolePermission.create(\nForeign key constraint violated on the constraint: `RolePermission_rolePermissionRoleId_fkey`","code":"P2003","meta":{"modelName":"RolePermission","constraint":"RolePermission_rolePermissionRoleId_fkey"},"clientVersion":"6.19.0","name":"PrismaClientKnownRequestError"}
+[2025-11-07 16:07:06] [INFO] {"message":"Permission schema loaded"}
+[2025-11-07 16:07:06] [INFO] {"message":"PermissionService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-07 16:07:06] [INFO] {"message":"PermissionRepository.getAll","skip":0,"take":1000000}
+[2025-11-07 16:07:06] [INFO] {"message":"Role schema loaded"}
+[2025-11-07 16:07:06] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-07 16:07:06] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-07 16:07:06] [INFO] {"message":"PermissionService.countAll"}
+[2025-11-07 16:07:06] [INFO] {"message":"GetAllPermissionUseCase success","total":1}
+[2025-11-07 16:07:06] [INFO] {"message":"Formatting permission data","count":1}
+[2025-11-07 16:07:07] [INFO] {"message":"RoleService.countAll"}
+[2025-11-07 16:07:07] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-07 16:07:07] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-07 16:07:50] [INFO] {"message":"RolePermissionValidator.isDuplicate","rolePermissionRoleId":"cmhn7mhha0001crvkb6efkug7","rolePermissionPermissionId":"cmhocnkct0001cr04ca8igiim"}
+[2025-11-07 16:07:50] [INFO] {"message":"RolePermissionRepository.findDuplicate","rolePermissionRoleId":"cmhn7mhha0001crvkb6efkug7","rolePermissionPermissionId":"cmhocnkct0001cr04ca8igiim"}
+[2025-11-07 16:07:50] [INFO] {"message":"RolePermission pair available"}
+[2025-11-07 16:07:50] [INFO] {"message":"RolePermissionService.create","data":{"rolePermissionRoleId":"cmhn7mhha0001crvkb6efkug7","rolePermissionPermissionId":"cmhocnkct0001cr04ca8igiim","rolePermissionStatus":"Enable","rolePermissionCreatedBy":"cmhmrsz8x000004l8gxrk9sqp","rolePermissionCreatedAt":"2025-11-07T16:07:50.000Z"}}
+[2025-11-07 16:07:50] [INFO] {"message":"RolePermissionRepository.create","data":{"rolePermissionRoleId":"cmhn7mhha0001crvkb6efkug7","rolePermissionPermissionId":"cmhocnkct0001cr04ca8igiim","rolePermissionStatus":"Enable","rolePermissionCreatedBy":"cmhmrsz8x000004l8gxrk9sqp","rolePermissionCreatedAt":"2025-11-07T16:07:50.000Z"}}
+[2025-11-07 16:07:50] [INFO] {"message":"Formatting rolePermission data","count":1}
+[2025-11-07 16:07:52] [INFO] {"message":"RolePermissionService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-07 16:07:52] [INFO] {"message":"RolePermissionRepository.getAll","skip":0,"take":1000000}
+[2025-11-07 16:07:52] [INFO] {"message":"Formatting rolePermission data","count":1}
+[2025-11-07 16:07:52] [INFO] {"message":"RolePermissionService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-07 16:07:52] [INFO] {"message":"RolePermissionRepository.getAll","skip":0,"take":1000000}
+[2025-11-07 16:07:53] [INFO] {"message":"Formatting rolePermission data","count":1}
+[2025-11-07 16:08:17] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-07 16:08:17] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-07 16:08:17] [INFO] {"message":"PermissionService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-07 16:08:17] [INFO] {"message":"PermissionRepository.getAll","skip":0,"take":1000000}
+[2025-11-07 16:08:18] [INFO] {"message":"PermissionService.countAll"}
+[2025-11-07 16:08:18] [INFO] {"message":"GetAllPermissionUseCase success","total":1}
+[2025-11-07 16:08:18] [INFO] {"message":"Formatting permission data","count":1}
+[2025-11-07 16:08:18] [INFO] {"message":"PermissionService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-07 16:08:18] [INFO] {"message":"PermissionRepository.getAll","skip":0,"take":1000000}
+[2025-11-07 16:08:18] [INFO] {"message":"PermissionService.countAll"}
+[2025-11-07 16:08:18] [INFO] {"message":"GetAllPermissionUseCase success","total":1}
+[2025-11-07 16:08:18] [INFO] {"message":"Formatting permission data","count":1}
+[2025-11-07 16:08:18] [INFO] {"message":"RoleService.countAll"}
+[2025-11-07 16:08:18] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-07 16:08:18] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-07 16:08:18] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-07 16:08:18] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-07 16:08:18] [INFO] {"message":"RoleService.countAll"}
+[2025-11-07 16:08:18] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-07 16:08:18] [INFO] {"message":"Formatting role data","count":2}

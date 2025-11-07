@@ -10,11 +10,17 @@ import {
   useSubmitRolePermission,
 } from "@/app/api/setting/rolePermission/hooks";
 import { useFormHandler } from "@/hooks/useFormHandler";
+import { useRoles } from "@/app/api/setting/role/hooks";
+import { usePermissions } from "@/app/api/setting/permission/hooks";
 
 export default function RolePermissionUpdate() {
   const { rolePermissionId } = useParams();
   const { userId, userName } = useSessionUser();
-  const { rolePermission, loading } = useRolePermission(rolePermissionId);
+  const { rolePermission, loading: rpLoading } =
+    useRolePermission(rolePermissionId);
+  const { roles, loading: roleLoading } = useRoles();
+  const { permissions, loading: permLoading } = usePermissions();
+
   const submitRolePermission = useSubmitRolePermission({
     mode: "update",
     rolePermissionId,
@@ -34,7 +40,7 @@ export default function RolePermissionUpdate() {
     if (rolePermission) formHandler.setFormData(rolePermission);
   }, [rolePermission]);
 
-  if (loading) return <UILoading />;
+  if (rpLoading || roleLoading || permLoading) return <UILoading />;
 
   return (
     <UIRolePermissionForm
@@ -43,6 +49,8 @@ export default function RolePermissionUpdate() {
       mode="update"
       operatedBy={userName}
       isUpdate
+      roles={roles}
+      permissions={permissions}
     />
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 import UIHeader from "@/components/UIHeader";
 import React from "react";
-import { Button, Input, Select, SelectItem } from "@heroui/react";
+import { Button, Select, SelectItem } from "@heroui/react";
 
 export default function UIRolePermissionForm({
   headerTopic,
@@ -9,13 +9,14 @@ export default function UIRolePermissionForm({
   mode,
   isUpdate,
   operatedBy,
+  roles,
+  permissions,
 }) {
   const { formRef, formData, handleChange, handleSubmit, errors } = formHandler;
 
   return (
     <>
       <UIHeader header={headerTopic} />
-
       <form
         ref={formRef}
         onSubmit={handleSubmit}
@@ -32,38 +33,59 @@ export default function UIRolePermissionForm({
 
           <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit p-2 gap-2">
             <div className="flex items-center justify-center w-full h-full p-2 gap-2">
-              <Input
+              <Select
                 name="rolePermissionRoleId"
-                type="text"
-                label="RolePermission role Id"
+                label="Role"
+                labelPlacement="outside"
+                placeholder="Select Role"
                 color="default"
                 variant="faded"
                 radius="none"
-                labelPlacement="outside"
-                placeholder="Enter RolePermission Id"
                 isRequired
-                value={formData.rolePermissionRoleId}
-                onChange={handleChange("rolePermissionRoleId")}
+                selectedKeys={
+                  formData.rolePermissionRoleId
+                    ? [formData.rolePermissionRoleId]
+                    : []
+                }
+                onSelectionChange={(keys) =>
+                  handleChange("rolePermissionRoleId")([...keys][0])
+                }
                 isInvalid={!!errors.rolePermissionRoleId}
                 errorMessage={errors.rolePermissionRoleId}
-              />
+              >
+                {roles?.map((r) => (
+                  <SelectItem key={r.roleId}>{r.roleName}</SelectItem>
+                ))}
+              </Select>
             </div>
+
             <div className="flex items-center justify-center w-full h-full p-2 gap-2">
-              <Input
+              <Select
                 name="rolePermissionPermissionId"
-                type="text"
-                label="RolePermission permission Id"
+                label="Permission"
+                labelPlacement="outside"
+                placeholder="Select Permission"
                 color="default"
                 variant="faded"
                 radius="none"
-                labelPlacement="outside"
-                placeholder="Enter RolePermission Id"
                 isRequired
-                value={formData.rolePermissionPermissionId}
-                onChange={handleChange("rolePermissionPermissionId")}
+                selectedKeys={
+                  formData.rolePermissionPermissionId
+                    ? [formData.rolePermissionPermissionId]
+                    : []
+                }
+                onSelectionChange={(keys) =>
+                  handleChange("rolePermissionPermissionId")([...keys][0])
+                }
                 isInvalid={!!errors.rolePermissionPermissionId}
                 errorMessage={errors.rolePermissionPermissionId}
-              />
+              >
+                {permissions?.map((p) => (
+                  <SelectItem key={p.permissionId}>
+                    {p.permissionName}
+                  </SelectItem>
+                ))}
+              </Select>
             </div>
           </div>
 
@@ -72,7 +94,7 @@ export default function UIRolePermissionForm({
               <div className="flex items-center justify-center w-full xl:w-6/12 h-full p-2 gap-2">
                 <Select
                   name="rolePermissionStatus"
-                  label="Mc Master Status"
+                  label="Status"
                   labelPlacement="outside"
                   placeholder="Please Select"
                   color="default"
@@ -97,6 +119,7 @@ export default function UIRolePermissionForm({
             </div>
           )}
 
+          {/* Buttons */}
           <div className="flex flex-row items-center justify-end w-full h-fit p-2 gap-2">
             <div className="flex items-center justify-center w-full xl:w-2/12 h-full p-2 gap-2">
               <Button

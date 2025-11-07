@@ -55,7 +55,7 @@ export default function UIRoleForm({
               <div className="flex items-center justify-center w-full xl:w-6/12 h-full p-2 gap-2">
                 <Select
                   name="roleStatus"
-                  label="Mc Master Status"
+                  label="Role Status"
                   labelPlacement="outside"
                   placeholder="Please Select"
                   color="default"

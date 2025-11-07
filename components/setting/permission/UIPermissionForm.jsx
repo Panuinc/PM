@@ -72,7 +72,7 @@ export default function UIPermissionForm({
               <div className="flex items-center justify-center w-full xl:w-6/12 h-full p-2 gap-2">
                 <Select
                   name="permissionStatus"
-                  label="Mc Master Status"
+                  label="P Status"
                   labelPlacement="outside"
                   placeholder="Please Select"
                   color="default"
