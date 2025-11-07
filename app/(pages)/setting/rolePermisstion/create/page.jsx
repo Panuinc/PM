@@ -8,11 +8,15 @@ import { useFormHandler } from "@/hooks/useFormHandler";
 
 export default function RolePermissionCreate() {
   const { userId, userName } = useSessionUser();
-  const submitRolePermission = useSubmitRolePermission({ mode: "create", userId });
+  const submitRolePermission = useSubmitRolePermission({
+    mode: "create",
+    userId,
+  });
 
   const formHandler = useFormHandler(
     {
       rolePermissionRoleId: "",
+      rolePermissionPermissionId: "",
     },
     submitRolePermission
   );

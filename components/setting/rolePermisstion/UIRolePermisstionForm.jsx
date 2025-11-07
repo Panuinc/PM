@@ -35,7 +35,7 @@ export default function UIRolePermissionForm({
               <Input
                 name="rolePermissionRoleId"
                 type="text"
-                label="RolePermission Id"
+                label="RolePermission role Id"
                 color="default"
                 variant="faded"
                 radius="none"
@@ -46,6 +46,23 @@ export default function UIRolePermissionForm({
                 onChange={handleChange("rolePermissionRoleId")}
                 isInvalid={!!errors.rolePermissionRoleId}
                 errorMessage={errors.rolePermissionRoleId}
+              />
+            </div>
+            <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+              <Input
+                name="rolePermissionPermissionId"
+                type="text"
+                label="RolePermission permission Id"
+                color="default"
+                variant="faded"
+                radius="none"
+                labelPlacement="outside"
+                placeholder="Enter RolePermission Id"
+                isRequired
+                value={formData.rolePermissionPermissionId}
+                onChange={handleChange("rolePermissionPermissionId")}
+                isInvalid={!!errors.rolePermissionPermissionId}
+                errorMessage={errors.rolePermissionPermissionId}
               />
             </div>
           </div>
@@ -63,7 +80,9 @@ export default function UIRolePermissionForm({
                   radius="none"
                   isRequired
                   selectedKeys={
-                    formData.rolePermissionStatus ? [formData.rolePermissionStatus] : []
+                    formData.rolePermissionStatus
+                      ? [formData.rolePermissionStatus]
+                      : []
                   }
                   onSelectionChange={(keys) =>
                     handleChange("rolePermissionStatus")([...keys][0])

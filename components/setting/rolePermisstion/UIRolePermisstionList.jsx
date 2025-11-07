@@ -6,7 +6,16 @@ import UILoading from "@/components/UILoading";
 
 const columns = [
   { name: "ID", uid: "rolePermissionIndex", sortable: true },
-  { name: "ROLE PERMISSION ID", uid: "rolePermissionRoleId", sortable: true },
+  {
+    name: "ROLE PERMISSION ROLE ID",
+    uid: "rolePermissionRoleId",
+    sortable: true,
+  },
+  {
+    name: "ROLE PERMISSION PERMISSION ID",
+    uid: "rolePermissionPermissionId",
+    sortable: true,
+  },
   { name: "STATUS", uid: "rolePermissionStatus", sortable: true },
   { name: "CREATED BY", uid: "rolePermissionCreatedBy", sortable: true },
   { name: "CREATED AT", uid: "rolePermissionCreatedAt", sortable: true },
@@ -28,6 +37,7 @@ const statusColorMap = {
 const INITIAL_VISIBLE_COLUMNS = [
   "rolePermissionIndex",
   "rolePermissionRoleId",
+  "rolePermissionPermissionId",
   "rolePermissionStatus",
   "actions",
 ];
@@ -60,10 +70,14 @@ export default function UIRolePermissionList({
           ? `${rolePermission.updatedByUser.userFirstName} ${rolePermission.updatedByUser.userLastName}`
           : rolePermission.rolePermissionUpdatedBy || "-",
         rolePermissionCreatedAt: rolePermission.rolePermissionCreatedAt
-          ? new Date(rolePermission.rolePermissionCreatedAt).toISOString().split("T")[0]
+          ? new Date(rolePermission.rolePermissionCreatedAt)
+              .toISOString()
+              .split("T")[0]
           : "-",
         rolePermissionUpdatedAt: rolePermission.rolePermissionUpdatedAt
-          ? new Date(rolePermission.rolePermissionUpdatedAt).toISOString().split("T")[0]
+          ? new Date(rolePermission.rolePermissionUpdatedAt)
+              .toISOString()
+              .split("T")[0]
           : "-",
       }))
     : [];

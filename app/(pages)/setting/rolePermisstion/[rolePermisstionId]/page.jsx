@@ -24,6 +24,7 @@ export default function RolePermissionUpdate() {
   const formHandler = useFormHandler(
     {
       rolePermissionRoleId: "",
+      rolePermissionPermissionId: "",
       rolePermissionStatus: "",
     },
     submitRolePermission
