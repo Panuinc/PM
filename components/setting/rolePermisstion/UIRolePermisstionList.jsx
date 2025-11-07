@@ -5,13 +5,13 @@ import DataTable from "@/components/UITable";
 import UILoading from "@/components/UILoading";
 
 const columns = [
-  { name: "ID", uid: "roleIndex", sortable: true },
-  { name: "ROLE NAME", uid: "roleName", sortable: true },
-  { name: "STATUS", uid: "roleStatus", sortable: true },
-  { name: "CREATED BY", uid: "roleCreatedBy", sortable: true },
-  { name: "CREATED AT", uid: "roleCreatedAt", sortable: true },
-  { name: "UPDATED BY", uid: "roleUpdatedBy", sortable: true },
-  { name: "UPDATED AT", uid: "roleUpdatedAt", sortable: true },
+  { name: "ID", uid: "rolePermissionIndex", sortable: true },
+  { name: "ROLE PERMISSION ID", uid: "rolePermissionRoleId", sortable: true },
+  { name: "STATUS", uid: "rolePermissionStatus", sortable: true },
+  { name: "CREATED BY", uid: "rolePermissionCreatedBy", sortable: true },
+  { name: "CREATED AT", uid: "rolePermissionCreatedAt", sortable: true },
+  { name: "UPDATED BY", uid: "rolePermissionUpdatedBy", sortable: true },
+  { name: "UPDATED AT", uid: "rolePermissionUpdatedAt", sortable: true },
   { name: "ACTIONS", uid: "actions" },
 ];
 
@@ -26,44 +26,44 @@ const statusColorMap = {
 };
 
 const INITIAL_VISIBLE_COLUMNS = [
-  "roleIndex",
-  "roleName",
-  "roleStatus",
+  "rolePermissionIndex",
+  "rolePermissionRoleId",
+  "rolePermissionStatus",
   "actions",
 ];
 
-export default function UIRoleList({
+export default function UIRolePermissionList({
   headerTopic,
-  Roles = [],
+  RolePermissions = [],
   loading,
   onAddNew,
   onView,
   onEdit,
 }) {
-  const total = Roles.length;
-  const enabled = Roles.filter(
-    (role) => role.roleStatus === "Enable"
+  const total = RolePermissions.length;
+  const enabled = RolePermissions.filter(
+    (rolePermission) => rolePermission.rolePermissionStatus === "Enable"
   ).length;
-  const disabled = Roles.filter(
-    (role) => role.roleStatus === "Disable"
+  const disabled = RolePermissions.filter(
+    (rolePermission) => rolePermission.rolePermissionStatus === "Disable"
   ).length;
 
-  const normalized = Array.isArray(Roles)
-    ? Roles.map((role, i) => ({
-        ...role,
-        id: role.roleId,
-        roleIndex: i + 1,
-        roleCreatedBy: role.createdByUser
-          ? `${role.createdByUser.userFirstName} ${role.createdByUser.userLastName}`
-          : role.roleCreatedBy || "-",
-        roleUpdatedBy: role.updatedByUser
-          ? `${role.updatedByUser.userFirstName} ${role.updatedByUser.userLastName}`
-          : role.roleUpdatedBy || "-",
-        roleCreatedAt: role.roleCreatedAt
-          ? new Date(role.roleCreatedAt).toISOString().split("T")[0]
+  const normalized = Array.isArray(RolePermissions)
+    ? RolePermissions.map((rolePermission, i) => ({
+        ...rolePermission,
+        id: rolePermission.rolePermissionId,
+        rolePermissionIndex: i + 1,
+        rolePermissionCreatedBy: rolePermission.createdByUser
+          ? `${rolePermission.createdByUser.userFirstName} ${rolePermission.createdByUser.userLastName}`
+          : rolePermission.rolePermissionCreatedBy || "-",
+        rolePermissionUpdatedBy: rolePermission.updatedByUser
+          ? `${rolePermission.updatedByUser.userFirstName} ${rolePermission.updatedByUser.userLastName}`
+          : rolePermission.rolePermissionUpdatedBy || "-",
+        rolePermissionCreatedAt: rolePermission.rolePermissionCreatedAt
+          ? new Date(rolePermission.rolePermissionCreatedAt).toISOString().split("T")[0]
           : "-",
-        roleUpdatedAt: role.roleUpdatedAt
-          ? new Date(role.roleUpdatedAt).toISOString().split("T")[0]
+        rolePermissionUpdatedAt: rolePermission.rolePermissionUpdatedAt
+          ? new Date(rolePermission.rolePermissionUpdatedAt).toISOString().split("T")[0]
           : "-",
       }))
     : [];
@@ -75,7 +75,7 @@ export default function UIRoleList({
       <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit gap-2">
         <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2 border-1 border-dark">
           <div className="flex items-center justify-start w-full h-full p-2 gap-2">
-            Total Roles
+            Total RolePermissions
           </div>
           <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-dark text-lg">
             {total}
@@ -84,7 +84,7 @@ export default function UIRoleList({
 
         <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2 border-1 border-dark">
           <div className="flex items-center justify-start w-full h-full p-2 gap-2">
-            Enabled Roles
+            Enabled RolePermissions
           </div>
           <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-success text-lg">
             {enabled}
@@ -93,7 +93,7 @@ export default function UIRoleList({
 
         <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2 border-1 border-dark">
           <div className="flex items-center justify-start w-full h-full p-2 gap-2">
-            Disabled Roles
+            Disabled RolePermissions
           </div>
           <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-danger text-lg">
             {disabled}
@@ -113,9 +113,9 @@ export default function UIRoleList({
             statusOptions={statusOptions}
             statusColorMap={statusColorMap}
             initialVisibleColumns={INITIAL_VISIBLE_COLUMNS}
-            searchPlaceholder="Search by role name..."
-            emptyContent="No roles found"
-            itemName="roles"
+            searchPlaceholder="Search by rolePermission name..."
+            emptyContent="No rolePermissions found"
+            itemName="rolePermissions"
             onAddNew={onAddNew}
             onView={onView}
             onEdit={onEdit}
