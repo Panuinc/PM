@@ -45,7 +45,9 @@ model User {
   permissionsCreated     Permission[]     @relation("PermissionCreatedByUser")
   permissionsUpdated     Permission[]     @relation("PermissionUpdatedByUser")
   rolePermissionsCreated RolePermission[] @relation("RolePermissionCreatedByUser")
+  rolePermissionsUpdated RolePermission[] @relation("RolePermissionUpdatedByUser")
   userRolesCreated       UserRole[]       @relation("UserRoleCreatedByUser")
+  userRolesUpdated       UserRole[]       @relation("UserRoleUpdatedByUser")
 
   @@index([userCreatedBy])
   @@index([userUpdatedBy])
@@ -107,35 +109,43 @@ model Permission {
 }
 
 model RolePermission {
-  rolePermissionId           String   @id @default(cuid())
+  rolePermissionId           String    @id @default(cuid())
   rolePermissionRoleId       String
   rolePermissionPermissionId String
-  rolePermissionStatus       Status   @default(Enable)
+  rolePermissionStatus       Status    @default(Enable)
   rolePermissionCreatedBy    String
   rolePermissionCreatedAt    DateTime
+  rolePermissionUpdatedBy    String?
+  rolePermissionUpdatedAt    DateTime?
 
   role          Role       @relation(fields: [rolePermissionRoleId], references: [roleId])
   permission    Permission @relation(fields: [rolePermissionPermissionId], references: [permissionId])
   createdByUser User       @relation("RolePermissionCreatedByUser", fields: [rolePermissionCreatedBy], references: [userId])
+  updatedByUser User?      @relation("RolePermissionUpdatedByUser", fields: [rolePermissionUpdatedBy], references: [userId])
 
   @@unique([rolePermissionRoleId, rolePermissionPermissionId])
   @@index([rolePermissionRoleId])
   @@index([rolePermissionPermissionId])
+  @@index([rolePermissionUpdatedBy])
 }
 
 model UserRole {
-  userRoleId        String   @id @default(cuid())
+  userRoleId        String    @id @default(cuid())
   userRoleUserId    String
   userRoleRoleId    String
-  userRoleStatus    Status   @default(Enable)
+  userRoleStatus    Status    @default(Enable)
   userRoleCreatedBy String
   userRoleCreatedAt DateTime
+  userRoleUpdatedBy String?
+  userRoleUpdatedAt DateTime?
 
-  user          User @relation(fields: [userRoleUserId], references: [userId])
-  role          Role @relation(fields: [userRoleRoleId], references: [roleId])
-  createdByUser User @relation("UserRoleCreatedByUser", fields: [userRoleCreatedBy], references: [userId])
+  user          User  @relation(fields: [userRoleUserId], references: [userId])
+  role          Role  @relation(fields: [userRoleRoleId], references: [roleId])
+  createdByUser User  @relation("UserRoleCreatedByUser", fields: [userRoleCreatedBy], references: [userId])
+  updatedByUser User? @relation("UserRoleUpdatedByUser", fields: [userRoleUpdatedBy], references: [userId])
 
   @@unique([userRoleUserId, userRoleRoleId])
   @@index([userRoleUserId])
   @@index([userRoleRoleId])
+  @@index([userRoleUpdatedBy])
 }
