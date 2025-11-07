@@ -5,16 +5,22 @@ import logger from "@/lib/logger.node";
 logger.info({ message: "RolePermission schema loaded" });
 
 export const rolePermissionPostSchema = z.object({
-  rolePermissionName: preprocessString("Please provide the rolePermission name"),
+  rolePermissionRoleId: preprocessString("Please provide the Role ID"),
+  rolePermissionPermissionId: preprocessString(
+    "Please provide the Permission ID"
+  ),
   rolePermissionCreatedBy: preprocessString("Please provide the creator ID"),
 });
 
 export const rolePermissionPutSchema = z.object({
-  rolePermissionId: preprocessString("Please provide the rolePermission ID"),
-  rolePermissionName: preprocessString("Please provide the rolePermission name"),
+  rolePermissionId: preprocessString("Please provide the RolePermission ID"),
+  rolePermissionRoleId: preprocessString("Please provide the Role ID"),
+  rolePermissionPermissionId: preprocessString(
+    "Please provide the Permission ID"
+  ),
   rolePermissionStatus: preprocessEnum(
     ["Enable", "Disable"],
-    "Please provide rolePermission status'"
+    "Please provide status"
   ),
   rolePermissionUpdatedBy: preprocessString("Please provide the updater ID"),
 });

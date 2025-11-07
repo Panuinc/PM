@@ -9,6 +9,8 @@ export const RolePermissionRepository = {
       take,
       orderBy: { rolePermissionCreatedAt: "asc" },
       include: {
+        role: { select: { roleId: true, roleName: true } },
+        permission: { select: { permissionId: true, permissionName: true } },
         createdByUser: {
           select: { userId: true, userFirstName: true, userLastName: true },
         },
@@ -22,10 +24,15 @@ export const RolePermissionRepository = {
   countAll: async () => prisma.rolePermission.count(),
 
   findById: async (rolePermissionId) => {
-    logger.info({ message: "RolePermissionRepository.findById", rolePermissionId });
+    logger.info({
+      message: "RolePermissionRepository.findById",
+      rolePermissionId,
+    });
     return await prisma.rolePermission.findUnique({
       where: { rolePermissionId },
       include: {
+        role: { select: { roleId: true, roleName: true } },
+        permission: { select: { permissionId: true, permissionName: true } },
         createdByUser: {
           select: { userId: true, userFirstName: true, userLastName: true },
         },
@@ -36,12 +43,14 @@ export const RolePermissionRepository = {
     });
   },
 
-  findByRolePermissionName: async (rolePermissionName) => {
-    logger.info({ message: "RolePermissionRepository.findByRolePermissionName", rolePermissionName });
+  findDuplicate: async (rolePermissionRoleId, rolePermissionPermissionId) => {
+    logger.info({
+      message: "RolePermissionRepository.findDuplicate",
+      rolePermissionRoleId,
+      rolePermissionPermissionId,
+    });
     return await prisma.rolePermission.findFirst({
-      where: {
-        rolePermissionName: { equals: rolePermissionName.trim(), mode: "insensitive" },
-      },
+      where: { rolePermissionRoleId, rolePermissionPermissionId },
     });
   },
 
@@ -50,6 +59,8 @@ export const RolePermissionRepository = {
     return await prisma.rolePermission.create({
       data,
       include: {
+        role: { select: { roleId: true, roleName: true } },
+        permission: { select: { permissionId: true, permissionName: true } },
         createdByUser: {
           select: { userId: true, userFirstName: true, userLastName: true },
         },
@@ -58,11 +69,16 @@ export const RolePermissionRepository = {
   },
 
   update: async (rolePermissionId, data) => {
-    logger.info({ message: "RolePermissionRepository.update", rolePermissionId });
+    logger.info({
+      message: "RolePermissionRepository.update",
+      rolePermissionId,
+    });
     return await prisma.rolePermission.update({
       where: { rolePermissionId },
       data,
       include: {
+        role: { select: { roleId: true, roleName: true } },
+        permission: { select: { permissionId: true, permissionName: true } },
         updatedByUser: {
           select: { userId: true, userFirstName: true, userLastName: true },
         },

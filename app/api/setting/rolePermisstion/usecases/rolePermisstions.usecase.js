@@ -9,110 +9,94 @@ import logger from "@/lib/logger.node";
 
 export async function GetAllRolePermissionUseCase(page = 1, limit = 1000000) {
   const skip = (page - 1) * limit;
-  const rolePermissions = await RolePermissionService.getAllPaginated(skip, limit);
+  const rolePermissions = await RolePermissionService.getAllPaginated(
+    skip,
+    limit
+  );
   const total = await RolePermissionService.countAll();
-
-  logger.info({ message: "GetAllRolePermissionUseCase success", total });
   return { rolePermissions, total };
 }
 
 export async function GetRolePermissionByIdUseCase(rolePermissionId) {
   if (!rolePermissionId || typeof rolePermissionId !== "string")
-    throw { status: 400, message: "Invalid rolePermission ID" };
+    throw { status: 400, message: "Invalid RolePermission ID" };
 
   const rolePermission = await RolePermissionService.getById(rolePermissionId);
-  if (!rolePermission) throw { status: 404, message: "RolePermission not found" };
-
-  logger.info({ message: "GetRolePermissionByIdUseCase success", rolePermissionId });
+  if (!rolePermission)
+    throw { status: 404, message: "RolePermission not found" };
   return rolePermission;
 }
 
 export async function CreateRolePermissionUseCase(data) {
-  logger.info({ message: "CreateRolePermissionUseCase start", data });
-
   const parsed = rolePermissionPostSchema.safeParse(data);
-  if (!parsed.success) {
-    logger.warn({
-      message: "Validation failed",
-      errors: parsed.error.flatten().fieldErrors,
-    });
+  if (!parsed.success)
     throw {
       status: 422,
       message: "Invalid input",
       details: parsed.error.flatten().fieldErrors,
     };
-  }
 
-  const duplicate = await RolePermissionValidator.isDuplicateRolePermissionName(
-    parsed.data.rolePermissionName
+  const duplicate = await RolePermissionValidator.isDuplicate(
+    parsed.data.rolePermissionRoleId,
+    parsed.data.rolePermissionPermissionId
   );
   if (duplicate)
     throw {
       status: 409,
-      message: `RolePermission '${parsed.data.rolePermissionName}' already exists`,
+      message: "This Role and Permission pair already exists",
     };
 
   const rolePermission = await RolePermissionService.create({
-    rolePermissionName: parsed.data.rolePermissionName.trim(),
+    rolePermissionRoleId: parsed.data.rolePermissionRoleId,
+    rolePermissionPermissionId: parsed.data.rolePermissionPermissionId,
+    rolePermissionStatus: "Enable",
     rolePermissionCreatedBy: parsed.data.rolePermissionCreatedBy,
     rolePermissionCreatedAt: getLocalNow(),
-  });
-
-  logger.info({
-    message: "RolePermission created successfully",
-    rolePermissionId: rolePermission.rolePermissionId,
   });
 
   return rolePermission;
 }
 
 export async function UpdateRolePermissionUseCase(data) {
-  logger.info({ message: "UpdateRolePermissionUseCase start", data });
-
   const parsed = rolePermissionPutSchema.safeParse(data);
-  if (!parsed.success) {
-    logger.warn({
-      message: "Validation failed",
-      errors: parsed.error.flatten().fieldErrors,
-    });
+  if (!parsed.success)
     throw {
       status: 422,
       message: "Invalid input",
       details: parsed.error.flatten().fieldErrors,
     };
-  }
 
-  const existing = await RolePermissionService.getById(parsed.data.rolePermissionId);
+  const existing = await RolePermissionService.getById(
+    parsed.data.rolePermissionId
+  );
   if (!existing) throw { status: 404, message: "RolePermission not found" };
 
   if (
-    parsed.data.rolePermissionName.trim().toLowerCase() !==
-    existing.rolePermissionName.trim().toLowerCase()
+    parsed.data.rolePermissionRoleId !== existing.rolePermissionRoleId ||
+    parsed.data.rolePermissionPermissionId !==
+      existing.rolePermissionPermissionId
   ) {
-    const duplicate = await RolePermissionValidator.isDuplicateRolePermissionName(
-      parsed.data.rolePermissionName
+    const duplicate = await RolePermissionValidator.isDuplicate(
+      parsed.data.rolePermissionRoleId,
+      parsed.data.rolePermissionPermissionId
     );
     if (duplicate)
       throw {
         status: 409,
-        message: `RolePermission '${parsed.data.rolePermissionName}' already exists`,
+        message: "This Role and Permission pair already exists",
       };
   }
 
   const updatedRolePermission = await RolePermissionService.update(
     parsed.data.rolePermissionId,
     {
-      rolePermissionName: parsed.data.rolePermissionName.trim(),
-      rolePermissionStatus: parsed.data.rolePermissionStatus.trim(),
+      rolePermissionRoleId: parsed.data.rolePermissionRoleId,
+      rolePermissionPermissionId: parsed.data.rolePermissionPermissionId,
+      rolePermissionStatus: parsed.data.rolePermissionStatus,
       rolePermissionUpdatedBy: parsed.data.rolePermissionUpdatedBy,
       rolePermissionUpdatedAt: getLocalNow(),
     }
   );
-
-  logger.info({
-    message: "RolePermission updated successfully",
-    rolePermissionId: parsed.data.rolePermissionId,
-  });
 
   return updatedRolePermission;
 }

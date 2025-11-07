@@ -2,26 +2,26 @@ import { RolePermissionRepository } from "@/app/api/setting/rolePermission/core/
 import logger from "@/lib/logger.node";
 
 export const RolePermissionValidator = {
-  async isDuplicateRolePermissionName(rolePermissionName) {
+  async isDuplicate(rolePermissionRoleId, rolePermissionPermissionId) {
     logger.info({
-      message: "RolePermissionValidator.isDuplicateRolePermissionName",
-      rolePermissionName,
+      message: "RolePermissionValidator.isDuplicate",
+      rolePermissionRoleId,
+      rolePermissionPermissionId,
     });
 
-    if (!rolePermissionName || typeof rolePermissionName !== "string") {
-      logger.warn({ message: "Invalid rolePermission name input", rolePermissionName });
-      throw new Error("Invalid rolePermission name");
-    }
-
-    const existing = await RolePermissionRepository.findByRolePermissionName(rolePermissionName);
+    const existing = await RolePermissionRepository.findDuplicate(
+      rolePermissionRoleId,
+      rolePermissionPermissionId
+    );
     const isDuplicate = !!existing;
 
     if (isDuplicate)
       logger.warn({
-        message: "Duplicate rolePermission name detected",
-        rolePermissionName,
+        message: "Duplicate RolePermission pair detected",
+        rolePermissionRoleId,
+        rolePermissionPermissionId,
       });
-    else logger.info({ message: "RolePermission name available", rolePermissionName });
+    else logger.info({ message: "RolePermission pair available" });
 
     return isDuplicate;
   },
