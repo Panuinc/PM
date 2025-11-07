@@ -161,6 +161,7 @@ export default function PagesLayout({ children }) {
       subMenus: [
         { text: "Department", path: "/setting/department" },
         { text: "Role", path: "/setting/role" },
+        { text: "Permission", path: "/setting/permission" },
         { text: "User", path: "/setting/user" },
       ],
     },
