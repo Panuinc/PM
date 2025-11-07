@@ -9,8 +9,8 @@ export const RoleValidator = {
     });
 
     if (!roleName || typeof roleName !== "string") {
-      logger.warn({ message: "Invalid role code input", roleName });
-      throw new Error("Invalid role code");
+      logger.warn({ message: "Invalid role name input", roleName });
+      throw new Error("Invalid role name");
     }
 
     const existing = await RoleRepository.findByRoleName(roleName);
@@ -18,10 +18,10 @@ export const RoleValidator = {
 
     if (isDuplicate)
       logger.warn({
-        message: "Duplicate role code detected",
+        message: "Duplicate role name detected",
         roleName,
       });
-    else logger.info({ message: "Role code available", roleName });
+    else logger.info({ message: "Role name available", roleName });
 
     return isDuplicate;
   },

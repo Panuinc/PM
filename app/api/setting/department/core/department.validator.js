@@ -9,8 +9,8 @@ export const DepartmentValidator = {
     });
 
     if (!departmentName || typeof departmentName !== "string") {
-      logger.warn({ message: "Invalid department code input", departmentName });
-      throw new Error("Invalid department code");
+      logger.warn({ message: "Invalid department name input", departmentName });
+      throw new Error("Invalid department name");
     }
 
     const existing = await DepartmentRepository.findByDepartmentName(departmentName);
@@ -18,10 +18,10 @@ export const DepartmentValidator = {
 
     if (isDuplicate)
       logger.warn({
-        message: "Duplicate department code detected",
+        message: "Duplicate department name detected",
         departmentName,
       });
-    else logger.info({ message: "Department code available", departmentName });
+    else logger.info({ message: "Department name available", departmentName });
 
     return isDuplicate;
   },
