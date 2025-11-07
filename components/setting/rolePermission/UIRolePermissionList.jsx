@@ -59,28 +59,33 @@ export default function UIRolePermissionList({
   ).length;
 
   const normalized = Array.isArray(RolePermissions)
-    ? RolePermissions.map((rolePermission, i) => ({
-        ...rolePermission,
-        id: rolePermission.rolePermissionId,
-        rolePermissionIndex: i + 1,
-        rolePermissionCreatedBy: rolePermission.createdByUser
-          ? `${rolePermission.createdByUser.userFirstName} ${rolePermission.createdByUser.userLastName}`
-          : rolePermission.rolePermissionCreatedBy || "-",
-        rolePermissionUpdatedBy: rolePermission.updatedByUser
-          ? `${rolePermission.updatedByUser.userFirstName} ${rolePermission.updatedByUser.userLastName}`
-          : rolePermission.rolePermissionUpdatedBy || "-",
-        rolePermissionCreatedAt: rolePermission.rolePermissionCreatedAt
-          ? new Date(rolePermission.rolePermissionCreatedAt)
-              .toISOString()
-              .split("T")[0]
-          : "-",
-        rolePermissionUpdatedAt: rolePermission.rolePermissionUpdatedAt
-          ? new Date(rolePermission.rolePermissionUpdatedAt)
-              .toISOString()
-              .split("T")[0]
-          : "-",
-      }))
-    : [];
+  ? RolePermissions.map((rolePermission, i) => ({
+      ...rolePermission,
+      id: rolePermission.rolePermissionId,
+      rolePermissionIndex: i + 1,
+      rolePermissionRoleId:
+        rolePermission.role?.roleName || rolePermission.rolePermissionRoleId,
+      rolePermissionPermissionId:
+        rolePermission.permission?.permissionName ||
+        rolePermission.rolePermissionPermissionId,
+      rolePermissionCreatedBy: rolePermission.createdByUser
+        ? `${rolePermission.createdByUser.userFirstName} ${rolePermission.createdByUser.userLastName}`
+        : rolePermission.rolePermissionCreatedBy || "-",
+      rolePermissionUpdatedBy: rolePermission.updatedByUser
+        ? `${rolePermission.updatedByUser.userFirstName} ${rolePermission.updatedByUser.userLastName}`
+        : rolePermission.rolePermissionUpdatedBy || "-",
+      rolePermissionCreatedAt: rolePermission.rolePermissionCreatedAt
+        ? new Date(rolePermission.rolePermissionCreatedAt)
+            .toISOString()
+            .split("T")[0]
+        : "-",
+      rolePermissionUpdatedAt: rolePermission.rolePermissionUpdatedAt
+        ? new Date(rolePermission.rolePermissionUpdatedAt)
+            .toISOString()
+            .split("T")[0]
+        : "-",
+    }))
+  : [];
 
   return (
     <>

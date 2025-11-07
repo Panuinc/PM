@@ -162,3 +162,25 @@
 [2025-11-07 16:08:18] [INFO] {"message":"RoleService.countAll"}
 [2025-11-07 16:08:18] [INFO] {"message":"GetAllRoleUseCase success","total":2}
 [2025-11-07 16:08:18] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-07 16:09:54] [INFO] {"message":"RolePermissionService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-07 16:09:54] [INFO] {"message":"RolePermissionRepository.getAll","skip":0,"take":1000000}
+[2025-11-07 16:09:54] [INFO] {"message":"Formatting rolePermission data","count":1}
+[2025-11-07 16:09:54] [INFO] {"message":"RolePermissionService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-07 16:09:54] [INFO] {"message":"RolePermissionRepository.getAll","skip":0,"take":1000000}
+[2025-11-07 16:09:54] [INFO] {"message":"Formatting rolePermission data","count":1}
+[2025-11-07 16:11:26] [INFO] {"message":"RolePermissionService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-07 16:11:26] [INFO] {"message":"RolePermissionRepository.getAll","skip":0,"take":1000000}
+[2025-11-07 16:11:27] [INFO] {"message":"Formatting rolePermission data","count":1}
+[2025-11-07 16:11:27] [INFO] {"message":"RolePermissionService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-07 16:11:27] [INFO] {"message":"RolePermissionRepository.getAll","skip":0,"take":1000000}
+[2025-11-07 16:11:27] [INFO] {"message":"Formatting rolePermission data","count":1}
+[2025-11-07 16:14:33] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-07 16:14:33] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-07 16:14:33] [INFO] {"message":"RoleService.countAll"}
+[2025-11-07 16:14:33] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-07 16:14:33] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-07 16:14:33] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-07 16:14:33] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-07 16:14:33] [INFO] {"message":"RoleService.countAll"}
+[2025-11-07 16:14:34] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-07 16:14:34] [INFO] {"message":"Formatting role data","count":2}
