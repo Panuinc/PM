@@ -36,11 +36,14 @@ export const PermissionRepository = {
     });
   },
 
-  findByPermissionName: async (permissionName) => {
-    logger.info({ message: "PermissionRepository.findByPermissionName", permissionName });
+  findByPermissionKey: async (permissionKey) => {
+    logger.info({
+      message: "PermissionRepository.findByPermissionKey",
+      permissionKey,
+    });
     return await prisma.permission.findFirst({
       where: {
-        permissionName: { equals: permissionName.trim(), mode: "insensitive" },
+        permissionKey: { equals: permissionKey.trim(), mode: "insensitive" },
       },
     });
   },

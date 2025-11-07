@@ -11,7 +11,6 @@ export async function GetAllPermissionUseCase(page = 1, limit = 1000000) {
   const skip = (page - 1) * limit;
   const permissions = await PermissionService.getAllPaginated(skip, limit);
   const total = await PermissionService.countAll();
-
   logger.info({ message: "GetAllPermissionUseCase success", total });
   return { permissions, total };
 }
@@ -43,17 +42,18 @@ export async function CreatePermissionUseCase(data) {
     };
   }
 
-  const duplicate = await PermissionValidator.isDuplicatePermissionName(
-    parsed.data.permissionName
+  const duplicateKey = await PermissionValidator.isDuplicatePermissionKey(
+    parsed.data.permissionKey
   );
-  if (duplicate)
+  if (duplicateKey)
     throw {
       status: 409,
-      message: `Permission '${parsed.data.permissionName}' already exists`,
+      message: `Permission key '${parsed.data.permissionKey}' already exists`,
     };
 
   const permission = await PermissionService.create({
     permissionName: parsed.data.permissionName.trim(),
+    permissionKey: parsed.data.permissionKey.trim(),
     permissionCreatedBy: parsed.data.permissionCreatedBy,
     permissionCreatedAt: getLocalNow(),
   });
@@ -86,16 +86,16 @@ export async function UpdatePermissionUseCase(data) {
   if (!existing) throw { status: 404, message: "Permission not found" };
 
   if (
-    parsed.data.permissionName.trim().toLowerCase() !==
-    existing.permissionName.trim().toLowerCase()
+    parsed.data.permissionKey.trim().toLowerCase() !==
+    existing.permissionKey.trim().toLowerCase()
   ) {
-    const duplicate = await PermissionValidator.isDuplicatePermissionName(
-      parsed.data.permissionName
+    const duplicateKey = await PermissionValidator.isDuplicatePermissionKey(
+      parsed.data.permissionKey
     );
-    if (duplicate)
+    if (duplicateKey)
       throw {
         status: 409,
-        message: `Permission '${parsed.data.permissionName}' already exists`,
+        message: `Permission key '${parsed.data.permissionKey}' already exists`,
       };
   }
 
@@ -103,6 +103,7 @@ export async function UpdatePermissionUseCase(data) {
     parsed.data.permissionId,
     {
       permissionName: parsed.data.permissionName.trim(),
+      permissionKey: parsed.data.permissionKey.trim(),
       permissionStatus: parsed.data.permissionStatus.trim(),
       permissionUpdatedBy: parsed.data.permissionUpdatedBy,
       permissionUpdatedAt: getLocalNow(),

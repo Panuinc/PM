@@ -2,26 +2,28 @@ import { PermissionRepository } from "@/app/api/setting/permission/core/permissi
 import logger from "@/lib/logger.node";
 
 export const PermissionValidator = {
-  async isDuplicatePermissionName(permissionName) {
+  async isDuplicatePermissionKey(permissionKey) {
     logger.info({
-      message: "PermissionValidator.isDuplicatePermissionName",
-      permissionName,
+      message: "PermissionValidator.isDuplicatePermissionKey",
+      permissionKey,
     });
 
-    if (!permissionName || typeof permissionName !== "string") {
-      logger.warn({ message: "Invalid permission code input", permissionName });
-      throw new Error("Invalid permission code");
+    if (!permissionKey || typeof permissionKey !== "string") {
+      logger.warn({ message: "Invalid permission key input", permissionKey });
+      throw new Error("Invalid permission key");
     }
 
-    const existing = await PermissionRepository.findByPermissionName(permissionName);
+    const existing = await PermissionRepository.findByPermissionKey(
+      permissionKey
+    );
     const isDuplicate = !!existing;
 
     if (isDuplicate)
       logger.warn({
-        message: "Duplicate permission code detected",
-        permissionName,
+        message: "Duplicate permission key detected",
+        permissionKey,
       });
-    else logger.info({ message: "Permission code available", permissionName });
+    else logger.info({ message: "Permission key available", permissionKey });
 
     return isDuplicate;
   },
