@@ -95,3 +95,13 @@
 [2025-11-07 11:23:29] [INFO] {"message":"Permission updated successfully","permissionId":"cmhocnkct0001cr04ca8igiim"}
 [2025-11-07 11:23:29] [INFO] {"message":"Formatting permission data","count":1}
 [2025-11-07 11:23:30] [INFO] {"message":"Permission schema loaded"}
+[2025-11-07 11:23:31] [INFO] {"message":"PermissionService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-07 11:23:31] [INFO] {"message":"PermissionRepository.getAll","skip":0,"take":1000000}
+[2025-11-07 11:23:31] [INFO] {"message":"PermissionService.countAll"}
+[2025-11-07 11:23:31] [INFO] {"message":"GetAllPermissionUseCase success","total":1}
+[2025-11-07 11:23:31] [INFO] {"message":"Formatting permission data","count":1}
+[2025-11-07 11:23:31] [INFO] {"message":"PermissionService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-07 11:23:31] [INFO] {"message":"PermissionRepository.getAll","skip":0,"take":1000000}
+[2025-11-07 11:23:31] [INFO] {"message":"PermissionService.countAll"}
+[2025-11-07 11:23:31] [INFO] {"message":"GetAllPermissionUseCase success","total":1}
+[2025-11-07 11:23:31] [INFO] {"message":"Formatting permission data","count":1}
