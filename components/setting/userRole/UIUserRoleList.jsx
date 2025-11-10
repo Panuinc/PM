@@ -59,38 +59,33 @@ export default function UIUserRoleList({
   ).length;
 
   const normalized = Array.isArray(UserRoles)
-  ? UserRoles.map((userRole, i) => ({
-      ...userRole,
-      id: userRole.userRoleId,
-      userRoleIndex: i + 1,
-      userRoleRoleId:
-        userRole.role?.roleName || userRole.userRoleRoleId,
-      userRoleUserId:
-        userRole.user?.userName ||
-        userRole.userRoleUserId,
-      userRoleCreatedBy: userRole.createdByUser
-        ? `${userRole.createdByUser.userFirstName} ${userRole.createdByUser.userLastName}`
-        : userRole.userRoleCreatedBy || "-",
-      userRoleUpdatedBy: userRole.updatedByUser
-        ? `${userRole.updatedByUser.userFirstName} ${userRole.updatedByUser.userLastName}`
-        : userRole.userRoleUpdatedBy || "-",
-      userRoleCreatedAt: userRole.userRoleCreatedAt
-        ? new Date(userRole.userRoleCreatedAt)
-            .toISOString()
-            .split("T")[0]
-        : "-",
-      userRoleUpdatedAt: userRole.userRoleUpdatedAt
-        ? new Date(userRole.userRoleUpdatedAt)
-            .toISOString()
-            .split("T")[0]
-        : "-",
-    }))
-  : [];
+    ? UserRoles.map((userRole, i) => ({
+        ...userRole,
+        id: userRole.userRoleId,
+        userRoleIndex: i + 1,
+        userRoleRoleId: userRole.role?.roleName || userRole.userRoleRoleId,
+        userRoleUserId:
+          userRole.user?.userFirstName && userRole.user?.userLastName
+            ? `${userRole.user.userFirstName} ${userRole.user.userLastName}`
+            : userRole.userRoleUserId,
+        userRoleCreatedBy: userRole.createdByUser
+          ? `${userRole.createdByUser.userFirstName} ${userRole.createdByUser.userLastName}`
+          : userRole.userRoleCreatedBy || "-",
+        userRoleUpdatedBy: userRole.updatedByUser
+          ? `${userRole.updatedByUser.userFirstName} ${userRole.updatedByUser.userLastName}`
+          : userRole.userRoleUpdatedBy || "-",
+        userRoleCreatedAt: userRole.userRoleCreatedAt
+          ? new Date(userRole.userRoleCreatedAt).toISOString().split("T")[0]
+          : "-",
+        userRoleUpdatedAt: userRole.userRoleUpdatedAt
+          ? new Date(userRole.userRoleUpdatedAt).toISOString().split("T")[0]
+          : "-",
+      }))
+    : [];
 
   return (
     <>
       <UIHeader header={headerTopic} />
-
       <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit gap-2">
         <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2 border-1 border-dark">
           <div className="flex items-center justify-start w-full h-full p-2 gap-2">

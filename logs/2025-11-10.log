@@ -58,3 +58,195 @@
 [2025-11-10 08:15:47] [INFO] {"message":"UserService.countAll"}
 [2025-11-10 08:15:47] [INFO] {"message":"GetAllUserUseCase success","total":2}
 [2025-11-10 08:15:47] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-10 08:17:53] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:17:53] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:17:53] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:17:53] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:17:53] [INFO] {"message":"RoleService.countAll"}
+[2025-11-10 08:17:53] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-10 08:17:53] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-10 08:17:53] [INFO] {"message":"UserService.countAll"}
+[2025-11-10 08:17:53] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-10 08:17:53] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-10 08:17:59] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:17:59] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:17:59] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:17:59] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:17:59] [INFO] {"message":"RoleService.countAll"}
+[2025-11-10 08:17:59] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-10 08:17:59] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-10 08:17:59] [INFO] {"message":"UserService.countAll"}
+[2025-11-10 08:17:59] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-10 08:17:59] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-10 08:18:00] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:18:00] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:18:00] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:18:00] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:18:00] [INFO] {"message":"RoleService.countAll"}
+[2025-11-10 08:18:00] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-10 08:18:00] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-10 08:18:00] [INFO] {"message":"UserService.countAll"}
+[2025-11-10 08:18:00] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-10 08:18:00] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-10 08:20:28] [INFO] {"message":"UserRoleValidator.isDuplicate","userRoleRoleId":"cmhn7mhha0001crvkb6efkug7","userRoleUserId":"cmhmrsz8x000004l8gxrk9sqp"}
+[2025-11-10 08:20:28] [INFO] {"message":"UserRoleRepository.findDuplicate","userRoleRoleId":"cmhn7mhha0001crvkb6efkug7","userRoleUserId":"cmhmrsz8x000004l8gxrk9sqp"}
+[2025-11-10 08:20:29] [INFO] {"message":"UserRole pair available"}
+[2025-11-10 08:20:29] [INFO] {"message":"UserRoleService.create","data":{"userRoleRoleId":"cmhn7mhha0001crvkb6efkug7","userRoleUserId":"cmhmrsz8x000004l8gxrk9sqp","userRoleStatus":"Enable","userRoleCreatedBy":"cmhmrsz8x000004l8gxrk9sqp","userRoleCreatedAt":"2025-11-10T08:20:29.000Z"}}
+[2025-11-10 08:20:29] [INFO] {"message":"UserRoleRepository.create","data":{"userRoleRoleId":"cmhn7mhha0001crvkb6efkug7","userRoleUserId":"cmhmrsz8x000004l8gxrk9sqp","userRoleStatus":"Enable","userRoleCreatedBy":"cmhmrsz8x000004l8gxrk9sqp","userRoleCreatedAt":"2025-11-10T08:20:29.000Z"}}
+[2025-11-10 08:20:29] [INFO] {"message":"Formatting userRole data","count":1}
+[2025-11-10 08:20:31] [INFO] {"message":"UserRoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:20:31] [INFO] {"message":"UserRoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:20:31] [INFO] {"message":"Formatting userRole data","count":1}
+[2025-11-10 08:20:31] [INFO] {"message":"UserRoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:20:31] [INFO] {"message":"UserRoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:20:31] [INFO] {"message":"Formatting userRole data","count":1}
+[2025-11-10 08:20:40] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:20:40] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:20:40] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:20:40] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:20:40] [INFO] {"message":"RoleService.countAll"}
+[2025-11-10 08:20:40] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-10 08:20:40] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-10 08:20:40] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:20:40] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:20:40] [INFO] {"message":"RoleService.countAll"}
+[2025-11-10 08:20:40] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-10 08:20:40] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-10 08:20:41] [INFO] {"message":"UserService.countAll"}
+[2025-11-10 08:20:41] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-10 08:20:41] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-10 08:20:41] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:20:41] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:20:41] [INFO] {"message":"UserService.countAll"}
+[2025-11-10 08:20:41] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-10 08:20:41] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-10 08:20:41] [INFO] {"message":"UserRoleRepository.findById","userRoleId":"cmhsggzg90001crw0xgine2gq"}
+[2025-11-10 08:20:41] [INFO] {"message":"UserRole schema loaded"}
+[2025-11-10 08:20:41] [INFO] {"message":"Formatting userRole data","count":1}
+[2025-11-10 08:20:41] [INFO] {"message":"UserRoleRepository.findById","userRoleId":"cmhsggzg90001crw0xgine2gq"}
+[2025-11-10 08:20:42] [INFO] {"message":"Formatting userRole data","count":1}
+[2025-11-10 08:20:42] [INFO] {"message":"UserRole schema loaded"}
+[2025-11-10 08:20:54] [INFO] {"message":"UserRoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:20:54] [INFO] {"message":"UserRoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:20:54] [INFO] {"message":"Formatting userRole data","count":1}
+[2025-11-10 08:20:54] [INFO] {"message":"UserRoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:20:54] [INFO] {"message":"UserRoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:20:54] [INFO] {"message":"Formatting userRole data","count":1}
+[2025-11-10 08:20:55] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:20:55] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:20:55] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:20:55] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:20:55] [INFO] {"message":"RoleService.countAll"}
+[2025-11-10 08:20:55] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-10 08:20:55] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-10 08:20:56] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:20:56] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:20:56] [INFO] {"message":"UserService.countAll"}
+[2025-11-10 08:20:56] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-10 08:20:56] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-10 08:20:56] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:20:56] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:20:56] [INFO] {"message":"RoleService.countAll"}
+[2025-11-10 08:20:56] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-10 08:20:56] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-10 08:20:56] [INFO] {"message":"UserService.countAll"}
+[2025-11-10 08:20:56] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-10 08:20:56] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-10 08:20:58] [INFO] {"message":"UserRoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:20:58] [INFO] {"message":"UserRoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:20:58] [INFO] {"message":"Formatting userRole data","count":1}
+[2025-11-10 08:20:58] [INFO] {"message":"UserRoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:20:58] [INFO] {"message":"UserRoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:20:58] [INFO] {"message":"Formatting userRole data","count":1}
+[2025-11-10 08:21:29] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:21:29] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:21:29] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:21:29] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:21:29] [INFO] {"message":"RoleService.countAll"}
+[2025-11-10 08:21:29] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-10 08:21:29] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-10 08:21:29] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:21:29] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:21:29] [INFO] {"message":"UserService.countAll"}
+[2025-11-10 08:21:29] [INFO] {"message":"RoleService.countAll"}
+[2025-11-10 08:21:29] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-10 08:21:29] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-10 08:21:29] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:21:29] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:21:29] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-10 08:21:29] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-10 08:21:29] [INFO] {"message":"UserService.countAll"}
+[2025-11-10 08:21:29] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-10 08:21:29] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-10 08:22:17] [INFO] {"message":"UserRoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:22:17] [INFO] {"message":"UserRoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:22:17] [INFO] {"message":"Formatting userRole data","count":1}
+[2025-11-10 08:22:17] [INFO] {"message":"UserRoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:22:17] [INFO] {"message":"UserRoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:22:17] [INFO] {"message":"Formatting userRole data","count":1}
+[2025-11-10 08:22:19] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:22:19] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:22:19] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:22:19] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:22:19] [INFO] {"message":"UserRoleRepository.findById","userRoleId":"cmhsggzg90001crw0xgine2gq"}
+[2025-11-10 08:22:19] [INFO] {"message":"RoleService.countAll"}
+[2025-11-10 08:22:19] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-10 08:22:19] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-10 08:22:19] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:22:19] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:22:20] [INFO] {"message":"UserService.countAll"}
+[2025-11-10 08:22:20] [INFO] {"message":"RoleService.countAll"}
+[2025-11-10 08:22:20] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-10 08:22:20] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-10 08:22:20] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-10 08:22:20] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-10 08:22:20] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:22:20] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:22:20] [INFO] {"message":"UserService.countAll"}
+[2025-11-10 08:22:20] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-10 08:22:20] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-10 08:22:20] [INFO] {"message":"Formatting userRole data","count":1}
+[2025-11-10 08:22:20] [INFO] {"message":"UserRoleRepository.findById","userRoleId":"cmhsggzg90001crw0xgine2gq"}
+[2025-11-10 08:22:20] [INFO] {"message":"UserRole schema loaded"}
+[2025-11-10 08:22:20] [INFO] {"message":"Formatting userRole data","count":1}
+[2025-11-10 08:22:22] [INFO] {"message":"UserRoleRepository.findById","userRoleId":"cmhsggzg90001crw0xgine2gq"}
+[2025-11-10 08:22:22] [INFO] {"message":"UserRoleService.update","userRoleId":"cmhsggzg90001crw0xgine2gq","data":{"userRoleRoleId":"cmhn7mhha0001crvkb6efkug7","userRoleUserId":"cmhmrsz8x000004l8gxrk9sqp","userRoleStatus":"Disable","userRoleUpdatedBy":"cmhmrsz8x000004l8gxrk9sqp","userRoleUpdatedAt":"2025-11-10T08:22:22.000Z"}}
+[2025-11-10 08:22:22] [INFO] {"message":"UserRoleRepository.update","userRoleId":"cmhsggzg90001crw0xgine2gq"}
+[2025-11-10 08:22:22] [INFO] {"message":"Formatting userRole data","count":1}
+[2025-11-10 08:22:23] [INFO] {"message":"UserRole schema loaded"}
+[2025-11-10 08:22:24] [INFO] {"message":"UserRoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:22:24] [INFO] {"message":"UserRoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:22:24] [INFO] {"message":"Formatting userRole data","count":1}
+[2025-11-10 08:22:24] [INFO] {"message":"UserRoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:22:24] [INFO] {"message":"UserRoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:22:25] [INFO] {"message":"Formatting userRole data","count":1}
+[2025-11-10 08:22:26] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:22:26] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:22:26] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:22:26] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:22:26] [INFO] {"message":"UserRoleRepository.findById","userRoleId":"cmhsggzg90001crw0xgine2gq"}
+[2025-11-10 08:22:26] [INFO] {"message":"RoleService.countAll"}
+[2025-11-10 08:22:26] [INFO] {"message":"UserService.countAll"}
+[2025-11-10 08:22:26] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-10 08:22:26] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-10 08:22:26] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-10 08:22:26] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-10 08:22:26] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:22:26] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:22:26] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:22:26] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:22:26] [INFO] {"message":"Formatting userRole data","count":1}
+[2025-11-10 08:22:26] [INFO] {"message":"UserRoleRepository.findById","userRoleId":"cmhsggzg90001crw0xgine2gq"}
+[2025-11-10 08:22:26] [INFO] {"message":"RoleService.countAll"}
+[2025-11-10 08:22:26] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-10 08:22:26] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-10 08:22:26] [INFO] {"message":"UserService.countAll"}
+[2025-11-10 08:22:26] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-10 08:22:26] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-10 08:22:27] [INFO] {"message":"Formatting userRole data","count":1}
+[2025-11-10 08:22:27] [INFO] {"message":"UserRole schema loaded"}
+[2025-11-10 08:22:28] [INFO] {"message":"UserRoleRepository.findById","userRoleId":"cmhsggzg90001crw0xgine2gq"}
+[2025-11-10 08:22:29] [INFO] {"message":"UserRoleService.update","userRoleId":"cmhsggzg90001crw0xgine2gq","data":{"userRoleRoleId":"cmhn7mhha0001crvkb6efkug7","userRoleUserId":"cmhmrsz8x000004l8gxrk9sqp","userRoleStatus":"Enable","userRoleUpdatedBy":"cmhmrsz8x000004l8gxrk9sqp","userRoleUpdatedAt":"2025-11-10T08:22:29.000Z"}}
+[2025-11-10 08:22:29] [INFO] {"message":"UserRoleRepository.update","userRoleId":"cmhsggzg90001crw0xgine2gq"}
+[2025-11-10 08:22:29] [INFO] {"message":"Formatting userRole data","count":1}
+[2025-11-10 08:22:29] [INFO] {"message":"UserRole schema loaded"}

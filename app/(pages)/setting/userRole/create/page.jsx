@@ -12,7 +12,7 @@ import UILoading from "@/components/UILoading";
 export default function UserRoleCreate() {
   const { userId, userName } = useSessionUser();
   const { roles, loading: roleLoading } = useRoles();
-  const { users, loading: permLoading } = useUsers();
+  const { users, loading: userLoading } = useUsers();
 
   const submitUserRole = useSubmitUserRole({
     mode: "create",
@@ -27,7 +27,7 @@ export default function UserRoleCreate() {
     submitUserRole
   );
 
-  if (roleLoading || permLoading) return <UILoading />;
+  if (roleLoading || userLoading) return <UILoading />;
 
   return (
     <UIUserRoleForm

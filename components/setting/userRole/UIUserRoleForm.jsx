@@ -43,16 +43,24 @@ export default function UIUserRoleForm({
                 radius="none"
                 isRequired
                 selectedKeys={
-                  formData.userRoleUserId ? [formData.userRoleUserId] : []
+                  formData.userRoleUserId
+                    ? new Set([formData.userRoleUserId])
+                    : new Set()
                 }
-                onSelectionChange={(keys) =>
-                  handleChange("userRoleUserId")([...keys][0])
-                }
+                onSelectionChange={(keys) => {
+                  const key = Array.from(keys)[0];
+                  handleChange("userRoleUserId")(key);
+                }}
                 isInvalid={!!errors.userRoleUserId}
                 errorMessage={errors.userRoleUserId}
               >
-                {users?.map((p) => (
-                  <SelectItem key={p.userId}>{p.userName}</SelectItem>
+                {users?.map((u) => (
+                  <SelectItem
+                    key={u.userId}
+                    textValue={`${u.userFirstName} ${u.userLastName}`}
+                  >
+                    {u.userFirstName} {u.userLastName}
+                  </SelectItem>
                 ))}
               </Select>
             </div>
@@ -111,7 +119,6 @@ export default function UIUserRoleForm({
             </div>
           )}
 
-          {/* Buttons */}
           <div className="flex flex-row items-center justify-end w-full h-fit p-2 gap-2">
             <div className="flex items-center justify-center w-full xl:w-2/12 h-full p-2 gap-2">
               <Button

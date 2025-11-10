@@ -16,10 +16,9 @@ import { useUsers } from "@/app/api/setting/user/hooks";
 export default function UserRoleUpdate() {
   const { userRoleId } = useParams();
   const { userId, userName } = useSessionUser();
-  const { userRole, loading: rpLoading } =
-    useUserRole(userRoleId);
+  const { userRole, loading: rpLoading } = useUserRole(userRoleId);
   const { roles, loading: roleLoading } = useRoles();
-  const { users, loading: permLoading } = useUsers();
+  const { users, loading: userLoading } = useUsers();
 
   const submitUserRole = useSubmitUserRole({
     mode: "update",
@@ -40,7 +39,7 @@ export default function UserRoleUpdate() {
     if (userRole) formHandler.setFormData(userRole);
   }, [userRole]);
 
-  if (rpLoading || roleLoading || permLoading) return <UILoading />;
+  if (rpLoading || roleLoading || userLoading) return <UILoading />;
 
   return (
     <UIUserRoleForm
