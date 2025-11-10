@@ -1,4 +1,7 @@
 import { z } from "zod";
+import logger from "@/lib/logger.node";
+
+logger.info({ message: "UserPermissionMatrix schema loaded" });
 
 export const userPermissionMatrixSchema = z.object({
   matrix: z.array(

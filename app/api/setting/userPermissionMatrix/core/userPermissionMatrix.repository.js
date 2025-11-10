@@ -3,6 +3,10 @@ import logger from "@/lib/logger.node";
 
 export const UserPermissionMatrixRepository = {
   async getAllUsersWithPermissions() {
+    logger.info({
+      message: "UserPermissionMatrixRepository.getAllUsersWithPermissions",
+    });
+
     const users = await prisma.user.findMany({
       select: {
         userId: true,
@@ -10,17 +14,37 @@ export const UserPermissionMatrixRepository = {
         userLastName: true,
         userPermissions: {
           select: {
-            permission: { select: { permissionId: true, permissionName: true } },
+            permission: {
+              select: { permissionId: true, permissionName: true },
+            },
           },
         },
       },
     });
+
+    logger.info({
+      message:
+        "UserPermissionMatrixRepository.getAllUsersWithPermissions success",
+      count: users.length,
+    });
+
     return users;
   },
 
   async upsertUserPermission(userId, permissionId, status, updaterId) {
+    logger.info({
+      message: "UserPermissionMatrixRepository.upsertUserPermission start",
+      userId,
+      permissionId,
+      status,
+      updaterId,
+    });
+
     const existing = await prisma.userPermission.findFirst({
-      where: { userPermissionUserId: userId, userPermissionPermissionId: permissionId },
+      where: {
+        userPermissionUserId: userId,
+        userPermissionPermissionId: permissionId,
+      },
     });
 
     if (status) {
@@ -33,8 +57,12 @@ export const UserPermissionMatrixRepository = {
             userPermissionUpdatedAt: new Date(),
           },
         });
+        logger.info({
+          message: "UserPermissionMatrixRepository.update existing Enable",
+          userPermissionId: existing.userPermissionId,
+        });
       } else {
-        await prisma.userPermission.create({
+        const created = await prisma.userPermission.create({
           data: {
             userPermissionUserId: userId,
             userPermissionPermissionId: permissionId,
@@ -43,10 +71,25 @@ export const UserPermissionMatrixRepository = {
             userPermissionCreatedAt: new Date(),
           },
         });
+        logger.info({
+          message: "UserPermissionMatrixRepository.create new Enable",
+          createdId: created.userPermissionId,
+        });
       }
     } else if (existing) {
       await prisma.userPermission.delete({
         where: { userPermissionId: existing.userPermissionId },
+      });
+      logger.info({
+        message: "UserPermissionMatrixRepository.delete Disable",
+        userPermissionId: existing.userPermissionId,
+      });
+    } else {
+      logger.info({
+        message:
+          "UserPermissionMatrixRepository.noAction (no existing, status=false)",
+        userId,
+        permissionId,
       });
     }
   },
