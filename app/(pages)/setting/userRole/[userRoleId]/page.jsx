@@ -11,7 +11,7 @@ import {
 } from "@/app/api/setting/userRole/hooks";
 import { useFormHandler } from "@/hooks/useFormHandler";
 import { useRoles } from "@/app/api/setting/role/hooks";
-import { usePermissions } from "@/app/api/setting/permission/hooks";
+import { useUsers } from "@/app/api/setting/user/hooks";
 
 export default function UserRoleUpdate() {
   const { userRoleId } = useParams();
@@ -19,7 +19,7 @@ export default function UserRoleUpdate() {
   const { userRole, loading: rpLoading } =
     useUserRole(userRoleId);
   const { roles, loading: roleLoading } = useRoles();
-  const { permissions, loading: permLoading } = usePermissions();
+  const { users, loading: permLoading } = useUsers();
 
   const submitUserRole = useSubmitUserRole({
     mode: "update",
@@ -30,7 +30,7 @@ export default function UserRoleUpdate() {
   const formHandler = useFormHandler(
     {
       userRoleRoleId: "",
-      userRolePermissionId: "",
+      userRoleUserId: "",
       userRoleStatus: "",
     },
     submitUserRole
@@ -50,7 +50,7 @@ export default function UserRoleUpdate() {
       operatedBy={userName}
       isUpdate
       roles={roles}
-      permissions={permissions}
+      users={users}
     />
   );
 }

@@ -13,7 +13,7 @@ const columns = [
   },
   {
     name: "ROLE PERMISSION PERMISSION ID",
-    uid: "userRolePermissionId",
+    uid: "userRoleUserId",
     sortable: true,
   },
   { name: "STATUS", uid: "userRoleStatus", sortable: true },
@@ -37,7 +37,7 @@ const statusColorMap = {
 const INITIAL_VISIBLE_COLUMNS = [
   "userRoleIndex",
   "userRoleRoleId",
-  "userRolePermissionId",
+  "userRoleUserId",
   "userRoleStatus",
   "actions",
 ];
@@ -65,9 +65,9 @@ export default function UIUserRoleList({
       userRoleIndex: i + 1,
       userRoleRoleId:
         userRole.role?.roleName || userRole.userRoleRoleId,
-      userRolePermissionId:
-        userRole.permission?.permissionName ||
-        userRole.userRolePermissionId,
+      userRoleUserId:
+        userRole.user?.userName ||
+        userRole.userRoleUserId,
       userRoleCreatedBy: userRole.createdByUser
         ? `${userRole.createdByUser.userFirstName} ${userRole.createdByUser.userLastName}`
         : userRole.userRoleCreatedBy || "-",

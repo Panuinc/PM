@@ -10,7 +10,7 @@ export default function UIUserRoleForm({
   isUpdate,
   operatedBy,
   roles,
-  permissions,
+  users,
 }) {
   const { formRef, formData, handleChange, handleSubmit, errors } = formHandler;
 
@@ -34,6 +34,31 @@ export default function UIUserRoleForm({
           <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit p-2 gap-2">
             <div className="flex items-center justify-center w-full h-full p-2 gap-2">
               <Select
+                name="userRoleUserId"
+                label="User"
+                labelPlacement="outside"
+                placeholder="Select User"
+                color="default"
+                variant="faded"
+                radius="none"
+                isRequired
+                selectedKeys={
+                  formData.userRoleUserId ? [formData.userRoleUserId] : []
+                }
+                onSelectionChange={(keys) =>
+                  handleChange("userRoleUserId")([...keys][0])
+                }
+                isInvalid={!!errors.userRoleUserId}
+                errorMessage={errors.userRoleUserId}
+              >
+                {users?.map((p) => (
+                  <SelectItem key={p.userId}>{p.userName}</SelectItem>
+                ))}
+              </Select>
+            </div>
+
+            <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+              <Select
                 name="userRoleRoleId"
                 label="Role"
                 labelPlacement="outside"
@@ -43,9 +68,7 @@ export default function UIUserRoleForm({
                 radius="none"
                 isRequired
                 selectedKeys={
-                  formData.userRoleRoleId
-                    ? [formData.userRoleRoleId]
-                    : []
+                  formData.userRoleRoleId ? [formData.userRoleRoleId] : []
                 }
                 onSelectionChange={(keys) =>
                   handleChange("userRoleRoleId")([...keys][0])
@@ -55,35 +78,6 @@ export default function UIUserRoleForm({
               >
                 {roles?.map((r) => (
                   <SelectItem key={r.roleId}>{r.roleName}</SelectItem>
-                ))}
-              </Select>
-            </div>
-
-            <div className="flex items-center justify-center w-full h-full p-2 gap-2">
-              <Select
-                name="userRolePermissionId"
-                label="Permission"
-                labelPlacement="outside"
-                placeholder="Select Permission"
-                color="default"
-                variant="faded"
-                radius="none"
-                isRequired
-                selectedKeys={
-                  formData.userRolePermissionId
-                    ? [formData.userRolePermissionId]
-                    : []
-                }
-                onSelectionChange={(keys) =>
-                  handleChange("userRolePermissionId")([...keys][0])
-                }
-                isInvalid={!!errors.userRolePermissionId}
-                errorMessage={errors.userRolePermissionId}
-              >
-                {permissions?.map((p) => (
-                  <SelectItem key={p.permissionId}>
-                    {p.permissionName}
-                  </SelectItem>
                 ))}
               </Select>
             </div>
@@ -102,9 +96,7 @@ export default function UIUserRoleForm({
                   radius="none"
                   isRequired
                   selectedKeys={
-                    formData.userRoleStatus
-                      ? [formData.userRoleStatus]
-                      : []
+                    formData.userRoleStatus ? [formData.userRoleStatus] : []
                   }
                   onSelectionChange={(keys) =>
                     handleChange("userRoleStatus")([...keys][0])
