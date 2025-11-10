@@ -250,3 +250,9 @@
 [2025-11-10 08:22:29] [INFO] {"message":"UserRoleRepository.update","userRoleId":"cmhsggzg90001crw0xgine2gq"}
 [2025-11-10 08:22:29] [INFO] {"message":"Formatting userRole data","count":1}
 [2025-11-10 08:22:29] [INFO] {"message":"UserRole schema loaded"}
+[2025-11-10 08:22:31] [INFO] {"message":"UserRoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:22:31] [INFO] {"message":"UserRoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:22:31] [INFO] {"message":"Formatting userRole data","count":1}
+[2025-11-10 08:22:31] [INFO] {"message":"UserRoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:22:31] [INFO] {"message":"UserRoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:22:31] [INFO] {"message":"Formatting userRole data","count":1}
