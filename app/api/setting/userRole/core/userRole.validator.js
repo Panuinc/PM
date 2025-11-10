@@ -2,16 +2,16 @@ import { UserRoleRepository } from "@/app/api/setting/userRole/core/userRole.rep
 import logger from "@/lib/logger.node";
 
 export const UserRoleValidator = {
-  async isDuplicate(userRoleRoleId, userUserRoleId) {
+  async isDuplicate(userRoleRoleId, userRoleUserId) {
     logger.info({
       message: "UserRoleValidator.isDuplicate",
       userRoleRoleId,
-      userUserRoleId,
+      userRoleUserId,
     });
 
     const existing = await UserRoleRepository.findDuplicate(
       userRoleRoleId,
-      userUserRoleId
+      userRoleUserId
     );
     const isDuplicate = !!existing;
 
@@ -19,7 +19,7 @@ export const UserRoleValidator = {
       logger.warn({
         message: "Duplicate UserRole pair detected",
         userRoleRoleId,
-        userUserRoleId,
+        userRoleUserId,
       });
     else logger.info({ message: "UserRole pair available" });
 

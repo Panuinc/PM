@@ -10,7 +10,9 @@ export const UserRoleRepository = {
       orderBy: { userRoleCreatedAt: "asc" },
       include: {
         role: { select: { roleId: true, roleName: true } },
-        permission: { select: { permissionId: true, permissionName: true } },
+        user: {
+          select: { userId: true, userFirstName: true, userLastName: true },
+        },
         createdByUser: {
           select: { userId: true, userFirstName: true, userLastName: true },
         },
@@ -24,15 +26,14 @@ export const UserRoleRepository = {
   countAll: async () => prisma.userRole.count(),
 
   findById: async (userRoleId) => {
-    logger.info({
-      message: "UserRoleRepository.findById",
-      userRoleId,
-    });
+    logger.info({ message: "UserRoleRepository.findById", userRoleId });
     return await prisma.userRole.findUnique({
       where: { userRoleId },
       include: {
         role: { select: { roleId: true, roleName: true } },
-        permission: { select: { permissionId: true, permissionName: true } },
+        user: {
+          select: { userId: true, userFirstName: true, userLastName: true },
+        },
         createdByUser: {
           select: { userId: true, userFirstName: true, userLastName: true },
         },
@@ -43,14 +44,14 @@ export const UserRoleRepository = {
     });
   },
 
-  findDuplicate: async (userRoleRoleId, userUserRoleId) => {
+  findDuplicate: async (userRoleRoleId, userRoleUserId) => {
     logger.info({
       message: "UserRoleRepository.findDuplicate",
       userRoleRoleId,
-      userUserRoleId,
+      userRoleUserId,
     });
     return await prisma.userRole.findFirst({
-      where: { userRoleRoleId, userUserRoleId },
+      where: { userRoleRoleId, userRoleUserId },
     });
   },
 
@@ -60,7 +61,9 @@ export const UserRoleRepository = {
       data,
       include: {
         role: { select: { roleId: true, roleName: true } },
-        permission: { select: { permissionId: true, permissionName: true } },
+        user: {
+          select: { userId: true, userFirstName: true, userLastName: true },
+        },
         createdByUser: {
           select: { userId: true, userFirstName: true, userLastName: true },
         },
@@ -69,16 +72,15 @@ export const UserRoleRepository = {
   },
 
   update: async (userRoleId, data) => {
-    logger.info({
-      message: "UserRoleRepository.update",
-      userRoleId,
-    });
+    logger.info({ message: "UserRoleRepository.update", userRoleId });
     return await prisma.userRole.update({
       where: { userRoleId },
       data,
       include: {
         role: { select: { roleId: true, roleName: true } },
-        permission: { select: { permissionId: true, permissionName: true } },
+        user: {
+          select: { userId: true, userFirstName: true, userLastName: true },
+        },
         updatedByUser: {
           select: { userId: true, userFirstName: true, userLastName: true },
         },

@@ -5,19 +5,15 @@ import logger from "@/lib/logger.node";
 logger.info({ message: "UserRole schema loaded" });
 
 export const userRolePostSchema = z.object({
+  userRoleUserId: preprocessString("Please provide the User ID"),
   userRoleRoleId: preprocessString("Please provide the Role ID"),
-  userUserRoleId: preprocessString(
-    "Please provide the Permission ID"
-  ),
   userRoleCreatedBy: preprocessString("Please provide the creator ID"),
 });
 
 export const userRolePutSchema = z.object({
   userRoleId: preprocessString("Please provide the UserRole ID"),
+  userRoleUserId: preprocessString("Please provide the User ID"),
   userRoleRoleId: preprocessString("Please provide the Role ID"),
-  userUserRoleId: preprocessString(
-    "Please provide the Permission ID"
-  ),
   userRoleStatus: preprocessEnum(
     ["Enable", "Disable"],
     "Please provide status"
@@ -26,13 +22,6 @@ export const userRolePutSchema = z.object({
 });
 
 export const formatUserRoleData = (userRoles) => {
-  logger.info({
-    message: "Formatting userRole data",
-    count: userRoles.length,
-  });
-  return formatData(
-    userRoles,
-    ["userRoleCreatedAt", "userRoleUpdatedAt"],
-    []
-  );
+  logger.info({ message: "Formatting userRole data", count: userRoles.length });
+  return formatData(userRoles, ["userRoleCreatedAt", "userRoleUpdatedAt"], []);
 };

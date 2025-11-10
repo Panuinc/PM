@@ -9,10 +9,7 @@ import logger from "@/lib/logger.node";
 
 export async function GetAllUserRoleUseCase(page = 1, limit = 1000000) {
   const skip = (page - 1) * limit;
-  const userRoles = await UserRoleService.getAllPaginated(
-    skip,
-    limit
-  );
+  const userRoles = await UserRoleService.getAllPaginated(skip, limit);
   const total = await UserRoleService.countAll();
   return { userRoles, total };
 }
@@ -22,8 +19,7 @@ export async function GetUserRoleByIdUseCase(userRoleId) {
     throw { status: 400, message: "Invalid UserRole ID" };
 
   const userRole = await UserRoleService.getById(userRoleId);
-  if (!userRole)
-    throw { status: 404, message: "UserRole not found" };
+  if (!userRole) throw { status: 404, message: "UserRole not found" };
   return userRole;
 }
 
@@ -38,17 +34,14 @@ export async function CreateUserRoleUseCase(data) {
 
   const duplicate = await UserRoleValidator.isDuplicate(
     parsed.data.userRoleRoleId,
-    parsed.data.userUserRoleId
+    parsed.data.userRoleUserId
   );
   if (duplicate)
-    throw {
-      status: 409,
-      message: "This Role and Permission pair already exists",
-    };
+    throw { status: 409, message: "This Role and User pair already exists" };
 
   const userRole = await UserRoleService.create({
     userRoleRoleId: parsed.data.userRoleRoleId,
-    userUserRoleId: parsed.data.userUserRoleId,
+    userRoleUserId: parsed.data.userRoleUserId,
     userRoleStatus: "Enable",
     userRoleCreatedBy: parsed.data.userRoleCreatedBy,
     userRoleCreatedAt: getLocalNow(),
@@ -66,37 +59,28 @@ export async function UpdateUserRoleUseCase(data) {
       details: parsed.error.flatten().fieldErrors,
     };
 
-  const existing = await UserRoleService.getById(
-    parsed.data.userRoleId
-  );
+  const existing = await UserRoleService.getById(parsed.data.userRoleId);
   if (!existing) throw { status: 404, message: "UserRole not found" };
 
   if (
     parsed.data.userRoleRoleId !== existing.userRoleRoleId ||
-    parsed.data.userUserRoleId !==
-      existing.userUserRoleId
+    parsed.data.userRoleUserId !== existing.userRoleUserId
   ) {
     const duplicate = await UserRoleValidator.isDuplicate(
       parsed.data.userRoleRoleId,
-      parsed.data.userUserRoleId
+      parsed.data.userRoleUserId
     );
     if (duplicate)
-      throw {
-        status: 409,
-        message: "This Role and Permission pair already exists",
-      };
+      throw { status: 409, message: "This Role and User pair already exists" };
   }
 
-  const updatedUserRole = await UserRoleService.update(
-    parsed.data.userRoleId,
-    {
-      userRoleRoleId: parsed.data.userRoleRoleId,
-      userUserRoleId: parsed.data.userUserRoleId,
-      userRoleStatus: parsed.data.userRoleStatus,
-      userRoleUpdatedBy: parsed.data.userRoleUpdatedBy,
-      userRoleUpdatedAt: getLocalNow(),
-    }
-  );
+  const updatedUserRole = await UserRoleService.update(parsed.data.userRoleId, {
+    userRoleRoleId: parsed.data.userRoleRoleId,
+    userRoleUserId: parsed.data.userRoleUserId,
+    userRoleStatus: parsed.data.userRoleStatus,
+    userRoleUpdatedBy: parsed.data.userRoleUpdatedBy,
+    userRoleUpdatedAt: getLocalNow(),
+  });
 
   return updatedUserRole;
 }
