@@ -51,13 +51,13 @@ export default function UserPermissionMatrixPage() {
           {matrix.map((user, uIdx) => (
             <tr key={user.userId}>
               <td className="border p-2">{user.userName}</td>
-              {user.permissions.map((perm, pIdx) => (
+              {user.permissions.map((permission, pIdx) => (
                 <td
-                  key={perm.permissionId}
+                  key={permission.permissionId}
                   className="border text-center cursor-pointer"
                   onClick={() => togglePermission(uIdx, pIdx)}
                 >
-                  {perm.hasPermission ? "✅" : "☐"}
+                  {permission.hasPermission ? "✅" : "☐"}
                 </td>
               ))}
             </tr>

@@ -56,11 +56,11 @@ export async function UpdateUserPermissionMatrixUseCase(body) {
   });
 
   for (const user of matrix) {
-    for (const perm of user.permissions) {
+    for (const permission of user.permissions) {
       await UserPermissionMatrixRepository.upsertUserPermission(
         user.userId,
-        perm.permissionId,
-        perm.hasPermission,
+        permission.permissionId,
+        permission.hasPermission,
         updaterId
       );
     }
