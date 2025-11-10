@@ -53,7 +53,8 @@ const PermissionMatrixTable = ({
                         onValueChange={() => onToggle(userIndex, permIndex)}
                         size="lg"
                         radius="none"
-                        color="default"
+                        color="success"
+                        className="text-white"
                       />
                     </div>
                   </td>
