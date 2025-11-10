@@ -88,12 +88,7 @@ export default function PagesLayout({ children }) {
     dashboard: {
       icon: <LayoutDashboard />,
       label: "Dashboard",
-      subMenus: [
-        { text: "Home", path: "/home" },
-        { text: "Analytics", path: "/dashboard/analytics" },
-        { text: "Reports", path: "/dashboard/reports" },
-        { text: "Settings", path: "/dashboard/settings" },
-      ],
+      subMenus: [{ text: "Home", path: "/home" }],
     },
     mcMaster: {
       icon: <HardDrive />,
