@@ -17,6 +17,11 @@ enum Status {
   Disable
 }
 
+//
+// ──────────────────────────────────────────────────────────
+//   USER
+// ──────────────────────────────────────────────────────────
+//
 model User {
   userId           String     @id @default(cuid())
   userFirstName    String
@@ -38,6 +43,7 @@ model User {
   updatedUsers  User[] @relation("UserUpdatedByUser")
 
   userRoles              UserRole[]
+  userPermissions        UserPermission[]
   rolesCreated           Role[]           @relation("RoleCreatedByUser")
   rolesUpdated           Role[]           @relation("RoleUpdatedByUser")
   departmentsCreated     Department[]     @relation("DepartmentCreatedByUser")
@@ -48,11 +54,18 @@ model User {
   rolePermissionsUpdated RolePermission[] @relation("RolePermissionUpdatedByUser")
   userRolesCreated       UserRole[]       @relation("UserRoleCreatedByUser")
   userRolesUpdated       UserRole[]       @relation("UserRoleUpdatedByUser")
+  userPermissionsCreated UserPermission[] @relation("UserPermissionCreatedByUser")
+  userPermissionsUpdated UserPermission[] @relation("UserPermissionUpdatedByUser")
 
   @@index([userCreatedBy])
   @@index([userUpdatedBy])
 }
 
+//
+// ──────────────────────────────────────────────────────────
+//   DEPARTMENT
+// ──────────────────────────────────────────────────────────
+//
 model Department {
   departmentId        String    @id @default(cuid())
   departmentName      String
@@ -70,6 +83,11 @@ model Department {
   @@index([departmentUpdatedBy])
 }
 
+//
+// ──────────────────────────────────────────────────────────
+//   ROLE
+// ──────────────────────────────────────────────────────────
+//
 model Role {
   roleId        String    @id @default(cuid())
   roleName      String
@@ -89,6 +107,11 @@ model Role {
   @@index([roleUpdatedBy])
 }
 
+//
+// ──────────────────────────────────────────────────────────
+//   PERMISSION
+// ──────────────────────────────────────────────────────────
+//
 model Permission {
   permissionId        String    @id @default(cuid())
   permissionName      String
@@ -100,6 +123,7 @@ model Permission {
   permissionUpdatedAt DateTime?
 
   rolePermissions RolePermission[]
+  userPermissions UserPermission[]
 
   createdByUser User? @relation("PermissionCreatedByUser", fields: [permissionCreatedBy], references: [userId])
   updatedByUser User? @relation("PermissionUpdatedByUser", fields: [permissionUpdatedBy], references: [userId])
@@ -108,6 +132,11 @@ model Permission {
   @@index([permissionUpdatedBy])
 }
 
+//
+// ──────────────────────────────────────────────────────────
+//   ROLE ⇄ PERMISSION
+// ──────────────────────────────────────────────────────────
+//
 model RolePermission {
   rolePermissionId           String    @id @default(cuid())
   rolePermissionRoleId       String
@@ -129,6 +158,11 @@ model RolePermission {
   @@index([rolePermissionUpdatedBy])
 }
 
+//
+// ──────────────────────────────────────────────────────────
+//   USER ⇄ ROLE
+// ──────────────────────────────────────────────────────────
+//
 model UserRole {
   userRoleId        String    @id @default(cuid())
   userRoleUserId    String
@@ -148,4 +182,30 @@ model UserRole {
   @@index([userRoleUserId])
   @@index([userRoleRoleId])
   @@index([userRoleUpdatedBy])
+}
+
+//
+// ──────────────────────────────────────────────────────────
+//   USER ⇄ PERMISSION  (เพิ่มใหม่ เพื่อควบคุมสิทธิ์เฉพาะบุคคล)
+// ──────────────────────────────────────────────────────────
+//
+model UserPermission {
+  userPermissionId           String    @id @default(cuid())
+  userPermissionUserId       String
+  userPermissionPermissionId String
+  userPermissionStatus       Status    @default(Enable)
+  userPermissionCreatedBy    String
+  userPermissionCreatedAt    DateTime
+  userPermissionUpdatedBy    String?
+  userPermissionUpdatedAt    DateTime?
+
+  user          User       @relation(fields: [userPermissionUserId], references: [userId])
+  permission    Permission @relation(fields: [userPermissionPermissionId], references: [permissionId])
+  createdByUser User       @relation("UserPermissionCreatedByUser", fields: [userPermissionCreatedBy], references: [userId])
+  updatedByUser User?      @relation("UserPermissionUpdatedByUser", fields: [userPermissionUpdatedBy], references: [userId])
+
+  @@unique([userPermissionUserId, userPermissionPermissionId])
+  @@index([userPermissionUserId])
+  @@index([userPermissionPermissionId])
+  @@index([userPermissionUpdatedBy])
 }

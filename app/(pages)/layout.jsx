@@ -165,6 +165,7 @@ export default function PagesLayout({ children }) {
         { text: "Role Permission", path: "/setting/rolePermission" },
         { text: "User", path: "/setting/user" },
         { text: "User Role", path: "/setting/userRole" },
+        { text: "User Permission", path: "/setting/userPermission" },
       ],
     },
   };
