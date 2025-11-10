@@ -1,0 +1,60 @@
+[2025-11-10 08:14:54] [INFO] {"message":"UserRole schema loaded"}
+[2025-11-10 08:14:54] [INFO] {"message":"UserRoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:14:54] [INFO] {"message":"UserRoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:14:55] [INFO] {"message":"Formatting userRole data","count":0}
+[2025-11-10 08:14:55] [INFO] {"message":"UserRoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:14:55] [INFO] {"message":"UserRoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:14:55] [INFO] {"message":"Formatting userRole data","count":0}
+[2025-11-10 08:14:59] [INFO] {"message":"Role schema loaded"}
+[2025-11-10 08:14:59] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:14:59] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:14:59] [INFO] {"message":"Permission schema loaded"}
+[2025-11-10 08:14:59] [INFO] {"message":"PermissionService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:14:59] [INFO] {"message":"PermissionRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:14:59] [INFO] {"message":"RoleService.countAll"}
+[2025-11-10 08:14:59] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-10 08:14:59] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-10 08:14:59] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:14:59] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:14:59] [INFO] {"message":"RoleService.countAll"}
+[2025-11-10 08:14:59] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-10 08:14:59] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-10 08:14:59] [INFO] {"message":"PermissionService.countAll"}
+[2025-11-10 08:15:00] [INFO] {"message":"GetAllPermissionUseCase success","total":1}
+[2025-11-10 08:15:00] [INFO] {"message":"Formatting permission data","count":1}
+[2025-11-10 08:15:00] [INFO] {"message":"PermissionService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:15:00] [INFO] {"message":"PermissionRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:15:00] [INFO] {"message":"PermissionService.countAll"}
+[2025-11-10 08:15:00] [INFO] {"message":"GetAllPermissionUseCase success","total":1}
+[2025-11-10 08:15:00] [INFO] {"message":"Formatting permission data","count":1}
+[2025-11-10 08:15:28] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:15:28] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:15:28] [INFO] {"message":"RoleService.countAll"}
+[2025-11-10 08:15:28] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-10 08:15:28] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-10 08:15:28] [INFO] {"message":"User schema loaded"}
+[2025-11-10 08:15:28] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:15:28] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:15:28] [INFO] {"message":"UserService.countAll"}
+[2025-11-10 08:15:28] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-10 08:15:28] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-10 08:15:46] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:15:46] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:15:47] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:15:47] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:15:47] [INFO] {"message":"RoleService.countAll"}
+[2025-11-10 08:15:47] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-10 08:15:47] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-10 08:15:47] [INFO] {"message":"RoleService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:15:47] [INFO] {"message":"RoleRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:15:47] [INFO] {"message":"RoleService.countAll"}
+[2025-11-10 08:15:47] [INFO] {"message":"GetAllRoleUseCase success","total":2}
+[2025-11-10 08:15:47] [INFO] {"message":"Formatting role data","count":2}
+[2025-11-10 08:15:47] [INFO] {"message":"UserService.countAll"}
+[2025-11-10 08:15:47] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-10 08:15:47] [INFO] {"message":"Formatting user data","count":2}
+[2025-11-10 08:15:47] [INFO] {"message":"UserService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 08:15:47] [INFO] {"message":"UserRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 08:15:47] [INFO] {"message":"UserService.countAll"}
+[2025-11-10 08:15:47] [INFO] {"message":"GetAllUserUseCase success","total":2}
+[2025-11-10 08:15:47] [INFO] {"message":"Formatting user data","count":2}
