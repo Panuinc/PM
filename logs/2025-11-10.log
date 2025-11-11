@@ -364,3 +364,14 @@
 [2025-11-10 11:08:14] [INFO] {"message":"DepartmentService.countAll"}
 [2025-11-10 11:08:14] [INFO] {"message":"GetAllDepartmentUseCase success","total":7}
 [2025-11-10 11:08:14] [INFO] {"message":"Formatting department data","count":7}
+[2025-11-10 16:27:55] [INFO] {"message":"Department schema loaded"}
+[2025-11-10 16:27:55] [INFO] {"message":"DepartmentService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 16:27:55] [INFO] {"message":"DepartmentRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 16:27:56] [INFO] {"message":"DepartmentService.countAll"}
+[2025-11-10 16:27:56] [INFO] {"message":"GetAllDepartmentUseCase success","total":0}
+[2025-11-10 16:27:56] [INFO] {"message":"Formatting department data","count":0}
+[2025-11-10 16:27:56] [INFO] {"message":"DepartmentService.getAllPaginated","skip":0,"take":1000000}
+[2025-11-10 16:27:56] [INFO] {"message":"DepartmentRepository.getAll","skip":0,"take":1000000}
+[2025-11-10 16:27:56] [INFO] {"message":"DepartmentService.countAll"}
+[2025-11-10 16:27:56] [INFO] {"message":"GetAllDepartmentUseCase success","total":0}
+[2025-11-10 16:27:56] [INFO] {"message":"Formatting department data","count":0}
