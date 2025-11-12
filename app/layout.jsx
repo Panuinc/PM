@@ -11,8 +11,8 @@ const gruppo = Gruppo({
 });
 
 export const metadata = {
-  title: "Maintenance",
-  description: "Maintenance By Alpaca",
+  title: "CHH Industry",
+  description: "CHH Industry Internal System By Alpaca",
 };
 
 export default function RootLayout({ children }) {
