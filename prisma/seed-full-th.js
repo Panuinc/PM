@@ -26,10 +26,10 @@ async function main() {
   // ────────────────────────────────
   const roles = await prisma.role.createMany({
     data: [
-      // บริหาร
+      // บริหาร1
       { roleName: "กรรมการผู้จัดการ", roleCreatedBy: "system", roleCreatedAt: new Date() },
 
-      // ฝ่ายขาย
+      // ฝ่ายขาย10
       { roleName: "ผู้อำนวยการฝ่ายขาย", roleCreatedBy: "system", roleCreatedAt: new Date() },
       { roleName: "ผู้จัดการฝ่ายการตลาด", roleCreatedBy: "system", roleCreatedAt: new Date() },
       { roleName: "ผู้จัดการฝ่ายขายโครงการ", roleCreatedBy: "system", roleCreatedAt: new Date() },
@@ -41,7 +41,7 @@ async function main() {
       { roleName: "เจ้าหน้าที่ประสานงานฝ่ายขาย", roleCreatedBy: "system", roleCreatedAt: new Date() },
       { roleName: "พนักงานขาย", roleCreatedBy: "system", roleCreatedAt: new Date() },
 
-      // ฝ่ายผลิต
+      // ฝ่ายผลิต32
       { roleName: "ผู้จัดการโรงงาน", roleCreatedBy: "system", roleCreatedAt: new Date() },
       { roleName: "ผู้ช่วยผู้จัดการโรงงาน", roleCreatedBy: "system", roleCreatedAt: new Date() },
       { roleName: "หัวหน้าแผนกวางแผนโครงการ", roleCreatedBy: "system", roleCreatedAt: new Date() },
@@ -52,6 +52,7 @@ async function main() {
       { roleName: "หัวหน้าฝ่ายตรวจสอบคุณภาพ (QC)", roleCreatedBy: "system", roleCreatedAt: new Date() },
       { roleName: "หัวหน้าฝ่ายคัดเกรดและบรรจุภัณฑ์", roleCreatedBy: "system", roleCreatedAt: new Date() },
       { roleName: "หัวหน้าแผนกผลิต WPC", roleCreatedBy: "system", roleCreatedAt: new Date() },
+
       { roleName: "หัวหน้าแผนกขนส่ง", roleCreatedBy: "system", roleCreatedAt: new Date() },
       { roleName: "หัวหน้าแผนกซ่อมบำรุง", roleCreatedBy: "system", roleCreatedAt: new Date() },
       { roleName: "ผู้ช่วยหัวหน้าแผนกผลิต", roleCreatedBy: "system", roleCreatedAt: new Date() },
@@ -62,6 +63,7 @@ async function main() {
       { roleName: "เจ้าหน้าที่ผลิต CNC/Robot", roleCreatedBy: "system", roleCreatedAt: new Date() },
       { roleName: "พนักงาน CNC", roleCreatedBy: "system", roleCreatedAt: new Date() },
       { roleName: "พนักงานเตรียมวัตถุดิบ", roleCreatedBy: "system", roleCreatedAt: new Date() },
+
       { roleName: "พนักงานประกอบโครง", roleCreatedBy: "system", roleCreatedAt: new Date() },
       { roleName: "พนักงานประกอบบาน", roleCreatedBy: "system", roleCreatedAt: new Date() },
       { roleName: "พนักงานอัดบาน CTS", roleCreatedBy: "system", roleCreatedAt: new Date() },
@@ -72,17 +74,18 @@ async function main() {
       { roleName: "พนักงานฝ่ายผลิต กะ B", roleCreatedBy: "system", roleCreatedAt: new Date() },
       { roleName: "พนักงานขับรถ", roleCreatedBy: "system", roleCreatedAt: new Date() },
       { roleName: "พนักงานเด็กรถ", roleCreatedBy: "system", roleCreatedAt: new Date() },
+
       { roleName: "ช่างซ่อมบำรุง", roleCreatedBy: "system", roleCreatedAt: new Date() },
       { roleName: "พนักงานแม่บ้าน", roleCreatedBy: "system", roleCreatedAt: new Date() },
 
-      // IT
+      // IT1
       { roleName: "โปรแกรมเมอร์", roleCreatedBy: "system", roleCreatedAt: new Date() },
 
-      // บุคคล
+      // บุคคล2
       { roleName: "ผู้จัดการฝ่ายบุคคล", roleCreatedBy: "system", roleCreatedAt: new Date() },
       { roleName: "เจ้าหน้าที่ฝ่ายบุคคล", roleCreatedBy: "system", roleCreatedAt: new Date() },
 
-      // บัญชี
+      // บัญชี3
       { roleName: "ผู้จัดการฝ่ายบัญชีและการเงิน", roleCreatedBy: "system", roleCreatedAt: new Date() },
       { roleName: "เจ้าหน้าที่บัญชีรับ", roleCreatedBy: "system", roleCreatedAt: new Date() },
       { roleName: "เจ้าหน้าที่บัญชีจ่าย", roleCreatedBy: "system", roleCreatedAt: new Date() },
