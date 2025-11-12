@@ -4,20 +4,15 @@
 import { Avatar, Button, Tooltip } from "@heroui/react";
 import {
   Bell,
-  BookOpen,
-  Calendar,
   Cat,
   ChevronLeft,
   ChevronRight,
-  Clipboard,
   Factory,
-  HardDrive,
-  History,
+  Wrench,
   Key,
   LayoutDashboard,
   Menu,
   Settings,
-  Wrench,
   X,
 } from "lucide-react";
 import Image from "next/image";
@@ -90,64 +85,12 @@ export default function PagesLayout({ children }) {
       label: "Dashboard",
       subMenus: [{ text: "Home", path: "/home" }],
     },
-    mcMaster: {
-      icon: <HardDrive />,
-      label: "Mc Master",
-      subMenus: [
-        { text: "Machine List", path: "/mcMaster" },
-        { text: "Add Machine", path: "/mc-master/add" },
-        { text: "Edit Machine", path: "/mc-master/edit" },
-        { text: "Delete Machine", path: "/mc-master/delete" },
-      ],
-    },
-    pmPlan: {
-      icon: <Calendar />,
-      label: "PM Plan",
-      subMenus: [
-        { text: "Daily Plan", path: "/pm-plan/daily" },
-        { text: "Weekly Plan", path: "/pm-plan/weekly" },
-        { text: "Monthly Plan", path: "/pm-plan/monthly" },
-        { text: "Yearly Plan", path: "/pm-plan/yearly" },
-      ],
-    },
-    mcRepairLog: {
+    pm: {
       icon: <Wrench />,
-      label: "Mc Repair Log",
+      label: "Preventive Maintenance",
       subMenus: [
-        { text: "View Logs", path: "/mc-repair-log/view" },
-        { text: "Add Log", path: "/mc-repair-log/add" },
-        { text: "Edit Log", path: "/mc-repair-log/edit" },
-        { text: "Export Logs", path: "/mc-repair-log/export" },
-      ],
-    },
-    pmRecord: {
-      icon: <BookOpen />,
-      label: "PM Record",
-      subMenus: [
-        { text: "All Records", path: "/pm-record/all" },
-        { text: "Pending", path: "/pm-record/pending" },
-        { text: "Completed", path: "/pm-record/completed" },
-        { text: "Archived", path: "/pm-record/archived" },
-      ],
-    },
-    mcJobOrder: {
-      icon: <Clipboard />,
-      label: "Mc Job Order",
-      subMenus: [
-        { text: "New Order", path: "/mc-job-order/new" },
-        { text: "In Progress", path: "/mc-job-order/in-progress" },
-        { text: "Completed", path: "/mc-job-order/completed" },
-        { text: "Cancelled", path: "/mc-job-order/cancelled" },
-      ],
-    },
-    mcHistory: {
-      icon: <History />,
-      label: "Mc History",
-      subMenus: [
-        { text: "View History", path: "/mc-history/view" },
-        { text: "Search", path: "/mc-history/search" },
-        { text: "Filter", path: "/mc-history/filter" },
-        { text: "Export", path: "/mc-history/export" },
+        { text: "Dashboard", path: "/mcDashboard" },
+        { text: "Machine List", path: "/mcMaster" },
       ],
     },
     setting: {
@@ -237,16 +180,18 @@ export default function PagesLayout({ children }) {
             <Cat />
           </div>
 
-          {Object.entries(menuData).map(([key, data]) => (
-            <MainMenu
-              key={key}
-              content={data.label}
-              icons={data.icon}
-              onClick={() => handleMenuClick(key)}
-              isActive={selectedMenu === key}
-              isMobile={isMobileMenuOpen}
-            />
-          ))}
+          <div className="flex flex-col items-center justify-start w-full h-full gap-2">
+            {Object.entries(menuData).map(([key, data]) => (
+              <MainMenu
+                key={key}
+                content={data.label}
+                icons={data.icon}
+                onClick={() => handleMenuClick(key)}
+                isActive={selectedMenu === key}
+                isMobile={isMobileMenuOpen}
+              />
+            ))}
+          </div>
 
           <div
             className="flex items-center justify-center w-full h-fit p-3 gap-2 border-t-2 border-default cursor-pointer text-white"
@@ -299,7 +244,7 @@ export default function PagesLayout({ children }) {
             <Menu />
           </button>
           <div className="flex items-center justify-start w-full xl:w-fit h-full p-2 gap-2 whitespace-nowrap">
-            Preventive Maintenance
+            CHH Industry
           </div>
           <div className="hidden xl:flex items-center justify-center w-full h-full p-2 gap-2">
             {" "}
