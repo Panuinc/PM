@@ -96,7 +96,7 @@ export default function UIUserPermissionForm({
               <div className="flex items-center justify-center w-full xl:w-6/12 h-full p-2 gap-2">
                 <Select
                   name="userPermissionStatus"
-                  label="Status"
+                  label="User Permission Status"
                   labelPlacement="outside"
                   placeholder="Please Select"
                   color="default"

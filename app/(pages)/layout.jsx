@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { Avatar, Button, Tooltip } from "@heroui/react";
@@ -54,7 +54,10 @@ function MainMenu({ icons, content, onClick, isActive, isMobile }) {
 
 function SubMenu({ text, onClick, path }) {
   const pathname = usePathname();
-  const isActive = pathname === path;
+  const isActive =
+    pathname === path ||
+    pathname.startsWith(path + "/") ||
+    pathname.startsWith(path);
 
   return (
     <div
@@ -118,8 +121,7 @@ export default function PagesLayout({ children }) {
     for (const [menuKey, menuValue] of Object.entries(menuData)) {
       const hasMatchingPath = menuValue.subMenus.some(
         (subMenu) =>
-          currentPath === subMenu.path ||
-          currentPath.startsWith(subMenu.path + "/")
+          currentPath === subMenu.path || currentPath.startsWith(subMenu.path)
       );
 
       if (hasMatchingPath) {
@@ -138,6 +140,7 @@ export default function PagesLayout({ children }) {
     setIsMobileMenuOpen(false);
     router.push(path);
   };
+
   useEffect(() => {
     if (status === "unauthenticated") router.push("/");
   }, [status, router]);
@@ -156,17 +159,13 @@ export default function PagesLayout({ children }) {
       )}
 
       <div
-        className={`
-          fixed xl:relative inset-y-0 left-0 z-50
-          flex flex-row items-center justify-center
-          ${isCollapsed ? "w-fit" : "w-[300px] xl:w-[500px]"}
-          h-full bg-white transition-all duration-300
-          ${
-            isMobileMenuOpen
-              ? "translate-x-0"
-              : "-translate-x-full xl:translate-x-0"
-          }
-        `}
+        className={`fixed xl:relative inset-y-0 left-0 z-50 flex flex-row items-center justify-center ${
+          isCollapsed ? "w-fit" : "w-[300px] xl:w-[500px]"
+        } h-full bg-white transition-all duration-300 ${
+          isMobileMenuOpen
+            ? "translate-x-0"
+            : "-translate-x-full xl:translate-x-0"
+        }`}
       >
         <div className="flex flex-col items-center justify-between min-w-fit h-full p-2 gap-2 border-1 border-dark bg-dark overflow-auto">
           <div
