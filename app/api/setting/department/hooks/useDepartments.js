@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 export function useDepartments(apiUrl = "/api/setting/department") {
   const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     let active = true;
@@ -17,6 +18,13 @@ export function useDepartments(apiUrl = "/api/setting/department") {
             "x-api-key": process.env.NEXT_PUBLIC_SECRET_TOKEN || "",
           },
         });
+
+        if (res.status === 403) {
+          showToast("warning", "You don't have permission to view this page.");
+          router.push("/forbidden");
+          return;
+        }
+
         const data = await res.json();
         if (!res.ok)
           throw new Error(data.error || "Failed to load departments.");
@@ -37,7 +45,9 @@ export function useDepartments(apiUrl = "/api/setting/department") {
           setDepartments(formatted);
         }
       } catch (err) {
-        showToast("danger", "Error: " + err.message);
+        if (active) {
+          showToast("danger", "Error: " + err.message);
+        }
       } finally {
         if (active) setLoading(false);
       }
@@ -46,7 +56,7 @@ export function useDepartments(apiUrl = "/api/setting/department") {
     return () => {
       active = false;
     };
-  }, [apiUrl]);
+  }, [apiUrl, router]);
 
   return { departments, loading };
 }
@@ -54,6 +64,7 @@ export function useDepartments(apiUrl = "/api/setting/department") {
 export function useDepartment(departmentId) {
   const [department, setDepartment] = useState(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     if (!departmentId) {
@@ -71,6 +82,13 @@ export function useDepartment(departmentId) {
             "x-api-key": process.env.NEXT_PUBLIC_SECRET_TOKEN || "",
           },
         });
+
+        if (res.status === 403) {
+          showToast("warning", "You don't have permission to view this page.");
+          router.push("/forbidden");
+          return;
+        }
+
         const result = await res.json();
         if (!res.ok)
           throw new Error(result.error || "Failed to load Department.");
@@ -91,10 +109,14 @@ export function useDepartment(departmentId) {
                 : "-",
             };
             setDepartment(formatted);
-          } else showToast("warning", "No Department data found.");
+          } else {
+            showToast("warning", "No Department data found.");
+          }
         }
       } catch (err) {
-        showToast("danger", "Error: " + err.message);
+        if (active) {
+          showToast("danger", "Error: " + err.message);
+        }
       } finally {
         if (active) setLoading(false);
       }
@@ -103,7 +125,7 @@ export function useDepartment(departmentId) {
     return () => {
       active = false;
     };
-  }, [departmentId]);
+  }, [departmentId, router]);
 
   return { department, loading };
 }
@@ -132,6 +154,15 @@ export function useSubmitDepartment({ mode = "create", departmentId, userId }) {
           },
           body: JSON.stringify(payload),
         });
+
+        if (res.status === 403) {
+          showToast(
+            "warning",
+            "You don't have permission to perform this action."
+          );
+          router.push("/forbidden");
+          return;
+        }
 
         const result = await res.json();
         if (res.ok) {

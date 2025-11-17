@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-
 import { Avatar, Button, Tooltip } from "@heroui/react";
 import {
   Bell,
@@ -17,9 +16,11 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { signOut, useSession } from "next-auth/react";
 import UILoading from "@/components/UILoading";
+import { getAuthorizedMenus } from "@/lib/permissions";
+import { PERMISSIONS } from "@/constants/permissions";
 
 function MainMenu({ icons, content, onClick, isActive, isMobile }) {
   const menuContent = (
@@ -82,38 +83,89 @@ export default function PagesLayout({ children }) {
   const toggleSidebar = () => setIsCollapsed(!isCollapsed);
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
-  const menuData = {
-    dashboard: {
-      icon: <LayoutDashboard />,
-      label: "Dashboard",
-      subMenus: [{ text: "Home", path: "/home" }],
-    },
-    pm: {
-      icon: <Wrench />,
-      label: "Preventive Maintenance",
-      subMenus: [
-        { text: "Dashboard", path: "/mcDashboard" },
-        { text: "Machine List", path: "/mcMaster" },
-      ],
-    },
-    setting: {
-      icon: <Settings />,
-      label: "Settings",
-      subMenus: [
-        { text: "Department", path: "/setting/department" },
-        { text: "Role", path: "/setting/role" },
-        { text: "Permission", path: "/setting/permission" },
-        { text: "Role Permission", path: "/setting/rolePermission" },
-        { text: "User", path: "/setting/user" },
-        { text: "User Role", path: "/setting/userRole" },
-        { text: "User Permission", path: "/setting/userPermission" },
-        {
-          text: "User Permission Matrix",
-          path: "/setting/userPermissionMatrix",
-        },
-      ],
-    },
-  };
+  const allMenuData = useMemo(
+    () => ({
+      dashboard: {
+        icon: <LayoutDashboard />,
+        label: "Dashboard",
+        subMenus: [
+          {
+            text: "Home",
+            path: "/home",
+          },
+        ],
+      },
+      pm: {
+        icon: <Wrench />,
+        label: "Preventive Maintenance",
+        requiredPermission: PERMISSIONS.PM_DASHBOARD_VIEW,
+        subMenus: [
+          {
+            text: "Dashboard",
+            path: "/mcDashboard",
+            requiredPermission: PERMISSIONS.PM_DASHBOARD_VIEW,
+          },
+          {
+            text: "Machine List",
+            path: "/mcMaster",
+            requiredPermission: PERMISSIONS.PM_MACHINE_VIEW,
+          },
+        ],
+      },
+      setting: {
+        icon: <Settings />,
+        label: "Settings",
+        subMenus: [
+          {
+            text: "Department",
+            path: "/setting/department",
+            requiredPermission: PERMISSIONS.DEPARTMENT_VIEW,
+          },
+          {
+            text: "Role",
+            path: "/setting/role",
+            requiredPermission: PERMISSIONS.ROLE_VIEW,
+          },
+          {
+            text: "Permission",
+            path: "/setting/permission",
+            requiredPermission: PERMISSIONS.PERMISSION_VIEW,
+          },
+          {
+            text: "Role Permission",
+            path: "/setting/rolePermission",
+            requiredPermission: PERMISSIONS.ROLE_PERMISSION_VIEW,
+          },
+          {
+            text: "User",
+            path: "/setting/user",
+            requiredPermission: PERMISSIONS.USER_VIEW,
+          },
+          {
+            text: "User Role",
+            path: "/setting/userRole",
+            requiredPermission: PERMISSIONS.USER_ROLE_VIEW,
+          },
+          {
+            text: "User Permission",
+            path: "/setting/userPermission",
+            requiredPermission: PERMISSIONS.USER_PERMISSION_VIEW,
+          },
+          {
+            text: "User Permission Matrix",
+            path: "/setting/userPermissionMatrix",
+            requiredPermission: PERMISSIONS.USER_PERMISSION_VIEW,
+          },
+        ],
+      },
+    }),
+    []
+  );
+
+  const menuData = useMemo(() => {
+    if (!session) return {};
+    return getAuthorizedMenus(session, allMenuData);
+  }, [session, allMenuData]);
 
   useEffect(() => {
     const currentPath = pathname;
@@ -129,7 +181,7 @@ export default function PagesLayout({ children }) {
         break;
       }
     }
-  }, [pathname]);
+  }, [pathname, menuData]);
 
   const handleMenuClick = (menuKey) => {
     if (isCollapsed) setIsCollapsed(false);
@@ -203,10 +255,10 @@ export default function PagesLayout({ children }) {
         {!isCollapsed && (
           <div className="flex flex-col items-center justify-start w-full h-full py-2 gap-2 border-1 border-dark overflow-auto">
             <div className="flex items-center justify-start w-full h-fit p-3 gap-2 border-b-2 border-dark">
-              <Factory /> {menuData[selectedMenu].label}
+              <Factory /> {menuData[selectedMenu]?.label || "Menu"}
             </div>
             <div className="flex flex-col items-center justify-start w-full h-full p-2 gap-2 overflow-auto">
-              {menuData[selectedMenu].subMenus.map((subMenu, index) => (
+              {menuData[selectedMenu]?.subMenus.map((subMenu, index) => (
                 <SubMenu
                   key={index}
                   text={subMenu.text}
