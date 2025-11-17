@@ -17,11 +17,7 @@ enum Status {
   Disable
 }
 
-//
-// ──────────────────────────────────────────────────────────
-//   USER
-// ──────────────────────────────────────────────────────────
-//
+
 model User {
   userId           String     @id @default(cuid())
   userFirstName    String
@@ -61,11 +57,7 @@ model User {
   @@index([userUpdatedBy])
 }
 
-//
-// ──────────────────────────────────────────────────────────
-//   DEPARTMENT
-// ──────────────────────────────────────────────────────────
-//
+
 model Department {
   departmentId        String    @id @default(cuid())
   departmentName      String
@@ -83,11 +75,7 @@ model Department {
   @@index([departmentUpdatedBy])
 }
 
-//
-// ──────────────────────────────────────────────────────────
-//   ROLE
-// ──────────────────────────────────────────────────────────
-//
+
 model Role {
   roleId        String    @id @default(cuid())
   roleName      String
@@ -107,11 +95,7 @@ model Role {
   @@index([roleUpdatedBy])
 }
 
-//
-// ──────────────────────────────────────────────────────────
-//   PERMISSION
-// ──────────────────────────────────────────────────────────
-//
+
 model Permission {
   permissionId        String    @id @default(cuid())
   permissionName      String
@@ -136,11 +120,7 @@ model Permission {
   @@index([permissionUpdatedBy])
 }
 
-//
-// ──────────────────────────────────────────────────────────
-//   ROLE ⇄ PERMISSION
-// ──────────────────────────────────────────────────────────
-//
+
 model RolePermission {
   rolePermissionId           String    @id @default(cuid())
   rolePermissionRoleId       String
@@ -162,11 +142,6 @@ model RolePermission {
   @@index([rolePermissionUpdatedBy])
 }
 
-//
-// ──────────────────────────────────────────────────────────
-//   USER ⇄ ROLE
-// ──────────────────────────────────────────────────────────
-//
 model UserRole {
   userRoleId        String    @id @default(cuid())
   userRoleUserId    String
@@ -188,11 +163,6 @@ model UserRole {
   @@index([userRoleUpdatedBy])
 }
 
-//
-// ──────────────────────────────────────────────────────────
-//   USER ⇄ PERMISSION  (เพิ่มใหม่ เพื่อควบคุมสิทธิ์เฉพาะบุคคล)
-// ──────────────────────────────────────────────────────────
-//
 model UserPermission {
   userPermissionId           String    @id @default(cuid())
   userPermissionUserId       String
