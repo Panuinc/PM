@@ -121,13 +121,17 @@ model Permission {
   permissionCreatedAt DateTime
   permissionUpdatedBy String?
   permissionUpdatedAt DateTime?
+  permissionGroupId   String?
 
   rolePermissions RolePermission[]
   userPermissions UserPermission[]
 
+  group PermissionGroup? @relation(fields: [permissionGroupId], references: [permissionGroupId])
+
   createdByUser User? @relation("PermissionCreatedByUser", fields: [permissionCreatedBy], references: [userId])
   updatedByUser User? @relation("PermissionUpdatedByUser", fields: [permissionUpdatedBy], references: [userId])
 
+  @@index([permissionGroupId])
   @@index([permissionCreatedBy])
   @@index([permissionUpdatedBy])
 }
@@ -208,4 +212,12 @@ model UserPermission {
   @@index([userPermissionUserId])
   @@index([userPermissionPermissionId])
   @@index([userPermissionUpdatedBy])
+}
+
+model PermissionGroup {
+  permissionGroupId    String @id @default(cuid())
+  permissionGroupName  String
+  permissionGroupOrder Int    @default(0)
+
+  permissions Permission[]
 }
