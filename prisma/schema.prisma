@@ -24,7 +24,7 @@ model User {
   userEmail     String     @unique
   userPassword  String
   userStatus    UserStatus @default(Enable)
-  userCreatedBy String
+  userCreatedBy String?
   userCreatedAt DateTime   @default(now())
   userUpdatedBy String?
   userUpdatedAt DateTime?  @updatedAt
@@ -50,7 +50,7 @@ model User {
 
 model Role {
   roleId        String    @id @default(cuid())
-  roleName      String
+  roleName      String    @unique
   roleStatus    Status    @default(Enable)
   roleCreatedBy String
   roleCreatedAt DateTime  @default(now())
