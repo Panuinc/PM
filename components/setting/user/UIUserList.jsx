@@ -9,7 +9,6 @@ const columns = [
   { name: "Firstname", uid: "userFirstName", sortable: true },
   { name: "Lastname", uid: "userLastName", sortable: true },
   { name: "Email", uid: "userEmail", sortable: true },
-  { name: "DEPARTMENT", uid: "userDepartmentId", sortable: true },
   { name: "STATUS", uid: "userStatus", sortable: true },
   { name: "CREATED BY", uid: "userCreatedBy", sortable: true },
   { name: "CREATED AT", uid: "userCreatedAt", sortable: true },
@@ -32,7 +31,6 @@ const INITIAL_VISIBLE_COLUMNS = [
   "userIndex",
   "userFirstName",
   "userLastName",
-  "userDepartmentId",
   "userStatus",
   "actions",
 ];
@@ -54,7 +52,6 @@ const normalized = Array.isArray(Users)
       ...user,
       id: user.userId,
       userIndex: i + 1,
-      userDepartmentId: user.department?.departmentName || "-",
       userCreatedBy: user.createdByUser
         ? `${user.createdByUser.userFirstName} ${user.createdByUser.userLastName}`
         : user.userCreatedBy,

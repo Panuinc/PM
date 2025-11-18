@@ -7,13 +7,11 @@ import { useParams } from "next/navigation";
 import { useSessionUser } from "@/hooks/useSessionUser";
 import { useUser, useSubmitUser } from "@/app/api/setting/user/hooks";
 import { useFormHandler } from "@/hooks/useFormHandler";
-import { useDepartments } from "@/app/api/setting/department/hooks";
 
 export default function UserUpdate() {
   const { userId } = useParams();
   const { userId: sessionUserId, userName } = useSessionUser();
   const { user, loading: userLoading } = useUser(userId);
-  const { departments, loading: deptLoading } = useDepartments();
 
   const submitUser = useSubmitUser({
     mode: "update",
@@ -26,7 +24,6 @@ export default function UserUpdate() {
       userFirstName: "",
       userLastName: "",
       userEmail: "",
-      userDepartmentId: "",
       userStatus: "",
     },
     submitUser
@@ -45,7 +42,6 @@ export default function UserUpdate() {
       mode="update"
       operatedBy={userName}
       isUpdate
-      departments={departments}
     />
   );
 }

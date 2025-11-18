@@ -14,9 +14,6 @@ export const userPostSchema = z.object({
   userLastName: preprocessString("Please provide last name"),
   userEmail: preprocessString("Please provide email"),
   userPassword: preprocessString("Please provide password"),
-  userDepartmentId: preprocessStringOptional(
-    "Please provide the Department ID"
-  ),
   userCreatedBy: preprocessString("Please provide the creator ID"),
 });
 
@@ -25,9 +22,6 @@ export const userPutSchema = z.object({
   userFirstName: preprocessString("Please provide first name"),
   userLastName: preprocessString("Please provide last name"),
   userEmail: preprocessString("Please provide email"),
-  userDepartmentId: preprocessStringOptional(
-    "Please provide the Department ID"
-  ),
   userStatus: preprocessEnum(
     ["Enable", "Disable"],
     "Please provide user status"

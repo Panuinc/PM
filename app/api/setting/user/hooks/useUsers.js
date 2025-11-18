@@ -27,9 +27,6 @@ export function useUsers(apiUrl = "/api/setting/user") {
                 ...user,
                 userIndex: index + 1,
                 userFullName: `${user.userFirstName} ${user.userLastName}`,
-                userDepartment: user.department
-                  ? user.department.departmentName
-                  : "-",
                 userStatus: user.userStatus || "-",
                 userCreatedBy: user.createdByUser
                   ? `${user.createdByUser.userFirstName} ${user.createdByUser.userLastName}`
@@ -90,7 +87,6 @@ export function useUser(userId) {
             const formatted = {
               ...user,
               userFullName: `${user.userFirstName} ${user.userLastName}`,
-              userDepartment: user.department ? user.department.departmentName : "-",
               userCreatedBy: user.createdByUser
                 ? `${user.createdByUser.userFirstName} ${user.createdByUser.userLastName}`
                 : "-",

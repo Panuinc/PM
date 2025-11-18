@@ -20,10 +20,6 @@ export default function UIHome() {
               <strong>Email:</strong> {session?.user?.email}
             </div>
             <div className="w-full p-2">
-              <strong>Department:</strong>{" "}
-              {session?.user?.department?.name || "N/A"}
-            </div>
-            <div className="w-full p-2">
               <strong>Status:</strong> {session?.user?.status}
             </div>
           </div>

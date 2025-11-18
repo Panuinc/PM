@@ -10,7 +10,6 @@ export function useSessionUser() {
   }`.trim();
   const userEmail = user.email ?? "";
   const userStatus = user.status ?? "";
-  const department = user.department ?? null;
   const roles = user.roles ?? [];
 
   const permissions =
@@ -21,7 +20,6 @@ export function useSessionUser() {
     userName,
     userEmail,
     userStatus,
-    department,
     roles,
     permissions,
     isLoading: status === "loading",

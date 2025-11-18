@@ -9,7 +9,6 @@ export const UserRepository = {
       take,
       orderBy: { userCreatedAt: "asc" },
       include: {
-        department: true,
         createdByUser: {
           select: { userId: true, userFirstName: true, userLastName: true },
         },
@@ -27,7 +26,6 @@ export const UserRepository = {
     return await prisma.user.findUnique({
       where: { userId },
       include: {
-        department: true,
         createdByUser: {
           select: { userId: true, userFirstName: true, userLastName: true },
         },
@@ -50,7 +48,6 @@ export const UserRepository = {
     return await prisma.user.create({
       data,
       include: {
-        department: true,
         createdByUser: {
           select: { userId: true, userFirstName: true, userLastName: true },
         },
@@ -64,7 +61,6 @@ export const UserRepository = {
       where: { userId },
       data,
       include: {
-        department: true,
         updatedByUser: {
           select: { userId: true, userFirstName: true, userLastName: true },
         },

@@ -32,11 +32,6 @@ export default function UIHome() {
             <div>
               <strong>Email:</strong> {user?.email}
             </div>
-
-            <div>
-              <strong>Department:</strong> {user?.department?.name || "N/A"}
-            </div>
-
             <div>
               <strong>Status:</strong> {user?.status}
             </div>

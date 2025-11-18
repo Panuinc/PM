@@ -9,7 +9,6 @@ export default function UIUserForm({
   mode,
   isUpdate,
   operatedBy,
-  departments = [],
 }) {
   const { formRef, formData, handleChange, handleSubmit, errors } = formHandler;
 
@@ -105,34 +104,6 @@ export default function UIUserForm({
                 />
               </div>
             )}
-          </div>
-
-          <div className="flex flex-col xl:flex-row items-center justify-end w-full h-fit p-2 gap-2">
-            <div className="flex items-center justify-center w-full h-full p-2 gap-2">
-              <Select
-                name="userDepartmentId"
-                label="Department"
-                labelPlacement="outside"
-                placeholder="Please Select"
-                color="default"
-                variant="faded"
-                radius="none"
-                selectedKeys={
-                  formData.userDepartmentId ? [formData.userDepartmentId] : []
-                }
-                onSelectionChange={(keys) =>
-                  handleChange("userDepartmentId")([...keys][0])
-                }
-                isInvalid={!!errors.userDepartmentId}
-                errorMessage={errors.userDepartmentId}
-              >
-                {departments.map((d) => (
-                  <SelectItem key={d.departmentId}>
-                    {d.departmentName}
-                  </SelectItem>
-                ))}
-              </Select>
-            </div>
           </div>
 
           {isUpdate && (
