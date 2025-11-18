@@ -8,7 +8,6 @@ import UIHome from "@/components/home/UIHome";
 export default function HomePage() {
   const { data: session, status } = useSession();
 
-  if (status === "loading") return <UILoading />;
 
   const user = session?.user;
 

@@ -10,18 +10,12 @@ export function useSessionUser() {
   }`.trim();
   const userEmail = user.email ?? "";
   const userStatus = user.status ?? "";
-  const roles = user.roles ?? [];
-
-  const permissions =
-    roles.flatMap((r) => r.permissions.map((p) => p.key)) ?? [];
 
   return {
     userId,
     userName,
     userEmail,
     userStatus,
-    roles,
-    permissions,
     isLoading: status === "loading",
     session: sessionData,
   };
