@@ -4,7 +4,7 @@ import {
   GetUserByIdUseCase,
   CreateUserUseCase,
   UpdateUserUseCase,
-} from "@/app/api/setting/user/usecases/users.usecase";
+} from "@/app/api/setting/user/usecases/user.usecase";
 import { formatUserData } from "@/app/api/setting/user/core/user.schema";
 import logger from "@/lib/logger.node";
 
