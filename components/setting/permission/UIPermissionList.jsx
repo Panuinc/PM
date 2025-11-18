@@ -26,14 +26,6 @@ const statusColorMap = {
   Disable: "danger",
 };
 
-const INITIAL_VISIBLE_COLUMNS = [
-  "permissionIndex",
-  "permissionName",
-  "permissionKey",
-  "permissionStatus",
-  "actions",
-];
-
 export default function UIPermissionList({
   headerTopic,
   Permissions = [],
@@ -114,7 +106,6 @@ export default function UIPermissionList({
             data={normalized}
             statusOptions={statusOptions}
             statusColorMap={statusColorMap}
-            initialVisibleColumns={INITIAL_VISIBLE_COLUMNS}
             searchPlaceholder="Search by permission name..."
             emptyContent="No permissions found"
             itemName="permissions"

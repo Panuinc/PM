@@ -25,13 +25,6 @@ const statusColorMap = {
   Disable: "danger",
 };
 
-const INITIAL_VISIBLE_COLUMNS = [
-  "roleIndex",
-  "roleName",
-  "roleStatus",
-  "actions",
-];
-
 export default function UIRoleList({
   headerTopic,
   Roles = [],
@@ -112,7 +105,6 @@ export default function UIRoleList({
             data={normalized}
             statusOptions={statusOptions}
             statusColorMap={statusColorMap}
-            initialVisibleColumns={INITIAL_VISIBLE_COLUMNS}
             searchPlaceholder="Search by role name..."
             emptyContent="No roles found"
             itemName="roles"

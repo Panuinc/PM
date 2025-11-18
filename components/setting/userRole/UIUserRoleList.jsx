@@ -34,14 +34,6 @@ const statusColorMap = {
   Disable: "danger",
 };
 
-const INITIAL_VISIBLE_COLUMNS = [
-  "userRoleIndex",
-  "userRoleRoleId",
-  "userRoleUserId",
-  "userRoleStatus",
-  "actions",
-];
-
 export default function UIUserRoleList({
   headerTopic,
   UserRoles = [],
@@ -126,7 +118,6 @@ export default function UIUserRoleList({
             data={normalized}
             statusOptions={statusOptions}
             statusColorMap={statusColorMap}
-            initialVisibleColumns={INITIAL_VISIBLE_COLUMNS}
             searchPlaceholder="Search by userRole name..."
             emptyContent="No userRoles found"
             itemName="userRoles"

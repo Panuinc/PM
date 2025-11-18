@@ -7,12 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum UserStatus {
+enum Status {
   Enable
   Disable
 }
 
-enum Status {
+enum UserStatus {
   Enable
   Disable
 }
@@ -29,14 +29,11 @@ model User {
   userUpdatedBy String?
   userUpdatedAt DateTime?  @updatedAt
 
-  createdByUser User?  @relation("UserCreatedByUser", fields: [userCreatedBy], references: [userId])
-  updatedByUser User?  @relation("UserUpdatedByUser", fields: [userUpdatedBy], references: [userId])
-  createdUsers  User[] @relation("UserCreatedByUser")
-  updatedUsers  User[] @relation("UserUpdatedByUser")
+  createdByUser User? @relation("UserCreatedByUser", fields: [userCreatedBy], references: [userId])
+  updatedByUser User? @relation("UserUpdatedByUser", fields: [userUpdatedBy], references: [userId])
 
-  userRoles       UserRole[]
-  userPermissions UserPermission[]
-
+  createdUsers           User[]           @relation("UserCreatedByUser")
+  updatedUsers           User[]           @relation("UserUpdatedByUser")
   rolesCreated           Role[]           @relation("RoleCreatedByUser")
   rolesUpdated           Role[]           @relation("RoleUpdatedByUser")
   permissionsCreated     Permission[]     @relation("PermissionCreatedByUser")
@@ -45,11 +42,7 @@ model User {
   rolePermissionsUpdated RolePermission[] @relation("RolePermissionUpdatedByUser")
   userRolesCreated       UserRole[]       @relation("UserRoleCreatedByUser")
   userRolesUpdated       UserRole[]       @relation("UserRoleUpdatedByUser")
-  userPermissionsCreated UserPermission[] @relation("UserPermissionCreatedByUser")
-  userPermissionsUpdated UserPermission[] @relation("UserPermissionUpdatedByUser")
-
-  permissionGroupsCreated PermissionGroup[] @relation("PermissionGroupCreatedByUser")
-  permissionGroupsUpdated PermissionGroup[] @relation("PermissionGroupUpdatedByUser")
+  userRoles              UserRole[]
 
   @@index([userCreatedBy])
   @@index([userUpdatedBy])
@@ -64,11 +57,11 @@ model Role {
   roleUpdatedBy String?
   roleUpdatedAt DateTime? @updatedAt
 
-  userRoles       UserRole[]
-  rolePermissions RolePermission[]
-
   createdByUser User? @relation("RoleCreatedByUser", fields: [roleCreatedBy], references: [userId])
   updatedByUser User? @relation("RoleUpdatedByUser", fields: [roleUpdatedBy], references: [userId])
+
+  userRoles       UserRole[]
+  rolePermissions RolePermission[]
 
   @@index([roleCreatedBy])
   @@index([roleUpdatedBy])
@@ -84,41 +77,13 @@ model Permission {
   permissionUpdatedBy String?
   permissionUpdatedAt DateTime? @updatedAt
 
-  permissionGroupId String?
-
-  rolePermissions RolePermission[]
-  userPermissions UserPermission[]
-
-  group PermissionGroup? @relation(fields: [permissionGroupId], references: [permissionGroupId])
-
   createdByUser User? @relation("PermissionCreatedByUser", fields: [permissionCreatedBy], references: [userId])
   updatedByUser User? @relation("PermissionUpdatedByUser", fields: [permissionUpdatedBy], references: [userId])
 
-  @@index([permissionGroupId])
+  rolePermissions RolePermission[]
+
   @@index([permissionCreatedBy])
   @@index([permissionUpdatedBy])
-}
-
-model RolePermission {
-  rolePermissionId           String    @id @default(cuid())
-  rolePermissionRoleId       String
-  rolePermissionPermissionId String
-  rolePermissionStatus       Status    @default(Enable)
-  rolePermissionCreatedBy    String
-  rolePermissionCreatedAt    DateTime  @default(now())
-  rolePermissionUpdatedBy    String?
-  rolePermissionUpdatedAt    DateTime? @updatedAt
-
-  role       Role       @relation(fields: [rolePermissionRoleId], references: [roleId])
-  permission Permission @relation(fields: [rolePermissionPermissionId], references: [permissionId])
-
-  createdByUser User  @relation("RolePermissionCreatedByUser", fields: [rolePermissionCreatedBy], references: [userId])
-  updatedByUser User? @relation("RolePermissionUpdatedByUser", fields: [rolePermissionUpdatedBy], references: [userId])
-
-  @@unique([rolePermissionRoleId, rolePermissionPermissionId])
-  @@index([rolePermissionRoleId])
-  @@index([rolePermissionPermissionId])
-  @@index([rolePermissionUpdatedBy])
 }
 
 model UserRole {
@@ -143,42 +108,24 @@ model UserRole {
   @@index([userRoleUpdatedBy])
 }
 
-model UserPermission {
-  userPermissionId           String    @id @default(cuid())
-  userPermissionUserId       String
-  userPermissionPermissionId String
-  userPermissionStatus       Status    @default(Enable)
-  userPermissionCreatedBy    String
-  userPermissionCreatedAt    DateTime  @default(now())
-  userPermissionUpdatedBy    String?
-  userPermissionUpdatedAt    DateTime? @updatedAt
+model RolePermission {
+  rolePermissionId           String    @id @default(cuid())
+  rolePermissionRoleId       String
+  rolePermissionPermissionId String
+  rolePermissionStatus       Status    @default(Enable)
+  rolePermissionCreatedBy    String
+  rolePermissionCreatedAt    DateTime  @default(now())
+  rolePermissionUpdatedBy    String?
+  rolePermissionUpdatedAt    DateTime? @updatedAt
 
-  user       User       @relation(fields: [userPermissionUserId], references: [userId])
-  permission Permission @relation(fields: [userPermissionPermissionId], references: [permissionId])
+  role       Role       @relation(fields: [rolePermissionRoleId], references: [roleId])
+  permission Permission @relation(fields: [rolePermissionPermissionId], references: [permissionId])
 
-  createdByUser User  @relation("UserPermissionCreatedByUser", fields: [userPermissionCreatedBy], references: [userId])
-  updatedByUser User? @relation("UserPermissionUpdatedByUser", fields: [userPermissionUpdatedBy], references: [userId])
+  createdByUser User  @relation("RolePermissionCreatedByUser", fields: [rolePermissionCreatedBy], references: [userId])
+  updatedByUser User? @relation("RolePermissionUpdatedByUser", fields: [rolePermissionUpdatedBy], references: [userId])
 
-  @@unique([userPermissionUserId, userPermissionPermissionId])
-  @@index([userPermissionUserId])
-  @@index([userPermissionPermissionId])
-  @@index([userPermissionUpdatedBy])
-}
-
-model PermissionGroup {
-  permissionGroupId        String    @id @default(cuid())
-  permissionGroupName      String
-  permissionGroupOrder     Int       @default(0)
-  permissionGroupCreatedBy String
-  permissionGroupCreatedAt DateTime  @default(now())
-  permissionGroupUpdatedBy String?
-  permissionGroupUpdatedAt DateTime? @updatedAt
-
-  permissions Permission[]
-
-  createdByUser User? @relation("PermissionGroupCreatedByUser", fields: [permissionGroupCreatedBy], references: [userId])
-  updatedByUser User? @relation("PermissionGroupUpdatedByUser", fields: [permissionGroupUpdatedBy], references: [userId])
-
-  @@index([permissionGroupCreatedBy])
-  @@index([permissionGroupUpdatedBy])
+  @@unique([rolePermissionRoleId, rolePermissionPermissionId])
+  @@index([rolePermissionRoleId])
+  @@index([rolePermissionPermissionId])
+  @@index([rolePermissionUpdatedBy])
 }

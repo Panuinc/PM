@@ -46,11 +46,7 @@ export default function DataTable({
   const [page, setPage] = React.useState(1);
 
   const [visibleColumns, setVisibleColumns] = React.useState(
-    new Set(
-      initialVisibleColumns.length > 0
-        ? initialVisibleColumns
-        : columns.map((c) => c.uid)
-    )
+    new Set(columns.map((c) => c.uid))
   );
 
   const hasSearchFilter = Boolean(filterValue);

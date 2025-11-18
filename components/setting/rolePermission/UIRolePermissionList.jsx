@@ -34,14 +34,6 @@ const statusColorMap = {
   Disable: "danger",
 };
 
-const INITIAL_VISIBLE_COLUMNS = [
-  "rolePermissionIndex",
-  "rolePermissionRoleId",
-  "rolePermissionPermissionId",
-  "rolePermissionStatus",
-  "actions",
-];
-
 export default function UIRolePermissionList({
   headerTopic,
   RolePermissions = [],
@@ -131,7 +123,6 @@ export default function UIRolePermissionList({
             data={normalized}
             statusOptions={statusOptions}
             statusColorMap={statusColorMap}
-            initialVisibleColumns={INITIAL_VISIBLE_COLUMNS}
             searchPlaceholder="Search by rolePermission name..."
             emptyContent="No rolePermissions found"
             itemName="rolePermissions"

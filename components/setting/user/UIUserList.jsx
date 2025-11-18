@@ -27,14 +27,6 @@ const statusColorMap = {
   Disable: "danger",
 };
 
-const INITIAL_VISIBLE_COLUMNS = [
-  "userIndex",
-  "userFirstName",
-  "userLastName",
-  "userStatus",
-  "actions",
-];
-
 export default function UIUserList({
   headerTopic,
   Users = [],
@@ -109,7 +101,6 @@ const normalized = Array.isArray(Users)
             data={normalized}
             statusOptions={statusOptions}
             statusColorMap={statusColorMap}
-            initialVisibleColumns={INITIAL_VISIBLE_COLUMNS}
             searchPlaceholder="Search by user name..."
             emptyContent="No users found"
             itemName="users"
