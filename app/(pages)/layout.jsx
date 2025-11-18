@@ -95,32 +95,10 @@ export default function PagesLayout({ children }) {
           },
         ],
       },
-      pm: {
-        icon: <Wrench />,
-        label: "Preventive Maintenance",
-        requiredPermission: PERMISSIONS.PM_DASHBOARD_VIEW,
-        subMenus: [
-          {
-            text: "Dashboard",
-            path: "/mcDashboard",
-            requiredPermission: PERMISSIONS.PM_DASHBOARD_VIEW,
-          },
-          {
-            text: "Machine List",
-            path: "/mcMaster",
-            requiredPermission: PERMISSIONS.PM_MACHINE_VIEW,
-          },
-        ],
-      },
       setting: {
         icon: <Settings />,
         label: "Settings",
         subMenus: [
-          {
-            text: "Department",
-            path: "/setting/department",
-            requiredPermission: PERMISSIONS.DEPARTMENT_VIEW,
-          },
           {
             text: "Role",
             path: "/setting/role",
@@ -152,9 +130,9 @@ export default function PagesLayout({ children }) {
             requiredPermission: PERMISSIONS.USER_PERMISSION_VIEW,
           },
           {
-            text: "User Permission Matrix",
-            path: "/setting/userPermissionMatrix",
-            requiredPermission: PERMISSIONS.USER_PERMISSION_VIEW,
+            text: "Permission Group",
+            path: "/setting/permissionGroup",
+            requiredPermission: PERMISSIONS.PERMISSION_GROUP_VIEW,
           },
         ],
       },
