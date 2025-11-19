@@ -25,9 +25,9 @@ model User {
   userPassword  String
   userStatus    UserStatus @default(Enable)
   userCreatedBy String?
-  userCreatedAt DateTime   @default(now())
+  userCreatedAt DateTime
   userUpdatedBy String?
-  userUpdatedAt DateTime?  @updatedAt
+  userUpdatedAt DateTime?
 
   createdByUser User? @relation("UserCreatedByUser", fields: [userCreatedBy], references: [userId])
   updatedByUser User? @relation("UserUpdatedByUser", fields: [userUpdatedBy], references: [userId])
