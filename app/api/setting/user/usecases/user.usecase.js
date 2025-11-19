@@ -70,7 +70,6 @@ export async function CreateUserUseCase(data) {
     const user = await UserService.create({
       ...parsed.data,
       userEmail: normalizedEmail,
-      userStatus: "Enable",
       userCreatedAt: getLocalNow(),
     });
 
