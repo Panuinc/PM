@@ -63,7 +63,7 @@ const normalized = Array.isArray(Users)
     <>
       <UIHeader header={headerTopic} />
 
-      <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit gap-2">
+      <div className="flex flex-row items-center justify-center w-full h-fit gap-2">
         <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2 border-1">
           <div className="flex items-center justify-start w-full h-full p-2 gap-2">
             Total Users
