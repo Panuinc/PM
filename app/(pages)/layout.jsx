@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
+
 import { Avatar, Tooltip } from "@heroui/react";
 import {
   Bell,
@@ -11,6 +12,7 @@ import {
   LayoutDashboard,
   Menu,
   Settings,
+  Wrench,
   X,
 } from "lucide-react";
 import Image from "next/image";
@@ -18,6 +20,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 import { signOut, useSession } from "next-auth/react";
 import UILoading from "@/components/UILoading";
+import { useSessionUser } from "@/hooks/useSessionUser";
 
 function MainMenu({ icons, content, onClick, isActive, isMobile }) {
   const menuContent = (
@@ -33,9 +36,7 @@ function MainMenu({ icons, content, onClick, isActive, isMobile }) {
     </div>
   );
 
-  if (isMobile) {
-    return menuContent;
-  }
+  if (isMobile) return menuContent;
 
   return (
     <Tooltip
@@ -71,6 +72,8 @@ function SubMenu({ text, onClick, path }) {
 
 export default function PagesLayout({ children }) {
   const { data: session, status } = useSession();
+  const { isSuperAdmin, permissions } = useSessionUser();
+
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState("dashboard");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -95,18 +98,34 @@ export default function PagesLayout({ children }) {
       setting: {
         icon: <Settings />,
         label: "Settings",
+        requiredPermissions: ["setting.read"],
         subMenus: [
           {
             text: "User",
             path: "/setting/user",
+            requiredPermissions: ["user.read"],
           },
           {
             text: "Permission",
             path: "/setting/permission",
+            requiredPermissions: ["permission.read"],
           },
           {
             text: "User Permission",
             path: "/setting/userPermission",
+            requiredPermissions: ["userPermission.read"],
+          },
+        ],
+      },
+      wrench: {
+        icon: <Wrench />,
+        label: "Wrench",
+        requiredPermissions: ["wrench.read"],
+        subMenus: [
+          {
+            text: "Machines",
+            path: "/pm/machines",
+            requiredPermissions: ["machines.read"],
           },
         ],
       },
@@ -114,9 +133,31 @@ export default function PagesLayout({ children }) {
     []
   );
 
+  const hasPermission = (required) => {
+    if (!Array.isArray(required) || required.length === 0) return true;
+    if (!Array.isArray(permissions)) return false;
+    return required.every((p) => permissions?.includes?.(p));
+  };
+
   const menuData = useMemo(() => {
-    return allMenuData;
-  }, [allMenuData]);
+    if (isSuperAdmin) return allMenuData;
+
+    const result = {};
+
+    for (const [menuKey, menuValue] of Object.entries(allMenuData)) {
+      if (!hasPermission(menuValue.requiredPermissions)) continue;
+
+      const allowedSubMenus = menuValue.subMenus.filter((sub) =>
+        hasPermission(sub.requiredPermissions)
+      );
+
+      if (allowedSubMenus.length > 0) {
+        result[menuKey] = { ...menuValue, subMenus: allowedSubMenus };
+      }
+    }
+
+    return result;
+  }, [allMenuData, permissions, isSuperAdmin]);
 
   useEffect(() => {
     const currentPath = pathname;
@@ -148,9 +189,7 @@ export default function PagesLayout({ children }) {
     if (status === "unauthenticated") router.push("/");
   }, [status, router]);
 
-  if (status === "loading" || !session) {
-    return <UILoading />;
-  }
+  if (status === "loading" || !session) return <UILoading />;
 
   return (
     <div className="flex flex-col xl:flex-row items-center justify-center w-full h-full">
@@ -172,7 +211,7 @@ export default function PagesLayout({ children }) {
       >
         <div className="flex flex-col items-center justify-between min-w-fit h-full p-2 gap-2 border-1 bg-foreground overflow-auto">
           <div
-            className="xl:hidden flex items-center justify-center w-full h-fit p-3 gap-2 cursor-pointer text-background hover: hover:bg-background"
+            className="xl:hidden flex items-center justify-center w-full h-fit p-3 gap-2 cursor-pointer text-background hover:bg-background"
             onClick={toggleMobileMenu}
           >
             <X />
@@ -248,9 +287,7 @@ export default function PagesLayout({ children }) {
           <div className="flex items-center justify-start w-full xl:w-fit h-full p-2 gap-2 whitespace-nowrap">
             CHH Industry
           </div>
-          <div className="hidden xl:flex items-center justify-center w-full h-full p-2 gap-2">
-            {" "}
-          </div>
+          <div className="hidden xl:flex items-center justify-center w-full h-full p-2 gap-2"></div>
           <div className="flex items-center justify-center aspect-square h-full p-2 gap-2 hover:scale-105">
             <Bell />
           </div>
@@ -263,6 +300,7 @@ export default function PagesLayout({ children }) {
             />
           </div>
         </div>
+
         <div className="flex flex-col items-stretch justify-start w-full flex-1 p-2 gap-2 border-1 overflow-y-auto overflow-x-hidden">
           {children}
         </div>
