@@ -100,6 +100,14 @@ export default function PagesLayout({ children }) {
             text: "User",
             path: "/setting/user",
           },
+          {
+            text: "Permission",
+            path: "/setting/permission",
+          },
+          {
+            text: "User Permission",
+            path: "/setting/userPermission",
+          },
         ],
       },
     }),
