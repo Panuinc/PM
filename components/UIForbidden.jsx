@@ -33,7 +33,7 @@ export default function UIForbidden() {
           <ShieldAlert className="text-danger" size={24} />
           คุณไม่ได้รับอนุญาตให้เข้าถึงหน้านี้ กรุณาติดต่อผู้ดูแลระบบหากคุณคิดว่านี่เป็นข้อผิดพลาด
         </div>
-        <div className="flex items-center justify-center w-full h-fit p-2 gap-2 text-center max-w-2xl text-default-500">
+        <div className="flex items-center justify-center w-full h-fit p-2 gap-2 text-center max-w-2xl text-default">
           You don't have permission to access this page. Please contact your administrator if you believe this is an error.
         </div>
         <div className="flex flex-row items-center justify-center w-6/12 h-fit p-2 gap-2">
@@ -44,7 +44,7 @@ export default function UIForbidden() {
             >
               <Button
                 color="primary"
-                className="w-6/12 p-2 gap-2 font-semibold text-white"
+                className="w-6/12 p-2 gap-2 font-semibold text-background"
               >
                 <Home />
                 Go Home

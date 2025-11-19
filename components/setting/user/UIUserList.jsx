@@ -64,15 +64,15 @@ const normalized = Array.isArray(Users)
       <UIHeader header={headerTopic} />
 
       <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit gap-2">
-        <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2 border-1 border-dark">
+        <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2 border-1">
           <div className="flex items-center justify-start w-full h-full p-2 gap-2">
             Total Users
           </div>
-          <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-dark text-lg">
+          <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-lg">
             {total}
           </div>
         </div>
-        <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2 border-1 border-dark">
+        <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2 border-1">
           <div className="flex items-center justify-start w-full h-full p-2 gap-2">
             Enabled Users
           </div>
@@ -80,7 +80,7 @@ const normalized = Array.isArray(Users)
             {enabled}
           </div>
         </div>
-        <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2 border-1 border-dark">
+        <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2 border-1">
           <div className="flex items-center justify-start w-full h-full p-2 gap-2">
             Disabled Users
           </div>

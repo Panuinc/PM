@@ -52,13 +52,13 @@ export default function UISignin({
             type="submit"
             color="primary"
             radius="none"
-            className="w-full p-2 gap-2 text-white font-semibold"
+            className="w-full p-2 gap-2 text-background font-semibold"
           >
             Signin
           </Button>
         </div>
       </div>
-      <div className="xl:flex hidden flex-col items-center justify-center w-full xl:w-8/12 h-full p-14 gap-2 border-l-1 border-dark">
+      <div className="xl:flex hidden flex-col items-center justify-center w-full xl:w-8/12 h-full p-14 gap-2 border-l-1">
         <div className="flex items-center justify-center w-full h-full p- gap-2">
           <Image
             src="/images/images.png"

@@ -12,10 +12,6 @@ export default function UserPage() {
     router.push("/setting/user/create");
   };
 
-  const handleView = (item) => {
-    router.push(`/setting/user/view/${item.userId}`);
-  };
-
   const handleEdit = (item) => {
     router.push(`/setting/user/${item.userId}`);
   };
@@ -26,7 +22,6 @@ export default function UserPage() {
       Users={users}
       loading={loading}
       onAddNew={handleAddNew}
-      onView={handleView}
       onEdit={handleEdit}
     />
   );

@@ -33,7 +33,7 @@ export default function UserUpdate() {
     if (user) formHandler.setFormData(user);
   }, [user]);
 
-  if (userLoading || deptLoading) return <UILoading />;
+  if (userLoading) return <UILoading />;
 
   return (
     <UIUserForm

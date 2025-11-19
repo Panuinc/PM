@@ -1,13 +1,17 @@
-import { getUserById, updateUser } from "@/app/api/setting/user/core/user.controller";
+import {
+  getUserById,
+  updateUser,
+} from "@/app/api/setting/user/core/user.controller";
+
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 export async function GET(request, context) {
   const { userId } = await context.params;
-  return getUserById(request, userId);
+  return getUserById(request, String(userId));
 }
 
 export async function PUT(request, context) {
   const { userId } = await context.params;
-  return updateUser(request, userId);
+  return updateUser(request, String(userId));
 }
-
-export const dynamic = "force-dynamic";

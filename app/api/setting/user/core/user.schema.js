@@ -5,9 +5,6 @@ import {
   preprocessEnum,
   formatData,
 } from "@/lib/zodSchema";
-import logger from "@/lib/logger.node";
-
-logger.info({ message: "User schema loaded" });
 
 export const userPostSchema = z.object({
   userFirstName: preprocessString("Please provide first name"),
@@ -30,9 +27,9 @@ export const userPutSchema = z.object({
 });
 
 export const formatUserData = (users) => {
-  logger.info({
-    message: "Formatting user data",
-    count: users.length,
+  const formatted = formatData(users, ["userCreatedAt", "userUpdatedAt"], []);
+  return formatted.map((user) => {
+    const { userPassword, ...safe } = user || {};
+    return safe;
   });
-  return formatData(users, ["userCreatedAt", "userUpdatedAt"], []);
 };

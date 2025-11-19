@@ -8,17 +8,17 @@ export default function UIHome({ headerTopic, user }) {
       <UIHeader header={headerTopic} />
 
       <div className="flex flex-col items-center justify-start w-full h-fit p-4 gap-6">
-        <div className="w-full max-w-3xl p-6 border-1 border-dark rounded-sm bg-white shadow-sm">
+        <div className="w-full max-w-3xl p-6 border-1 rounded-sm bg-background shadow-sm">
           <div className="text-3xl font-bold mb-1">
             Welcome, {user?.userFirstName} {user?.userLastName} 🎉
           </div>
-          <div className="text-default-600">
+          <div className="text-default">
             Great to see you again! Here's your account overview.
           </div>
         </div>
 
         {/* User Info */}
-        <div className="w-full max-w-3xl p-6 border-1 border-dark rounded-sm bg-white shadow-sm">
+        <div className="w-full max-w-3xl p-6 border-1 rounded-sm bg-background shadow-sm">
           <div className="text-xl font-semibold mb-4">Your Information</div>
 
           <div className="flex flex-col gap-3">
@@ -31,7 +31,7 @@ export default function UIHome({ headerTopic, user }) {
           </div>
         </div>
 
-        <div className="text-default-500">
+        <div className="text-default">
           Use the menu on the left to navigate across the system.
         </div>
       </div>

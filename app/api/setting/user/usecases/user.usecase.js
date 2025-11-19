@@ -12,101 +12,185 @@ export async function GetAllUserUseCase(page = 1, limit = 1000000) {
   const users = await UserService.getAllPaginated(skip, limit);
   const total = await UserService.countAll();
 
-  logger.info({ message: "GetAllUserUseCase success", total });
   return { users, total };
 }
 
 export async function GetUserByIdUseCase(userId) {
-  if (!userId || typeof userId !== "string")
+  if (!userId || typeof userId !== "string") {
     throw { status: 400, message: "Invalid user ID" };
+  }
 
   const user = await UserService.getById(userId);
-  if (!user) throw { status: 404, message: "User not found" };
+  if (!user) {
+    throw { status: 404, message: "User not found" };
+  }
 
-  logger.info({ message: "GetUserByIdUseCase success", userId });
   return user;
 }
 
 export async function CreateUserUseCase(data) {
-  logger.info({ message: "CreateUserUseCase start", data });
+  logger.info({
+    message: "CreateUserUseCase start",
+    userEmail: data?.userEmail,
+    userCreatedBy: data?.userCreatedBy,
+  });
 
   const parsed = userPostSchema.safeParse(data);
   if (!parsed.success) {
+    const fieldErrors = parsed.error.flatten().fieldErrors;
+
     logger.warn({
-      message: "Validation failed",
-      errors: parsed.error.flatten().fieldErrors,
+      message: "CreateUserUseCase validation failed",
+      errors: fieldErrors,
     });
+
     throw {
       status: 422,
       message: "Invalid input",
-      details: parsed.error.flatten().fieldErrors,
+      details: fieldErrors,
     };
   }
 
-  const duplicate = await UserValidator.isDuplicateEmail(parsed.data.userEmail);
-  if (duplicate)
+  const normalizedEmail = parsed.data.userEmail.trim().toLowerCase();
+
+  const duplicate = await UserValidator.isDuplicateEmail(normalizedEmail);
+  if (duplicate) {
+    logger.warn({
+      message: "CreateUserUseCase duplicate email",
+      userEmail: normalizedEmail,
+    });
+
     throw {
       status: 409,
-      message: `Email '${parsed.data.userEmail}' already exists`,
+      message: `Email '${normalizedEmail}' already exists`,
     };
+  }
 
-  const user = await UserService.create({
-    ...parsed.data,
-    userEmail: parsed.data.userEmail.trim().toLowerCase(),
-    userStatus: "Enable",
-    userCreatedAt: getLocalNow(),
-  });
+  try {
+    const user = await UserService.create({
+      ...parsed.data,
+      userEmail: normalizedEmail,
+      userStatus: "Enable",
+      userCreatedAt: getLocalNow(),
+    });
 
-  logger.info({
-    message: "User created successfully",
-    userId: user.userId,
-  });
+    logger.info({
+      message: "CreateUserUseCase success",
+      userId: user.userId,
+    });
 
-  return user;
+    return user;
+  } catch (error) {
+    if (error && typeof error === "object" && error.code === "P2002") {
+      logger.warn({
+        message:
+          "CreateUserUseCase unique constraint violation on userEmail (P2002)",
+        userEmail: normalizedEmail,
+      });
+
+      throw {
+        status: 409,
+        message: `Email '${normalizedEmail}' already exists`,
+      };
+    }
+
+    logger.error({
+      message: "CreateUserUseCase error",
+      error,
+    });
+
+    throw error;
+  }
 }
 
 export async function UpdateUserUseCase(data) {
-  logger.info({ message: "UpdateUserUseCase start", data });
+  logger.info({
+    message: "UpdateUserUseCase start",
+    userId: data?.userId,
+    userEmail: data?.userEmail,
+    userUpdatedBy: data?.userUpdatedBy,
+  });
 
   const parsed = userPutSchema.safeParse(data);
   if (!parsed.success) {
+    const fieldErrors = parsed.error.flatten().fieldErrors;
+
     logger.warn({
-      message: "Validation failed",
-      errors: parsed.error.flatten().fieldErrors,
+      message: "UpdateUserUseCase validation failed",
+      errors: fieldErrors,
     });
+
     throw {
       status: 422,
       message: "Invalid input",
-      details: parsed.error.flatten().fieldErrors,
+      details: fieldErrors,
     };
   }
 
   const existing = await UserService.getById(parsed.data.userId);
-  if (!existing) throw { status: 404, message: "User not found" };
+  if (!existing) {
+    logger.warn({
+      message: "UpdateUserUseCase user not found",
+      userId: parsed.data.userId,
+    });
 
-  if (
-    parsed.data.userEmail.trim().toLowerCase() !==
-    existing.userEmail.trim().toLowerCase()
-  ) {
-    const duplicate = await UserValidator.isDuplicateEmail(
-      parsed.data.userEmail
-    );
-    if (duplicate)
-      throw {
-        status: 409,
-        message: `Email '${parsed.data.userEmail}' already exists`,
-      };
+    throw { status: 404, message: "User not found" };
   }
 
-  const updatedUser = await UserService.update(parsed.data.userId, {
-    ...parsed.data,
-    userUpdatedAt: getLocalNow(),
-  });
+  const normalizedEmail = parsed.data.userEmail.trim().toLowerCase();
+  const existingEmailNormalized = existing.userEmail
+    ? existing.userEmail.trim().toLowerCase()
+    : "";
 
-  logger.info({
-    message: "User updated successfully",
-    userId: parsed.data.userId,
-  });
+  if (normalizedEmail !== existingEmailNormalized) {
+    const duplicate = await UserValidator.isDuplicateEmail(normalizedEmail);
+    if (duplicate) {
+      logger.warn({
+        message: "UpdateUserUseCase duplicate email",
+        userEmail: normalizedEmail,
+      });
 
-  return updatedUser;
+      throw {
+        status: 409,
+        message: `Email '${normalizedEmail}' already exists`,
+      };
+    }
+  }
+
+  const { userId, ...rest } = parsed.data;
+
+  try {
+    const updatedUser = await UserService.update(userId, {
+      ...rest,
+      userEmail: normalizedEmail,
+      userUpdatedAt: getLocalNow(),
+    });
+
+    logger.info({
+      message: "UpdateUserUseCase success",
+      userId,
+    });
+
+    return updatedUser;
+  } catch (error) {
+    if (error && typeof error === "object" && error.code === "P2002") {
+      logger.warn({
+        message:
+          "UpdateUserUseCase unique constraint violation on userEmail (P2002)",
+        userEmail: normalizedEmail,
+      });
+
+      throw {
+        status: 409,
+        message: `Email '${normalizedEmail}' already exists`,
+      };
+    }
+
+    logger.error({
+      message: "UpdateUserUseCase error",
+      error,
+    });
+
+    throw error;
+  }
 }

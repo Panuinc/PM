@@ -25,7 +25,7 @@ export default function RootLayout({ children }) {
         <body className={`${gruppo.variable} font-[var(--gruppo)] antialiased`}>
           <Providers>
             <div
-              className="flex items-center justify-center w-full h-screen gap-2 bg-white text-dark
+              className="flex items-center justify-center w-full h-screen gap-2 bg-background
            text-sm font-semibold"
             >
               {children}

@@ -16,9 +16,9 @@ export function showToast(type, message) {
     variant: "solid",
     timeout: 3000,
     classNames: {
-      content: "text-white",
-      title: "text-white",
-      description: "text-white",
+      content: "text-background",
+      title: "text-background",
+      description: "text-background",
     },
   });
 }

@@ -187,7 +187,7 @@ export default function DataTable({
               color="default"
               endContent={<ChevronDown />}
               radius="none"
-              className="w-full xl:w-32 p-2 gap-2 text-dark font-semibold"
+              className="w-full xl:w-32 p-2 gap-2 font-semibold"
             >
               Columns
             </Button>
@@ -215,7 +215,7 @@ export default function DataTable({
                 color="default"
                 endContent={<ChevronDown />}
                 radius="none"
-                className="w-full xl:w-32 p-2 gap-2 text-dark font-semibold"
+                className="w-full xl:w-32 p-2 gap-2 font-semibold"
               >
                 Status
               </Button>
@@ -243,7 +243,7 @@ export default function DataTable({
             color="primary"
             onPress={onAddNew}
             radius="none"
-            className="w-full xl:w-32 p-2 gap-2 text-white font-semibold"
+            className="w-full xl:w-32 p-2 gap-2 text-background font-semibold"
           >
             Add New
           </Button>
@@ -253,7 +253,7 @@ export default function DataTable({
         <div className="flex items-center justify-between w-full h-full p-2 gap-2">
           Total {data.length} {itemName}
         </div>
-        <label className="flex items-center justify-between w-fit h-full p-2 gap-2 whitespace-nowrap">
+        <label className="flex items-center justify-between w-fit h-full p-2 gap-2 backgroundspace-nowrap">
           Rows per page:
           <select
             className="flex items-center justify-between w-fit h-full p-2 gap-2"
@@ -277,7 +277,7 @@ export default function DataTable({
           isCompact
           showControls
           showShadow
-          color="warning"
+          color="primary"
           radius="none"
           page={page}
           total={pages}
@@ -308,7 +308,7 @@ export default function DataTable({
             key={column.uid}
             align={column.uid === "actions" ? "center" : "start"}
             allowsSorting={column.sortable}
-            className="border-t-2 border-b-2 border-dark bg-default p-4 gap-2"
+            className="border-t-2 border-b-2 p-4 gap-2"
           >
             {column.name}
           </TableColumn>
@@ -318,7 +318,7 @@ export default function DataTable({
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => (
-              <TableCell className="border-b-1 border-dark">
+              <TableCell className="border-b-1">
                 {renderCell(item, columnKey)}
               </TableCell>
             )}

@@ -1,7 +1,31 @@
 "use client";
+
 import { useState, useEffect, useCallback } from "react";
 import { showToast } from "@/components/UIToast";
 import { useRouter } from "next/navigation";
+
+const AUTH_TOKEN = process.env.NEXT_PUBLIC_SECRET_TOKEN || "";
+
+function formatUserFromApi(user, index) {
+  if (!user) return null;
+
+  const baseFullName = `${user.userFirstName ?? ""} ${
+    user.userLastName ?? ""
+  }`.trim();
+
+  return {
+    ...user,
+    userIndex: index != null ? index + 1 : undefined,
+    userFullName: baseFullName || "-",
+    userStatus: user.userStatus || "-",
+    userCreatedBy: user.createdByUser
+      ? `${user.createdByUser.userFirstName} ${user.createdByUser.userLastName}`
+      : "-",
+    userUpdatedBy: user.updatedByUser
+      ? `${user.updatedByUser.userFirstName} ${user.updatedByUser.userLastName}`
+      : "-",
+  };
+}
 
 export function useUsers(apiUrl = "/api/setting/user") {
   const [users, setUsers] = useState([]);
@@ -14,33 +38,28 @@ export function useUsers(apiUrl = "/api/setting/user") {
       try {
         const res = await fetch(apiUrl, {
           headers: {
-            "x-api-key": process.env.NEXT_PUBLIC_SECRET_TOKEN || "",
+            Authorization: `Bearer ${AUTH_TOKEN}`,
           },
         });
-        const data = await res.json();
 
-        if (!res.ok) throw new Error(data.error || "Failed to load users.");
+        const data = await res.json().catch(() => ({}));
 
-        if (active) {
-          const formatted = Array.isArray(data.users)
-            ? data.users.map((user, index) => ({
-                ...user,
-                userIndex: index + 1,
-                userFullName: `${user.userFirstName} ${user.userLastName}`,
-                userStatus: user.userStatus || "-",
-                userCreatedBy: user.createdByUser
-                  ? `${user.createdByUser.userFirstName} ${user.createdByUser.userLastName}`
-                  : "-",
-                userUpdatedBy: user.updatedByUser
-                  ? `${user.updatedByUser.userFirstName} ${user.updatedByUser.userLastName}`
-                  : "-",
-              }))
-            : [];
-
-          setUsers(formatted);
+        if (!res.ok) {
+          throw new Error(data.error || "Failed to load users.");
         }
+
+        if (!active) return;
+
+        const formatted = Array.isArray(data.users)
+          ? data.users
+              .map((user, index) => formatUserFromApi(user, index))
+              .filter(Boolean)
+          : [];
+
+        setUsers(formatted);
       } catch (err) {
-        showToast("danger", "Error: " + err.message);
+        if (!active) return;
+        showToast("danger", "Error: " + (err?.message || "Unknown error"));
       } finally {
         if (active) setLoading(false);
       }
@@ -71,34 +90,31 @@ export function useUser(userId) {
       try {
         const res = await fetch(`/api/setting/user/${userId}`, {
           headers: {
-            "x-api-key": process.env.NEXT_PUBLIC_SECRET_TOKEN || "",
+            Authorization: `Bearer ${AUTH_TOKEN}`,
           },
         });
-        const result = await res.json();
 
-        if (!res.ok) throw new Error(result.error || "Failed to load User.");
+        const result = await res.json().catch(() => ({}));
 
-        if (active) {
-          const user =
-            result.user ||
-            (Array.isArray(result.users) ? result.users[0] : null);
-
-          if (user) {
-            const formatted = {
-              ...user,
-              userFullName: `${user.userFirstName} ${user.userLastName}`,
-              userCreatedBy: user.createdByUser
-                ? `${user.createdByUser.userFirstName} ${user.createdByUser.userLastName}`
-                : "-",
-              userUpdatedBy: user.updatedByUser
-                ? `${user.updatedByUser.userFirstName} ${user.updatedByUser.userLastName}`
-                : "-",
-            };
-            setUser(formatted);
-          } else showToast("warning", "No User data found.");
+        if (!res.ok) {
+          throw new Error(result.error || "Failed to load User.");
         }
+
+        if (!active) return;
+
+        const rawUser =
+          result.user || (Array.isArray(result.users) ? result.users[0] : null);
+
+        if (!rawUser) {
+          showToast("warning", "No User data found.");
+          return;
+        }
+
+        const formatted = formatUserFromApi(rawUser, null);
+        setUser(formatted);
       } catch (err) {
-        showToast("danger", "Error: " + err.message);
+        if (!active) return;
+        showToast("danger", "Error: " + (err?.message || "Unknown error"));
       } finally {
         if (active) setLoading(false);
       }
@@ -134,21 +150,30 @@ export function useSubmitUser({ mode = "create", userId, currentUserId }) {
           method,
           headers: {
             "Content-Type": "application/json",
-            "x-api-key": process.env.NEXT_PUBLIC_SECRET_TOKEN || "",
+            Authorization: `Bearer ${AUTH_TOKEN}`,
           },
           body: JSON.stringify(payload),
         });
 
-        const result = await res.json();
+        const result = await res.json().catch(() => ({}));
+
         if (res.ok) {
           showToast("success", result.message || "Success");
           setTimeout(() => router.push("/setting/user"), 1500);
         } else {
-          setErrors(result.details || {});
+          if (result.details && typeof result.details === "object") {
+            setErrors(result.details);
+          } else {
+            setErrors({});
+          }
+
           showToast("danger", result.error || "Failed to submit User.");
         }
       } catch (err) {
-        showToast("danger", `Failed to submit User: ${err.message}`);
+        showToast(
+          "danger",
+          `Failed to submit User: ${err?.message || "Unknown error"}`
+        );
       }
     },
     [mode, userId, currentUserId, router]

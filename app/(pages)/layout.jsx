@@ -24,8 +24,8 @@ function MainMenu({ icons, content, onClick, isActive, isMobile }) {
     <div
       className={`flex items-center justify-center w-full aspect-square p-3 gap-2 cursor-pointer ${
         isActive
-          ? "border-b-1 border-white text-white"
-          : "hover:border-b-1 border-white text-white"
+          ? "border-b-1 border-background text-background"
+          : "hover:border-b-1 border-background text-background"
       }`}
       onClick={onClick}
     >
@@ -43,7 +43,7 @@ function MainMenu({ icons, content, onClick, isActive, isMobile }) {
       content={content}
       placement="right"
       offset={15}
-      className="px-4 py-2 font-semibold text-white"
+      className="px-4 py-2 font-semibold text-background"
     >
       {menuContent}
     </Tooltip>
@@ -60,7 +60,7 @@ function SubMenu({ text, onClick, path }) {
   return (
     <div
       className={`flex items-center justify-start w-full h-fit p-3 gap-2 cursor-pointer ${
-        isActive ? "border-b-1 border-dark" : "hover:border-b-1 border-dark"
+        isActive ? "border-b-1" : "hover:border-b-1"
       }`}
       onClick={onClick}
     >
@@ -156,21 +156,21 @@ export default function PagesLayout({ children }) {
       <div
         className={`fixed xl:relative inset-y-0 left-0 z-50 flex flex-row items-center justify-center ${
           isCollapsed ? "w-fit" : "w-[300px] xl:w-[500px]"
-        } h-full bg-white transition-all duration-300 ${
+        } h-full bg-background transition-all duration-300 ${
           isMobileMenuOpen
             ? "translate-x-0"
             : "-translate-x-full xl:translate-x-0"
         }`}
       >
-        <div className="flex flex-col items-center justify-between min-w-fit h-full p-2 gap-2 border-1 border-dark bg-dark overflow-auto">
+        <div className="flex flex-col items-center justify-between min-w-fit h-full p-2 gap-2 border-1 bg-foreground overflow-auto">
           <div
-            className="xl:hidden flex items-center justify-center w-full h-fit p-3 gap-2 cursor-pointer text-white hover:text-dark hover:bg-white"
+            className="xl:hidden flex items-center justify-center w-full h-fit p-3 gap-2 cursor-pointer text-background hover: hover:bg-background"
             onClick={toggleMobileMenu}
           >
             <X />
           </div>
 
-          <div className="flex items-center justify-center w-full h-fit p-3 gap-2 border-b-2 border-default text-white">
+          <div className="flex items-center justify-center w-full h-fit p-3 gap-2 border-b-2 border-background text-background">
             <Cat />
           </div>
 
@@ -188,7 +188,7 @@ export default function PagesLayout({ children }) {
           </div>
 
           <div
-            className="flex items-center justify-center w-full h-fit p-3 gap-2 border-t-2 border-default cursor-pointer text-white"
+            className="flex items-center justify-center w-full h-fit p-3 gap-2 border-t-2 border-background cursor-pointer text-background"
             onClick={toggleSidebar}
           >
             {isCollapsed ? <ChevronRight /> : <ChevronLeft />}
@@ -196,8 +196,8 @@ export default function PagesLayout({ children }) {
         </div>
 
         {!isCollapsed && (
-          <div className="flex flex-col items-center justify-start w-full h-full py-2 gap-2 border-1 border-dark overflow-auto">
-            <div className="flex items-center justify-start w-full h-fit p-3 gap-2 border-b-2 border-dark">
+          <div className="flex flex-col items-center justify-start w-full h-full py-2 gap-2 border-1 overflow-auto">
+            <div className="flex items-center justify-start w-full h-fit p-3 gap-2 border-b-2">
               <Factory /> {menuData[selectedMenu]?.label || "Menu"}
             </div>
             <div className="flex flex-col items-center justify-start w-full h-full p-2 gap-2 overflow-auto">
@@ -221,7 +221,7 @@ export default function PagesLayout({ children }) {
             </div>
             <div
               onClick={() => signOut({ callbackUrl: "/" })}
-              className="flex items-center justify-start w-full h-fit p-3 gap-2 border-t-2 border-dark cursor-pointer"
+              className="flex items-center justify-start w-full h-fit p-3 gap-2 border-t-2 cursor-pointer"
             >
               <Key className="hover:scale-150" /> Logout
             </div>
@@ -230,7 +230,7 @@ export default function PagesLayout({ children }) {
       </div>
 
       <div className="flex flex-col items-stretch justify-start w-full h-screen overflow-hidden">
-        <div className="flex flex-row items-center justify-between w-full h-fit p-1 gap-2 border-1 border-dark">
+        <div className="flex flex-row items-center justify-between w-full h-fit p-1 gap-2 border-1">
           <button
             className="flex xl:hidden items-center justify-center aspect-square h-full p-2 gap-2 cursor-pointer"
             onClick={toggleMobileMenu}
@@ -255,7 +255,7 @@ export default function PagesLayout({ children }) {
             />
           </div>
         </div>
-        <div className="flex flex-col items-stretch justify-start w-full flex-1 p-2 gap-2 border-1 border-dark overflow-y-auto overflow-x-hidden">
+        <div className="flex flex-col items-stretch justify-start w-full flex-1 p-2 gap-2 border-1 overflow-y-auto overflow-x-hidden">
           {children}
         </div>
       </div>

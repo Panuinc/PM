@@ -4,7 +4,7 @@ import React from "react";
 export default function UIHeader({ header }) {
   return (
     <>
-      <div className="flex items-center justify-start w-full h-fit p-2 gap-2 border-b-1 border-dark">
+      <div className="flex items-center justify-start w-full h-fit p-2 gap-2 border-b-1">
         <Box /> {header}
       </div>
     </>

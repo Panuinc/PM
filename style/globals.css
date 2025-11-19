@@ -7,11 +7,11 @@ body {
 }
 
 .border-default-200 {
-  border: 1px solid #121212;
+  border: 1px solid #000000;
 }
 
 .bg-content1 {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
 }
 
 svg.lucide {

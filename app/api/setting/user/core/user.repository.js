@@ -1,10 +1,8 @@
 import prisma from "@/lib/prisma";
-import logger from "@/lib/logger.node";
 
 export const UserRepository = {
   getAll: async (skip = 0, take = 10) => {
-    logger.info({ message: "UserRepository.getAll", skip, take });
-    return await prisma.user.findMany({
+    return prisma.user.findMany({
       skip,
       take,
       orderBy: { userCreatedAt: "asc" },
@@ -19,11 +17,12 @@ export const UserRepository = {
     });
   },
 
-  countAll: async () => prisma.user.count(),
+  countAll: async () => {
+    return prisma.user.count();
+  },
 
   findById: async (userId) => {
-    logger.info({ message: "UserRepository.findById", userId });
-    return await prisma.user.findUnique({
+    return prisma.user.findUnique({
       where: { userId },
       include: {
         createdByUser: {
@@ -37,15 +36,13 @@ export const UserRepository = {
   },
 
   findByEmail: async (userEmail) => {
-    logger.info({ message: "UserRepository.findByEmail", userEmail });
-    return await prisma.user.findUnique({
+    return prisma.user.findUnique({
       where: { userEmail },
     });
   },
 
   create: async (data) => {
-    logger.info({ message: "UserRepository.create", data });
-    return await prisma.user.create({
+    return prisma.user.create({
       data,
       include: {
         createdByUser: {
@@ -56,8 +53,7 @@ export const UserRepository = {
   },
 
   update: async (userId, data) => {
-    logger.info({ message: "UserRepository.update", userId });
-    return await prisma.user.update({
+    return prisma.user.update({
       where: { userId },
       data,
       include: {

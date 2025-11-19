@@ -138,9 +138,9 @@ export default function UIUserForm({
             <div className="flex items-center justify-center w-full xl:w-2/12 h-full p-2 gap-2">
               <Button
                 type="submit"
-                color="success"
+                color="primary"
                 radius="none"
-                className="w-full p-2 gap-2 text-white font-semibold"
+                className="w-full p-2 gap-2 text-background font-semibold"
               >
                 Submit
               </Button>
@@ -148,7 +148,7 @@ export default function UIUserForm({
             <div className="flex items-center justify-center w-full xl:w-2/12 h-full p-2 gap-2">
               <Button
                 type="button"
-                color="default"
+                color="danger"
                 radius="none"
                 className="w-full p-2 gap-2 font-semibold"
                 onPress={() => history.back()}
