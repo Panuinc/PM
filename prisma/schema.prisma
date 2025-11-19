@@ -35,6 +35,54 @@ model User {
   createdUsers User[] @relation("UserCreatedByUser")
   updatedUsers User[] @relation("UserUpdatedByUser")
 
+  createdPermissions Permission[] @relation("PermissionCreatedByUser")
+  updatedPermissions Permission[] @relation("PermissionUpdatedByUser")
+
+  createdUserPermissions UserPermission[] @relation("UserPermissionCreatedByUser")
+  updatedUserPermissions UserPermission[] @relation("UserPermissionUpdatedByUser")
+  userPermissions        UserPermission[]
+
   @@index([userCreatedBy])
   @@index([userUpdatedBy])
+}
+
+model Permission {
+  permissionId        String    @id @default(cuid())
+  permissionName      String    @unique
+  permissionStatus    Status    @default(Enable)
+  permissionCreatedBy String
+  permissionCreatedAt DateTime
+  permissionUpdatedBy String?
+  permissionUpdatedAt DateTime?
+
+  createdByUser User? @relation("PermissionCreatedByUser", fields: [permissionCreatedBy], references: [userId])
+  updatedByUser User? @relation("PermissionUpdatedByUser", fields: [permissionUpdatedBy], references: [userId])
+
+  userPermissions UserPermission[]
+
+  @@index([permissionCreatedBy])
+  @@index([permissionUpdatedBy])
+}
+
+model UserPermission {
+  userPermissionId           String    @id @default(cuid())
+  userPermissionUserId       String
+  userPermissionPermissionId String
+  userPermissionStatus       Status    @default(Enable)
+  userPermissionCreatedBy    String
+  userPermissionCreatedAt    DateTime
+  userPermissionUpdatedBy    String?
+  userPermissionUpdatedAt    DateTime?
+
+  user       User       @relation(fields: [userPermissionUserId], references: [userId])
+  permission Permission @relation(fields: [userPermissionPermissionId], references: [permissionId])
+
+  createdByUser User? @relation("UserPermissionCreatedByUser", fields: [userPermissionCreatedBy], references: [userId])
+  updatedByUser User? @relation("UserPermissionUpdatedByUser", fields: [userPermissionUpdatedBy], references: [userId])
+
+  @@unique([userPermissionUserId, userPermissionPermissionId])
+  @@index([userPermissionUserId])
+  @@index([userPermissionPermissionId])
+  @@index([userPermissionCreatedBy])
+  @@index([userPermissionUpdatedBy])
 }
