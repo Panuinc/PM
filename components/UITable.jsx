@@ -253,7 +253,7 @@ export default function DataTable({
         <div className="flex items-center justify-between w-full h-full p-2 gap-2">
           Total {data.length} {itemName}
         </div>
-        <label className="flex items-center justify-between w-fit h-full p-2 gap-2 backgroundspace-nowrap">
+        <label className="flex items-center justify-between w-fit h-full p-2 gap-2 whitespace-nowrap">
           Rows per page:
           <select
             className="flex items-center justify-between w-fit h-full p-2 gap-2"
