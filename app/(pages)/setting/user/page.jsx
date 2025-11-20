@@ -3,12 +3,12 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import UIUserList from "@/components/setting/user/UIUserList";
 import { useUsers } from "@/app/api/setting/user/hooks";
-import { usePermission } from "@/hooks/usePermission";
+import { useSePermission } from "@/hooks/useSePermission";
 
 export default function UserPage() {
   const router = useRouter();
   const { users, loading } = useUsers();
-  const { can } = usePermission();
+  const { can } = useSePermission();
 
   const handleAddNew = () => {
     if (!can("user.create")) return;

@@ -16,11 +16,11 @@ function formatPermissionFromApi(permission, index) {
     permissionIndex: index != null ? index + 1 : undefined,
     permissionFullName: fullName || "-",
     permissionStatus: permission.permissionStatus || "-",
-    permissionCreatedBy: permission.createdByPermission
-      ? `${permission.createdByPermission.userFirstName} ${permission.createdByPermission.userLastName}`
+    permissionCreatedBy: permission.createdByUser
+      ? `${permission.createdByUser.userFirstName} ${permission.createdByUser.userLastName}`
       : "-",
-    permissionUpdatedBy: permission.updatedByPermission
-      ? `${permission.updatedByPermission.userFirstName} ${permission.updatedByPermission.userLastName}`
+    permissionUpdatedBy: permission.updatedByUser
+      ? `${permission.updatedByUser.userFirstName} ${permission.updatedByUser.userLastName}`
       : "-",
   };
 }

@@ -7,11 +7,11 @@ export const PermissionRepository = {
       take,
       orderBy: { permissionCreatedAt: "asc" },
       include: {
-        createdByPermission: {
-          select: { permissionId: true, userFirstName: true, userLastName: true },
+        createdByUser: {
+          select: {userId: true, userFirstName: true, userLastName: true },
         },
-        updatedByPermission: {
-          select: { permissionId: true, userFirstName: true, userLastName: true },
+        updatedByUser: {
+          select: {userId: true, userFirstName: true, userLastName: true },
         },
       },
     });
@@ -25,11 +25,11 @@ export const PermissionRepository = {
     return prisma.permission.findUnique({
       where: { permissionId },
       include: {
-        createdByPermission: {
-          select: { permissionId: true, userFirstName: true, userLastName: true },
+        createdByUser: {
+          select: {userId: true, userFirstName: true, userLastName: true },
         },
-        updatedByPermission: {
-          select: { permissionId: true, userFirstName: true, userLastName: true },
+        updatedByUser: {
+          select: {userId: true, userFirstName: true, userLastName: true },
         },
       },
     });
@@ -45,8 +45,8 @@ export const PermissionRepository = {
     return prisma.permission.create({
       data,
       include: {
-        createdByPermission: {
-          select: { permissionId: true, userFirstName: true, userLastName: true },
+        createdByUser: {
+          select: {userId: true, userFirstName: true, userLastName: true },
         },
       },
     });
@@ -57,8 +57,8 @@ export const PermissionRepository = {
       where: { permissionId },
       data,
       include: {
-        updatedByPermission: {
-          select: { permissionId: true, userFirstName: true, userLastName: true },
+        updatedByUser: {
+          select: {userId: true, userFirstName: true, userLastName: true },
         },
       },
     });

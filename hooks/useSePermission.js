@@ -2,7 +2,7 @@
 
 import { useSessionUser } from "@/hooks/useSessionUser";
 
-export function usePermission() {
+export function useSePermission () {
   const { permissions = [], isSuperAdmin } = useSessionUser();
 
   const can = (permName) => {
