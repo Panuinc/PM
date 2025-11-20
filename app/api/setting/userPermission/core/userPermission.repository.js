@@ -7,37 +7,51 @@ export const UserPermissionRepository = {
       take,
       orderBy: { userPermissionCreatedAt: "asc" },
       include: {
+        user: {
+          select: { userId: true, userFirstName: true, userLastName: true },
+        },
+        permission: { select: { permissionId: true, permissionName: true } },
         createdByUser: {
-          select: {userId: true, userFirstName: true, userLastName: true },
+          select: { userId: true, userFirstName: true, userLastName: true },
         },
         updatedByUser: {
-          select: {userId: true, userFirstName: true, userLastName: true },
+          select: { userId: true, userFirstName: true, userLastName: true },
         },
       },
     });
   },
 
-  countAll: async () => {
-    return prisma.userPermission.count();
-  },
+  countAll: async () => prisma.userPermission.count(),
 
   findById: async (userPermissionId) => {
     return prisma.userPermission.findUnique({
       where: { userPermissionId },
       include: {
+        user: {
+          select: { userId: true, userFirstName: true, userLastName: true },
+        },
+        permission: { select: { permissionId: true, permissionName: true } },
         createdByUser: {
-          select: {userId: true, userFirstName: true, userLastName: true },
+          select: { userId: true, userFirstName: true, userLastName: true },
         },
         updatedByUser: {
-          select: {userId: true, userFirstName: true, userLastName: true },
+          select: { userId: true, userFirstName: true, userLastName: true },
         },
       },
     });
   },
 
-  findByUserPermissionUserId: async (userPermissionUserId) => {
+  findByUniquePair: async (
+    userPermissionUserId,
+    userPermissionPermissionId
+  ) => {
     return prisma.userPermission.findUnique({
-      where: { userPermissionUserId },
+      where: {
+        userPermissionUserId_userPermissionPermissionId: {
+          userPermissionUserId,
+          userPermissionPermissionId,
+        },
+      },
     });
   },
 
@@ -45,8 +59,12 @@ export const UserPermissionRepository = {
     return prisma.userPermission.create({
       data,
       include: {
+        user: {
+          select: { userId: true, userFirstName: true, userLastName: true },
+        },
+        permission: { select: { permissionId: true, permissionName: true } },
         createdByUser: {
-          select: {userId: true, userFirstName: true, userLastName: true },
+          select: { userId: true, userFirstName: true, userLastName: true },
         },
       },
     });
@@ -57,8 +75,12 @@ export const UserPermissionRepository = {
       where: { userPermissionId },
       data,
       include: {
+        user: {
+          select: { userId: true, userFirstName: true, userLastName: true },
+        },
+        permission: { select: { permissionId: true, permissionName: true } },
         updatedByUser: {
-          select: {userId: true, userFirstName: true, userLastName: true },
+          select: { userId: true, userFirstName: true, userLastName: true },
         },
       },
     });

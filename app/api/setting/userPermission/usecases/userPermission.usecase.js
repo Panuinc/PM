@@ -9,9 +9,11 @@ import logger from "@/lib/logger.node";
 
 export async function GetAllUserPermissionUseCase(page = 1, limit = 1000000) {
   const skip = (page - 1) * limit;
-  const userPermissions = await UserPermissionService.getAllPaginated(skip, limit);
+  const userPermissions = await UserPermissionService.getAllPaginated(
+    skip,
+    limit
+  );
   const total = await UserPermissionService.countAll();
-
   return { userPermissions, total };
 }
 
@@ -21,9 +23,8 @@ export async function GetUserPermissionByIdUseCase(userPermissionId) {
   }
 
   const userPermission = await UserPermissionService.getById(userPermissionId);
-  if (!userPermission) {
+  if (!userPermission)
     throw { status: 404, message: "UserPermission not found" };
-  }
 
   return userPermission;
 }
@@ -32,6 +33,7 @@ export async function CreateUserPermissionUseCase(data) {
   logger.info({
     message: "CreateUserPermissionUseCase start",
     userPermissionUserId: data?.userPermissionUserId,
+    userPermissionPermissionId: data?.userPermissionPermissionId,
     userPermissionCreatedBy: data?.userPermissionCreatedBy,
   });
 
@@ -44,60 +46,48 @@ export async function CreateUserPermissionUseCase(data) {
       errors: fieldErrors,
     });
 
-    throw {
-      status: 422,
-      message: "Invalid input",
-      details: fieldErrors,
-    };
+    throw { status: 422, message: "Invalid input", details: fieldErrors };
   }
 
-  const normalizedUserPermissionUserId = parsed.data.userPermissionUserId.trim().toLowerCase();
+  const userId = parsed.data.userPermissionUserId.trim().toLowerCase();
+  const permissionId = parsed.data.userPermissionPermissionId
+    .trim()
+    .toLowerCase();
 
-  const duplicate = await UserPermissionValidator.isDuplicateUserPermissionUserId(normalizedUserPermissionUserId);
+  const duplicate = await UserPermissionValidator.isDuplicate(
+    userId,
+    permissionId
+  );
   if (duplicate) {
-    logger.warn({
-      message: "CreateUserPermissionUseCase duplicate userPermissionUserId",
-      userPermissionUserId: normalizedUserPermissionUserId,
-    });
-
     throw {
       status: 409,
-      message: `userPermissionUserId '${normalizedUserPermissionUserId}' already exists`,
+      message: `UserPermission for this user & permission already exists`,
     };
   }
 
   try {
-    const userPermission = await UserPermissionService.create({
+    const created = await UserPermissionService.create({
       ...parsed.data,
-      userPermissionUserId: normalizedUserPermissionUserId,
+      userPermissionUserId: userId,
+      userPermissionPermissionId: permissionId,
       userPermissionCreatedAt: getLocalNow(),
     });
 
     logger.info({
       message: "CreateUserPermissionUseCase success",
-      userPermissionId: userPermission.userPermissionId,
+      userPermissionId: created.userPermissionId,
     });
 
-    return userPermission;
+    return created;
   } catch (error) {
-    if (error && typeof error === "object" && error.code === "P2002") {
-      logger.warn({
-        message:
-          "CreateUserPermissionUseCase unique constraint violation on userPermissionUserId (P2002)",
-        userPermissionUserId: normalizedUserPermissionUserId,
-      });
+    logger.error({ message: "CreateUserPermissionUseCase error", error });
 
+    if (error.code === "P2002") {
       throw {
         status: 409,
-        message: `userPermissionUserId '${normalizedUserPermissionUserId}' already exists`,
+        message: `UserPermission already exists`,
       };
     }
-
-    logger.error({
-      message: "CreateUserPermissionUseCase error",
-      error,
-    });
-
     throw error;
   }
 }
@@ -107,6 +97,7 @@ export async function UpdateUserPermissionUseCase(data) {
     message: "UpdateUserPermissionUseCase start",
     userPermissionId: data?.userPermissionId,
     userPermissionUserId: data?.userPermissionUserId,
+    userPermissionPermissionId: data?.userPermissionPermissionId,
     userPermissionUpdatedBy: data?.userPermissionUpdatedBy,
   });
 
@@ -119,39 +110,35 @@ export async function UpdateUserPermissionUseCase(data) {
       errors: fieldErrors,
     });
 
-    throw {
-      status: 422,
-      message: "Invalid input",
-      details: fieldErrors,
-    };
+    throw { status: 422, message: "Invalid input", details: fieldErrors };
   }
 
-  const existing = await UserPermissionService.getById(parsed.data.userPermissionId);
+  const existing = await UserPermissionService.getById(
+    parsed.data.userPermissionId
+  );
   if (!existing) {
-    logger.warn({
-      message: "UpdateUserPermissionUseCase userPermission not found",
-      userPermissionId: parsed.data.userPermissionId,
-    });
-
     throw { status: 404, message: "UserPermission not found" };
   }
 
-  const normalizedUserPermissionUserId = parsed.data.userPermissionUserId.trim().toLowerCase();
-  const existingUserPermissionUserIdNormalized = existing.userPermissionUserId
-    ? existing.userPermissionUserId.trim().toLowerCase()
-    : "";
+  const userId = parsed.data.userPermissionUserId.trim().toLowerCase();
+  const permissionId = parsed.data.userPermissionPermissionId
+    .trim()
+    .toLowerCase();
 
-  if (normalizedUserPermissionUserId !== existingUserPermissionUserIdNormalized) {
-    const duplicate = await UserPermissionValidator.isDuplicateUserPermissionUserId(normalizedUserPermissionUserId);
+  const existingUserId = existing.userPermissionUserId.trim().toLowerCase();
+  const existingPermissionId = existing.userPermissionPermissionId
+    .trim()
+    .toLowerCase();
+
+  if (userId !== existingUserId || permissionId !== existingPermissionId) {
+    const duplicate = await UserPermissionValidator.isDuplicate(
+      userId,
+      permissionId
+    );
     if (duplicate) {
-      logger.warn({
-        message: "UpdateUserPermissionUseCase duplicate userPermissionUserId",
-        userPermissionUserId: normalizedUserPermissionUserId,
-      });
-
       throw {
         status: 409,
-        message: `userPermissionUserId '${normalizedUserPermissionUserId}' already exists`,
+        message: `UserPermission for this user & permission already exists`,
       };
     }
   }
@@ -159,9 +146,10 @@ export async function UpdateUserPermissionUseCase(data) {
   const { userPermissionId, ...rest } = parsed.data;
 
   try {
-    const updatedUserPermission = await UserPermissionService.update(userPermissionId, {
+    const updated = await UserPermissionService.update(userPermissionId, {
       ...rest,
-      userPermissionUserId: normalizedUserPermissionUserId,
+      userPermissionUserId: userId,
+      userPermissionPermissionId: permissionId,
       userPermissionUpdatedAt: getLocalNow(),
     });
 
@@ -170,26 +158,16 @@ export async function UpdateUserPermissionUseCase(data) {
       userPermissionId,
     });
 
-    return updatedUserPermission;
+    return updated;
   } catch (error) {
-    if (error && typeof error === "object" && error.code === "P2002") {
-      logger.warn({
-        message:
-          "UpdateUserPermissionUseCase unique constraint violation on userPermissionUserId (P2002)",
-        userPermissionUserId: normalizedUserPermissionUserId,
-      });
+    logger.error({ message: "UpdateUserPermissionUseCase error", error });
 
+    if (error.code === "P2002") {
       throw {
         status: 409,
-        message: `userPermissionUserId '${normalizedUserPermissionUserId}' already exists`,
+        message: `UserPermission already exists`,
       };
     }
-
-    logger.error({
-      message: "UpdateUserPermissionUseCase error",
-      error,
-    });
-
     throw error;
   }
 }

@@ -7,15 +7,17 @@ import { useRouter } from "next/navigation";
 function formatUserPermissionFromApi(userPermission, index) {
   if (!userPermission) return null;
 
-  const fullName = `${userPermission.userFirstName ?? ""} ${
-    userPermission.userLastName ?? ""
-  }`.trim();
+  const fullName = userPermission.user
+    ? `${userPermission.user.userFirstName ?? ""} ${
+        userPermission.user.userLastName ?? ""
+      }`.trim()
+    : "-";
 
   return {
     ...userPermission,
     userPermissionIndex: index != null ? index + 1 : undefined,
     userPermissionFullName: fullName || "-",
-    userPermissionStatus: userPermission.userPermissionStatus || "-",
+    permissionName: userPermission.permission?.permissionName || "-",
     userPermissionCreatedBy: userPermission.createdByUser
       ? `${userPermission.createdByUser.userFirstName} ${userPermission.createdByUser.userLastName}`
       : "-",
@@ -34,26 +36,22 @@ export function useUserPermissions(apiUrl = "/api/setting/userPermission") {
 
     (async () => {
       try {
-        const res = await fetch(apiUrl, {
-          credentials: "include",
-        });
+        const res = await fetch(apiUrl, { credentials: "include" });
+        const data = await res.json();
 
-        const data = await res.json().catch(() => ({}));
-
-        if (!res.ok) {
+        if (!res.ok)
           throw new Error(data.error || "Failed to load userPermissions.");
-        }
-
-        if (!active) return;
 
         const formatted = Array.isArray(data.userPermissions)
-          ? data.userPermissions.map((u, i) => formatUserPermissionFromApi(u, i)).filter(Boolean)
+          ? data.userPermissions.map((u, i) =>
+              formatUserPermissionFromApi(u, i)
+            )
           : [];
 
-        setUserPermissions(formatted);
+        if (active) setUserPermissions(formatted);
       } catch (err) {
-        if (!active) return;
-        showToast("danger", "Error: " + (err?.message || "Unknown error"));
+        if (active)
+          showToast("danger", "Error: " + (err?.message || "Unknown error"));
       } finally {
         if (active) setLoading(false);
       }
@@ -78,34 +76,29 @@ export function useUserPermission(userPermissionId) {
     }
 
     let active = true;
-    setLoading(true);
 
     (async () => {
       try {
-        const res = await fetch(`/api/setting/userPermission/${userPermissionId}`, {
-          credentials: "include",
-        });
+        const res = await fetch(
+          `/api/setting/userPermission/${userPermissionId}`,
+          {
+            credentials: "include",
+          }
+        );
 
-        const result = await res.json().catch(() => ({}));
+        const result = await res.json();
 
-        if (!res.ok) {
+        if (!res.ok)
           throw new Error(result.error || "Failed to load UserPermission.");
-        }
 
-        if (!active) return;
-
-        const raw = result.userPermission;
-
-        if (!raw) {
-          showToast("warning", "No UserPermission data found.");
-          return;
-        }
-
-        const formatted = formatUserPermissionFromApi(raw, null);
-        setUserPermission(formatted);
+        const formatted = formatUserPermissionFromApi(
+          result.userPermission,
+          null
+        );
+        if (active) setUserPermission(formatted);
       } catch (err) {
-        if (!active) return;
-        showToast("danger", "Error: " + (err?.message || "Unknown error"));
+        if (active)
+          showToast("danger", "Error: " + (err?.message || "Unknown error"));
       } finally {
         if (active) setLoading(false);
       }
@@ -119,34 +112,41 @@ export function useUserPermission(userPermissionId) {
   return { userPermission, loading };
 }
 
-export function useSubmitUserPermission({ mode = "create", userPermissionId, currentUserPermissionId }) {
+export function useSubmitUserPermission({
+  mode = "create",
+  userPermissionId,
+  currentUserPermissionId,
+}) {
   const router = useRouter();
 
   return useCallback(
     async (formRef, formData, setErrors) => {
-      const byField = mode === "create" ? "userPermissionCreatedBy" : "userPermissionUpdatedBy";
+      const byField =
+        mode === "create"
+          ? "userPermissionCreatedBy"
+          : "userPermissionUpdatedBy";
 
       const payload = {
         ...formData,
+        userPermissionPermissionId: formData.userPermissionPermissionId,
         [byField]: currentUserPermissionId,
       };
 
       const url =
-        mode === "create" ? "/api/setting/userPermission" : `/api/setting/userPermission/${userPermissionId}`;
-
+        mode === "create"
+          ? "/api/setting/userPermission"
+          : `/api/setting/userPermission/${userPermissionId}`;
       const method = mode === "create" ? "POST" : "PUT";
 
       try {
         const res = await fetch(url, {
           method,
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           credentials: "include",
           body: JSON.stringify(payload),
         });
 
-        const result = await res.json().catch(() => ({}));
+        const result = await res.json();
 
         if (res.ok) {
           showToast("success", result.message || "Success");
@@ -158,7 +158,10 @@ export function useSubmitUserPermission({ mode = "create", userPermissionId, cur
             setErrors({});
           }
 
-          showToast("danger", result.error || "Failed to submit UserPermission.");
+          showToast(
+            "danger",
+            result.error || "Failed to submit UserPermission."
+          );
         }
       } catch (err) {
         showToast(

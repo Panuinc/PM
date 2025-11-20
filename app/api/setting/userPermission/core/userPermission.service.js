@@ -13,10 +13,6 @@ export class UserPermissionService {
     return UserPermissionRepository.findById(userPermissionId);
   }
 
-  static async getByUserPermissionUserId(userPermissionUserId) {
-    return UserPermissionRepository.findByUserPermissionUserId(userPermissionUserId);
-  }
-
   static async create(data) {
     if (!data) {
       throw {
@@ -24,12 +20,7 @@ export class UserPermissionService {
         message: "UserPermissionService.create called without data",
       };
     }
-
-    const userPermissionData = {
-      ...data,
-    };
-
-    return UserPermissionRepository.create(userPermissionData);
+    return UserPermissionRepository.create({ ...data });
   }
 
   static async update(userPermissionId, data) {
@@ -39,7 +30,6 @@ export class UserPermissionService {
         message: "UserPermissionService.update called without data",
       };
     }
-
-    return UserPermissionRepository.update(userPermissionId, data);
+    return UserPermissionRepository.update(userPermissionId, { ...data });
   }
 }

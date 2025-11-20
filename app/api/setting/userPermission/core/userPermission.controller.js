@@ -8,28 +8,15 @@ import {
 import { formatUserPermissionData } from "@/app/api/setting/userPermission/core/userPermission.schema";
 
 function normalizeError(error) {
-  const fallback = {
-    status: 500,
-    message: "Internal server error",
-  };
+  const fallback = { status: 500, message: "Internal server error" };
 
   if (!error) return fallback;
 
   if (typeof error === "object" && !Array.isArray(error)) {
     const status = error.status || 500;
-    const message =
-      typeof error.message === "string" && error.message.trim()
-        ? error.message
-        : fallback.message;
+    const message = error.message || fallback.message;
     const details = error.details;
     return { status, message, details };
-  }
-
-  if (error instanceof Error) {
-    return {
-      status: 500,
-      message: error.message || fallback.message,
-    };
   }
 
   return fallback;
@@ -37,13 +24,8 @@ function normalizeError(error) {
 
 function buildErrorResponse(error) {
   const normalized = normalizeError(error);
-  const body = {
-    error: normalized.message,
-  };
-  if (normalized.details) {
-    body.details = normalized.details;
-  }
-
+  const body = { error: normalized.message };
+  if (normalized.details) body.details = normalized.details;
   return NextResponse.json(body, { status: normalized.status });
 }
 
@@ -53,7 +35,10 @@ export async function getAllUserPermission(request) {
     const page = parseInt(searchParams.get("page") || "1", 10);
     const limit = parseInt(searchParams.get("limit") || "1000000", 10);
 
-    const { userPermissions, total } = await GetAllUserPermissionUseCase(page, limit);
+    const { userPermissions, total } = await GetAllUserPermissionUseCase(
+      page,
+      limit
+    );
 
     return NextResponse.json({
       message: "Success",
@@ -82,11 +67,11 @@ export async function getUserPermissionById(request, userPermissionId) {
 export async function createUserPermission(request) {
   try {
     const data = await request.json();
-    const userPermission = await CreateUserPermissionUseCase(data);
+    const created = await CreateUserPermissionUseCase(data);
     return NextResponse.json(
       {
         message: "Created",
-        userPermission: formatUserPermissionData([userPermission])[0],
+        userPermission: formatUserPermissionData([created])[0],
       },
       { status: 201 }
     );
@@ -98,10 +83,13 @@ export async function createUserPermission(request) {
 export async function updateUserPermission(request, userPermissionId) {
   try {
     const data = await request.json();
-    const userPermission = await UpdateUserPermissionUseCase({ ...data, userPermissionId });
+    const updated = await UpdateUserPermissionUseCase({
+      ...data,
+      userPermissionId,
+    });
     return NextResponse.json({
       message: "Updated",
-      userPermission: formatUserPermissionData([userPermission])[0],
+      userPermission: formatUserPermissionData([updated])[0],
     });
   } catch (error) {
     return buildErrorResponse(error);
