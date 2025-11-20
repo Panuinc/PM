@@ -4,7 +4,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 enum Status {
@@ -35,6 +34,9 @@ model User {
   createdUsers User[] @relation("UserCreatedByUser")
   updatedUsers User[] @relation("UserUpdatedByUser")
 
+  createdDepartments Department[] @relation("DepartmentCreatedByUser")
+  updatedDepartments Department[] @relation("DepartmentUpdatedByUser")
+
   createdPermissions Permission[] @relation("PermissionCreatedByUser")
   updatedPermissions Permission[] @relation("PermissionUpdatedByUser")
 
@@ -44,6 +46,22 @@ model User {
 
   @@index([userCreatedBy])
   @@index([userUpdatedBy])
+}
+
+model Department {
+  departmentId        String    @id @default(cuid())
+  departmentName      String
+  departmentStatus    Status
+  departmentCreatedBy String
+  departmentCreatedAt DateTime
+  departmentUpdatedBy String?
+  departmentUpdatedAt DateTime?
+
+  createdByUser User? @relation("DepartmentCreatedByUser", fields: [departmentCreatedBy], references: [userId])
+  updatedByUser User? @relation("DepartmentUpdatedByUser", fields: [departmentUpdatedBy], references: [userId])
+
+  @@index([departmentCreatedBy])
+  @@index([departmentUpdatedBy])
 }
 
 model Permission {
