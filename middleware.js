@@ -61,14 +61,12 @@ export async function middleware(req) {
     "/api/setting/user": "user.read",
     "/api/setting/permission": "permission.read",
     "/api/setting/userPermission": "userPermission.read",
-    "/api/pm/machines": "machines.read",
   };
 
   const uiRules = {
     "/setting/user": "user.read",
     "/setting/permission": "permission.read",
     "/setting/userPermission": "userPermission.read",
-    "/pm/machines": "machines.read",
   };
 
   if (pathname.startsWith("/api")) {

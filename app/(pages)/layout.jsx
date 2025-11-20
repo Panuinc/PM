@@ -12,7 +12,6 @@ import {
   LayoutDashboard,
   Menu,
   Settings,
-  Wrench,
   X,
 } from "lucide-react";
 import Image from "next/image";
@@ -117,18 +116,6 @@ export default function PagesLayout({ children }) {
           },
         ],
       },
-      wrench: {
-        icon: <Wrench />,
-        label: "Wrench",
-        requiredPermissions: ["wrench.read"],
-        subMenus: [
-          {
-            text: "Machines",
-            path: "/pm/machines",
-            requiredPermissions: ["machines.read"],
-          },
-        ],
-      },
     }),
     []
   );
@@ -195,7 +182,7 @@ export default function PagesLayout({ children }) {
     <div className="flex flex-col xl:flex-row items-center justify-center w-full h-full">
       {isMobileMenuOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 xl:hidden"
+          className="fixed inset-0 bg-foreground/50 z-40 xl:hidden"
           onClick={toggleMobileMenu}
         />
       )}
