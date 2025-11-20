@@ -30,9 +30,7 @@ export default function DataTable({
   searchPlaceholder = "Search...",
   emptyContent = "No data found",
   itemName = "items",
-  initialVisibleColumns = [],
   onAddNew,
-  onView,
   onEdit,
   renderCustomCell,
 }) {
@@ -102,6 +100,7 @@ export default function DataTable({
   const renderCell = React.useCallback(
     (item, columnKey) => {
       const cellValue = item[columnKey];
+
       if (renderCustomCell) {
         const customRender = renderCustomCell(item, columnKey);
         if (customRender !== undefined) return customRender;
@@ -119,36 +118,31 @@ export default function DataTable({
         );
       }
 
-      switch (columnKey) {
-        case "actions":
-          return (
-            <div className="flex items-center justify-center w-full h-full p-2 gap-2">
-              <Dropdown>
-                <DropdownTrigger>
-                  <Button isIconOnly variant="light">
-                    <EllipsisVertical />
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu>
-                  {onView && (
-                    <DropdownItem key="view" onPress={() => onView(item)}>
-                      View
-                    </DropdownItem>
-                  )}
-                  {onEdit && (
-                    <DropdownItem key="edit" onPress={() => onEdit(item)}>
-                      Edit
-                    </DropdownItem>
-                  )}
-                </DropdownMenu>
-              </Dropdown>
-            </div>
-          );
-        default:
-          return cellValue;
+      if (columnKey === "actions") {
+        if (!onEdit) return null;
+
+        return (
+          <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+            <Dropdown>
+              <DropdownTrigger>
+                <Button isIconOnly variant="light">
+                  <EllipsisVertical />
+                </Button>
+              </DropdownTrigger>
+
+              <DropdownMenu>
+                <DropdownItem key="edit" onPress={() => onEdit(item)}>
+                  Edit
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+        );
       }
+
+      return cellValue;
     },
-    [statusColorMap, renderCustomCell, onView, onEdit]
+    [statusColorMap, renderCustomCell, onEdit]
   );
 
   const onRowsPerPageChange = (e) => {

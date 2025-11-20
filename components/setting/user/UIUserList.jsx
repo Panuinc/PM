@@ -32,7 +32,6 @@ export default function UIUserList({
   Users = [],
   loading,
   onAddNew,
-  onView,
   onEdit,
 }) {
   const total = Users.length;
@@ -105,7 +104,6 @@ const normalized = Array.isArray(Users)
             emptyContent="No users found"
             itemName="users"
             onAddNew={onAddNew}
-            onView={onView}
             onEdit={onEdit}
           />
         )}

@@ -98,7 +98,7 @@ export default function PagesLayout({ children }) {
       setting: {
         icon: <Settings />,
         label: "Settings",
-        requiredPermissions: ["setting.read"],
+        requiredPermissions: ["menu.setting"],
         subMenus: [
           {
             text: "User",
