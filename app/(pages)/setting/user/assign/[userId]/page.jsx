@@ -34,7 +34,6 @@ export default function UserPermissionAssignPage() {
     }
   }, [can, router]);
 
-  // Initial selected permissions
   useEffect(() => {
     const initial = new Set(
       permissions.filter((p) => p.assigned).map((p) => p.permissionId)
