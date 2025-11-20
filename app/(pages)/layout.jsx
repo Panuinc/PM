@@ -9,9 +9,7 @@ import {
   ChevronRight,
   Factory,
   Key,
-  LayoutDashboard,
   Menu,
-  Settings,
   X,
 } from "lucide-react";
 import Image from "next/image";
@@ -20,6 +18,8 @@ import { useState, useEffect, useMemo } from "react";
 import { signOut, useSession } from "next-auth/react";
 import UILoading from "@/components/UILoading";
 import { useSessionUser } from "@/hooks/useSessionUser";
+
+import { menuConfig } from "@/config/permissions";
 
 function MainMenu({ icons, content, onClick, isActive, isMobile }) {
   const menuContent = (
@@ -76,49 +76,14 @@ export default function PagesLayout({ children }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState("dashboard");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const router = useRouter();
   const pathname = usePathname();
 
   const toggleSidebar = () => setIsCollapsed(!isCollapsed);
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
-  const allMenuData = useMemo(
-    () => ({
-      dashboard: {
-        icon: <LayoutDashboard />,
-        label: "Dashboard",
-        subMenus: [
-          {
-            text: "Home",
-            path: "/home",
-          },
-        ],
-      },
-      setting: {
-        icon: <Settings />,
-        label: "Settings",
-        requiredPermissions: ["menu.setting"],
-        subMenus: [
-          {
-            text: "User",
-            path: "/setting/user",
-            requiredPermissions: ["user.read"],
-          },
-          {
-            text: "Permission",
-            path: "/setting/permission",
-            requiredPermissions: ["permission.read"],
-          },
-          {
-            text: "User Permission",
-            path: "/setting/userPermission",
-            requiredPermissions: ["userPermission.read"],
-          },
-        ],
-      },
-    }),
-    []
-  );
+  const allMenuData = useMemo(() => menuConfig, []);
 
   const hasPermission = (required) => {
     if (!Array.isArray(required) || required.length === 0) return true;
