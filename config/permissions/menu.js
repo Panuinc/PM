@@ -30,11 +30,6 @@ export const menuConfig = {
         requiredPermissions: ["permission.read"],
       },
       {
-        text: "User Permission",
-        path: "/setting/userPermission",
-        requiredPermissions: ["userPermission.read"],
-      },
-        {
         text: "Department",
         path: "/setting/department",
         requiredPermissions: ["department.read"],
