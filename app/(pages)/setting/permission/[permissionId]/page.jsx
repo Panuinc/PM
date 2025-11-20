@@ -1,52 +1,56 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import UIUserForm from "@/components/setting/user/UIUserForm";
+import UIPermissionForm from "@/components/setting/permission/UIPermissionForm";
 import UILoading from "@/components/UILoading";
 import { useSessionUser } from "@/hooks/useSessionUser";
-import { useUser, useSubmitUser } from "@/app/api/setting/user/hooks";
+import {
+  usePermission,
+  useSubmitPermission,
+} from "@/app/api/setting/permission/hooks";
 import { useFormHandler } from "@/hooks/useFormHandler";
 import { useSePermission } from "@/hooks/useSePermission";
 
-export default function UserUpdate() {
+export default function PermissionUpdate() {
   const router = useRouter();
   const { can } = useSePermission();
-  const { userId } = useParams();
+
+  const { permissionId } = useParams();
   const { userId: sessionUserId, userName } = useSessionUser();
-  const { user, loading: userLoading } = useUser(userId);
+
+  const { permission, loading: permissionLoading } =
+    usePermission(permissionId);
 
   useEffect(() => {
-    if (!can("user.update")) {
+    if (!can("permission.update")) {
       router.replace("/forbidden");
     }
   }, [can]);
 
-  const submitUser = useSubmitUser({
+  const submitPermission = useSubmitPermission({
     mode: "update",
-    userId,
-    currentUserId: sessionUserId,
+    permissionId,
+    currentPermissionId: sessionUserId,
   });
 
   const formHandler = useFormHandler(
     {
-      userFirstName: "",
-      userLastName: "",
-      userEmail: "",
-      userStatus: "",
+      permissionName: "",
+      permissionStatus: "",
     },
-    submitUser
+    submitPermission
   );
 
   useEffect(() => {
-    if (user) formHandler.setFormData(user);
-  }, [user]);
+    if (permission) formHandler.setFormData(permission);
+  }, [permission]);
 
-  if (userLoading) return <UILoading />;
+  if (permissionLoading) return <UILoading />;
 
   return (
-    <UIUserForm
-      headerTopic="User Update"
+    <UIPermissionForm
+      headerTopic="Permission Update"
       formHandler={formHandler}
       mode="update"
       operatedBy={userName}

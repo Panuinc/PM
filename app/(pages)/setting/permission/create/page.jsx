@@ -1,42 +1,39 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import UIUserForm from "@/components/setting/user/UIUserForm";
+import UIPermissionForm from "@/components/setting/permission/UIPermissionForm";
 import { useSessionUser } from "@/hooks/useSessionUser";
-import { useSubmitUser } from "@/app/api/setting/user/hooks";
+import { useSubmitPermission } from "@/app/api/setting/permission/hooks";
 import { useFormHandler } from "@/hooks/useFormHandler";
 import { useSePermission } from "@/hooks/useSePermission";
 
-export default function UserCreate() {
+export default function PermissionCreate() {
   const router = useRouter();
   const { can } = useSePermission();
   const { userId, userName } = useSessionUser();
 
   useEffect(() => {
-    if (!can("user.create")) {
+    if (!can("permission.create")) {
       router.replace("/forbidden");
     }
   }, [can]);
 
-  const submitUser = useSubmitUser({
+  const submitPermission = useSubmitPermission({
     mode: "create",
-    currentUserId: userId,
+    currentPermissionId: userId,
   });
 
   const formHandler = useFormHandler(
     {
-      userFirstName: "",
-      userLastName: "",
-      userEmail: "",
-      userPassword: "",
+      permissionName: "",
     },
-    submitUser
+    submitPermission
   );
 
   return (
-    <UIUserForm
-      headerTopic="User Create"
+    <UIPermissionForm
+      headerTopic="Permission Create"
       formHandler={formHandler}
       mode="create"
       operatedBy={userName}
