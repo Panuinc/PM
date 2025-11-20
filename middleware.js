@@ -19,44 +19,52 @@ export async function middleware(req) {
   const now = Date.now();
 
   if (Math.random() < 0.02) cleanOldRequests();
-
   const hits = requests.get(ip) || [];
   const recent = hits.filter((t) => now - t < RATE_WINDOW);
   recent.push(now);
   requests.set(ip, recent);
 
   if (recent.length > RATE_LIMIT) {
+    if (pathname.startsWith("/api")) {
+      return NextResponse.json(
+        { error: "Rate limit exceeded" },
+        { status: 429 }
+      );
+    }
     return NextResponse.redirect(new URL("/forbidden", req.url));
   }
-
-  if (pathname.startsWith("/api/auth")) return NextResponse.next();
-
+  // จะขึ้น production ลบออก
   const tokenHeader = req.headers.get("authorization");
   const secret = process.env.SECRET_TOKEN;
-
-  if (secret && tokenHeader === `Bearer ${secret}`) {
+  if (tokenHeader === `Bearer ${secret}`) {
     return NextResponse.next();
   }
+  //
+  
+  if (pathname.startsWith("/api/auth")) return NextResponse.next();
 
-  const sessionToken = await getToken({ req });
+  const session = await getToken({ req });
 
-  if (!sessionToken) {
+  if (!session) {
+    if (pathname.startsWith("/api")) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
     return NextResponse.redirect(new URL("/forbidden", req.url));
   }
 
-  const permissions = sessionToken.user?.permissions ?? [];
+  const permissions = session.user?.permissions ?? [];
   const isSuperAdmin = permissions.includes("superadmin");
 
   if (isSuperAdmin) return NextResponse.next();
 
-  const apiRoutes = {
+  const apiRules = {
     "/api/setting/user": "user.read",
     "/api/setting/permission": "permission.read",
     "/api/setting/userPermission": "userPermission.read",
     "/api/pm/machines": "machines.read",
   };
 
-  const uiRoutes = {
+  const uiRules = {
     "/setting/user": "user.read",
     "/setting/permission": "permission.read",
     "/setting/userPermission": "userPermission.read",
@@ -64,16 +72,16 @@ export async function middleware(req) {
   };
 
   if (pathname.startsWith("/api")) {
-    for (const [route, required] of Object.entries(apiRoutes)) {
-      if (pathname.startsWith(route) && !permissions.includes(required)) {
-        return NextResponse.redirect(new URL("/forbidden", req.url));
+    for (const [route, perm] of Object.entries(apiRules)) {
+      if (pathname.startsWith(route) && !permissions.includes(perm)) {
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
       }
     }
     return NextResponse.next();
   }
 
-  for (const [route, required] of Object.entries(uiRoutes)) {
-    if (pathname.startsWith(route) && !permissions.includes(required)) {
+  for (const [route, perm] of Object.entries(uiRules)) {
+    if (pathname.startsWith(route) && !permissions.includes(perm)) {
       return NextResponse.redirect(new URL("/forbidden", req.url));
     }
   }

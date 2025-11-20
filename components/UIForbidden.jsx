@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Home, ArrowLeft, ShieldAlert } from "lucide-react";
+import { Home, ArrowLeft, Search } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@heroui/react";
@@ -26,15 +26,13 @@ export default function UIForbidden() {
             403
           </motion.div>
         </div>
-        <div className="flex items-center justify-center w-full h-fit p-2 gap-2 text-2xl font-semibold">
-          Access Denied
+        <div className="flex items-center justify-center w-full h-fit p-2 gap-2 text-2xl">
+          You are not authorized to access this page. Please contact your
+          administrator if you believe this is a mistake.
         </div>
-        <div className="flex items-center justify-center w-full h-fit p-2 gap-2 text-center max-w-2xl">
-          <ShieldAlert className="text-danger" size={24} />
-          คุณไม่ได้รับอนุญาตให้เข้าถึงหน้านี้ กรุณาติดต่อผู้ดูแลระบบหากคุณคิดว่านี่เป็นข้อผิดพลาด
-        </div>
-        <div className="flex items-center justify-center w-full h-fit p-2 gap-2 text-center max-w-2xl text-default">
-          You don't have permission to access this page. Please contact your administrator if you believe this is an error.
+        <div className="flex items-center justify-center w-full h-fit p-2 gap-2">
+          You don't have permission to access this page. Please reach out to
+          your admin if you think this was done in error.
         </div>
         <div className="flex flex-row items-center justify-center w-6/12 h-fit p-2 gap-2">
           <div className="flex items-center justify-center w-full h-full p-2 gap-2">
@@ -43,8 +41,8 @@ export default function UIForbidden() {
               className="flex items-center justify-center w-full h-full p-2 gap-2"
             >
               <Button
-                color="primary"
-                className="w-6/12 p-2 gap-2 font-semibold text-background"
+                color="default"
+                className="w-6/12 p-2 gap-2 font-semibold"
               >
                 <Home />
                 Go Home

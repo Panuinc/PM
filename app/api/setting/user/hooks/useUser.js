@@ -4,19 +4,17 @@ import { useState, useEffect, useCallback } from "react";
 import { showToast } from "@/components/UIToast";
 import { useRouter } from "next/navigation";
 
-const AUTH_TOKEN = process.env.NEXT_PUBLIC_SECRET_TOKEN || "";
-
 function formatUserFromApi(user, index) {
   if (!user) return null;
 
-  const baseFullName = `${user.userFirstName ?? ""} ${
+  const fullName = `${user.userFirstName ?? ""} ${
     user.userLastName ?? ""
   }`.trim();
 
   return {
     ...user,
     userIndex: index != null ? index + 1 : undefined,
-    userFullName: baseFullName || "-",
+    userFullName: fullName || "-",
     userStatus: user.userStatus || "-",
     userCreatedBy: user.createdByUser
       ? `${user.createdByUser.userFirstName} ${user.createdByUser.userLastName}`
@@ -37,9 +35,7 @@ export function useUsers(apiUrl = "/api/setting/user") {
     (async () => {
       try {
         const res = await fetch(apiUrl, {
-          headers: {
-            Authorization: `Bearer ${AUTH_TOKEN}`,
-          },
+          credentials: "include",
         });
 
         const data = await res.json().catch(() => ({}));
@@ -51,9 +47,7 @@ export function useUsers(apiUrl = "/api/setting/user") {
         if (!active) return;
 
         const formatted = Array.isArray(data.users)
-          ? data.users
-              .map((user, index) => formatUserFromApi(user, index))
-              .filter(Boolean)
+          ? data.users.map((u, i) => formatUserFromApi(u, i)).filter(Boolean)
           : [];
 
         setUsers(formatted);
@@ -89,9 +83,7 @@ export function useUser(userId) {
     (async () => {
       try {
         const res = await fetch(`/api/setting/user/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${AUTH_TOKEN}`,
-          },
+          credentials: "include",
         });
 
         const result = await res.json().catch(() => ({}));
@@ -102,15 +94,14 @@ export function useUser(userId) {
 
         if (!active) return;
 
-        const rawUser =
-          result.user || (Array.isArray(result.users) ? result.users[0] : null);
+        const raw = result.user;
 
-        if (!rawUser) {
+        if (!raw) {
           showToast("warning", "No User data found.");
           return;
         }
 
-        const formatted = formatUserFromApi(rawUser, null);
+        const formatted = formatUserFromApi(raw, null);
         setUser(formatted);
       } catch (err) {
         if (!active) return;
@@ -150,8 +141,8 @@ export function useSubmitUser({ mode = "create", userId, currentUserId }) {
           method,
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${AUTH_TOKEN}`,
           },
+          credentials: "include",
           body: JSON.stringify(payload),
         });
 
