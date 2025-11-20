@@ -5,7 +5,7 @@ export const UserValidator = {
     if (!userEmail || typeof userEmail !== "string") {
       throw {
         status: 400,
-        message: "Invalid email",
+        message: "Invalid userEmail",
       };
     }
 

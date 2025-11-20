@@ -62,7 +62,7 @@ export async function CreateUserUseCase(data) {
 
     throw {
       status: 409,
-      message: `Email '${normalizedEmail}' already exists`,
+      message: `userEmail '${normalizedEmail}' already exists`,
     };
   }
 
@@ -89,7 +89,7 @@ export async function CreateUserUseCase(data) {
 
       throw {
         status: 409,
-        message: `Email '${normalizedEmail}' already exists`,
+        message: `userEmail '${normalizedEmail}' already exists`,
       };
     }
 
@@ -151,7 +151,7 @@ export async function UpdateUserUseCase(data) {
 
       throw {
         status: 409,
-        message: `Email '${normalizedEmail}' already exists`,
+        message: `userEmail '${normalizedEmail}' already exists`,
       };
     }
   }
@@ -181,7 +181,7 @@ export async function UpdateUserUseCase(data) {
 
       throw {
         status: 409,
-        message: `Email '${normalizedEmail}' already exists`,
+        message: `userEmail '${normalizedEmail}' already exists`,
       };
     }
 
