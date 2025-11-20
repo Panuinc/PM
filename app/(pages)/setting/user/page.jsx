@@ -22,7 +22,7 @@ export default function UserPage() {
 
   const handleAssignPermission = (item) => {
     if (!can("userPermission.update")) return;
-    router.push(`/setting/userPermission/assign/${item.userId}`);
+    router.push(`/setting/user/assign/${item.userId}`);
   };
   return (
     <UIUserList
