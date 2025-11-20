@@ -30,7 +30,10 @@ export default function UserUpdate() {
 
   const formHandler = useFormHandler(
     {
-      permissionName: "",
+      userFirstName: "",
+      userLastName: "",
+      userEmail: "",
+      userStatus: "",
     },
     submitUser
   );

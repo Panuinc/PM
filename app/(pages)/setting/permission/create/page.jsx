@@ -26,7 +26,10 @@ export default function UserCreate() {
 
   const formHandler = useFormHandler(
     {
-      permissionName: "",
+      userFirstName: "",
+      userLastName: "",
+      userEmail: "",
+      userPassword: "",
     },
     submitUser
   );
