@@ -20,6 +20,10 @@ export default function UserPage() {
     router.push(`/setting/user/${item.userId}`);
   };
 
+  const handleAssignPermission = (item) => {
+    if (!can("userPermission.update")) return;
+    router.push(`/setting/userPermission/assign/${item.userId}`);
+  };
   return (
     <UIUserList
       headerTopic="User"
@@ -27,6 +31,7 @@ export default function UserPage() {
       loading={loading}
       onAddNew={can("user.create") ? handleAddNew : null}
       onEdit={can("user.update") ? handleEdit : null}
+      onAssign={can("userPermission.update") ? handleAssignPermission : null}
     />
   );
 }

@@ -4,6 +4,8 @@ import {
   GetUserPermissionByIdUseCase,
   CreateUserPermissionUseCase,
   UpdateUserPermissionUseCase,
+  GetPermissionsForUserUseCase,
+  UpdateUserPermissionsForUserUseCase,
 } from "@/app/api/setting/userPermission/usecases/userPermission.usecase";
 import { formatUserPermissionData } from "@/app/api/setting/userPermission/core/userPermission.schema";
 
@@ -90,6 +92,37 @@ export async function updateUserPermission(request, userPermissionId) {
     return NextResponse.json({
       message: "Updated",
       userPermission: formatUserPermissionData([updated])[0],
+    });
+  } catch (error) {
+    return buildErrorResponse(error);
+  }
+}
+
+export async function getPermissionsForUser(request, userId) {
+  try {
+    const permissions = await GetPermissionsForUserUseCase(userId);
+    return NextResponse.json({
+      message: "Success",
+      userId,
+      permissions,
+    });
+  } catch (error) {
+    return buildErrorResponse(error);
+  }
+}
+
+export async function updatePermissionsForUser(request, userId) {
+  try {
+    const data = await request.json();
+    const permissions = await UpdateUserPermissionsForUserUseCase({
+      ...data,
+      userPermissionUserId: userId,
+    });
+
+    return NextResponse.json({
+      message: "Updated",
+      userId,
+      permissions,
     });
   } catch (error) {
     return buildErrorResponse(error);

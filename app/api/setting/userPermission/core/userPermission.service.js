@@ -32,4 +32,19 @@ export class UserPermissionService {
     }
     return UserPermissionRepository.update(userPermissionId, { ...data });
   }
+
+  static async getByUserId(userId) {
+    return UserPermissionRepository.getByUserId(userId);
+  }
+
+  static async deleteManyByUserAndPermissionIdsNotIn(userId, permissionIds) {
+    return UserPermissionRepository.deleteManyByUserAndPermissionIdsNotIn(
+      userId,
+      permissionIds
+    );
+  }
+
+  static async getPermissionsWithAssignmentForUser(userId) {
+    return UserPermissionRepository.getPermissionsWithAssignmentForUser(userId);
+  }
 }

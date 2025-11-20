@@ -2,6 +2,7 @@ import { UserPermissionService } from "@/app/api/setting/userPermission/core/use
 import {
   userPermissionPostSchema,
   userPermissionPutSchema,
+  userPermissionAssignSchema,
 } from "@/app/api/setting/userPermission/core/userPermission.schema";
 import { UserPermissionValidator } from "@/app/api/setting/userPermission/core/userPermission.validator";
 import { getLocalNow } from "@/lib/getLocalNow";
@@ -170,4 +171,89 @@ export async function UpdateUserPermissionUseCase(data) {
     }
     throw error;
   }
+}
+
+export async function GetPermissionsForUserUseCase(userId) {
+  if (!userId || typeof userId !== "string") {
+    throw { status: 400, message: "Invalid user ID" };
+  }
+
+  logger.info({
+    message: "GetPermissionsForUserUseCase start",
+    userId,
+  });
+
+  const permissions =
+    await UserPermissionService.getPermissionsWithAssignmentForUser(userId);
+
+  logger.info({
+    message: "GetPermissionsForUserUseCase success",
+    userId,
+    permissionsCount: permissions.length,
+  });
+
+  return permissions;
+}
+
+export async function UpdateUserPermissionsForUserUseCase(data) {
+  logger.info({
+    message: "UpdateUserPermissionsForUserUseCase start",
+    userId: data?.userPermissionUserId,
+    permissionIds: data?.permissionIds,
+    userPermissionUpdatedBy: data?.userPermissionUpdatedBy,
+  });
+
+  const parsed = userPermissionAssignSchema.safeParse(data);
+  if (!parsed.success) {
+    const fieldErrors = parsed.error.flatten().fieldErrors;
+
+    logger.warn({
+      message: "UpdateUserPermissionsForUserUseCase validation failed",
+      errors: fieldErrors,
+    });
+
+    throw { status: 422, message: "Invalid input", details: fieldErrors };
+  }
+
+  const userId = parsed.data.userPermissionUserId.trim().toLowerCase();
+  const updaterId = parsed.data.userPermissionUpdatedBy.trim().toLowerCase();
+  const now = getLocalNow();
+
+  const normalizedPermissionIds = Array.from(
+    new Set(
+      (parsed.data.permissionIds || []).map((id) => id.trim().toLowerCase())
+    )
+  );
+
+  const existing = await UserPermissionService.getByUserId(userId);
+  const existingSet = new Set(
+    existing.map((e) => e.userPermissionPermissionId.trim().toLowerCase())
+  );
+
+  await UserPermissionService.deleteManyByUserAndPermissionIdsNotIn(
+    userId,
+    normalizedPermissionIds
+  );
+
+  for (const permissionId of normalizedPermissionIds) {
+    if (!existingSet.has(permissionId)) {
+      await UserPermissionService.create({
+        userPermissionUserId: userId,
+        userPermissionPermissionId: permissionId,
+        userPermissionStatus: "Enable",
+        userPermissionCreatedBy: updaterId,
+        userPermissionCreatedAt: now,
+      });
+    }
+  }
+
+  logger.info({
+    message: "UpdateUserPermissionsForUserUseCase success",
+    userId,
+  });
+
+  const permissions =
+    await UserPermissionService.getPermissionsWithAssignmentForUser(userId);
+
+  return permissions;
 }

@@ -33,31 +33,32 @@ export default function UIUserList({
   loading,
   onAddNew,
   onEdit,
+  onAssign,
 }) {
   const total = Users.length;
   const enabled = Users.filter((user) => user.userStatus === "Enable").length;
   const disabled = Users.filter((user) => user.userStatus === "Disable").length;
 
-const normalized = Array.isArray(Users)
-  ? Users.map((user, i) => ({
-      ...user,
-      id: user.userId,
-      userIndex: i + 1,
-      userCreatedBy: user.createdByUser
-        ? `${user.createdByUser.userFirstName} ${user.createdByUser.userLastName}`
-        : user.userCreatedBy,
-      userUpdatedBy: user.updatedByUser
-        ? `${user.updatedByUser.userFirstName} ${user.updatedByUser.userLastName}`
-        : user.userUpdatedBy || "-",
-      userCreatedAt: user.userCreatedAt
-        ? new Date(user.userCreatedAt).toISOString().split("T")[0]
-        : "-",
-      userUpdatedAt: user.userUpdatedAt
-        ? new Date(user.userUpdatedAt).toISOString().split("T")[0]
-        : "-",
-    }))
-  : [];
-  
+  const normalized = Array.isArray(Users)
+    ? Users.map((user, i) => ({
+        ...user,
+        id: user.userId,
+        userIndex: i + 1,
+        userCreatedBy: user.createdByUser
+          ? `${user.createdByUser.userFirstName} ${user.createdByUser.userLastName}`
+          : user.userCreatedBy,
+        userUpdatedBy: user.updatedByUser
+          ? `${user.updatedByUser.userFirstName} ${user.updatedByUser.userLastName}`
+          : user.userUpdatedBy || "-",
+        userCreatedAt: user.userCreatedAt
+          ? new Date(user.userCreatedAt).toISOString().split("T")[0]
+          : "-",
+        userUpdatedAt: user.userUpdatedAt
+          ? new Date(user.userUpdatedAt).toISOString().split("T")[0]
+          : "-",
+      }))
+    : [];
+
   return (
     <>
       <UIHeader header={headerTopic} />
@@ -105,6 +106,7 @@ const normalized = Array.isArray(Users)
             itemName="users"
             onAddNew={onAddNew}
             onEdit={onEdit}
+            onAssign={onAssign}
           />
         )}
       </div>

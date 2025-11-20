@@ -173,3 +173,91 @@ export function useSubmitUserPermission({
     [mode, userPermissionId, currentUserPermissionId, router]
   );
 }
+
+export function useUserPermissionsForUser(userId) {
+  const [permissions, setPermissions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!userId) {
+      setLoading(false);
+      return;
+    }
+
+    let active = true;
+
+    (async () => {
+      try {
+        const res = await fetch(`/api/setting/userPermission/user/${userId}`, {
+          credentials: "include",
+        });
+        const data = await res.json();
+
+        if (!res.ok)
+          throw new Error(data.error || "Failed to load permissions.");
+
+        const list = Array.isArray(data.permissions) ? data.permissions : [];
+        if (active) setPermissions(list);
+      } catch (err) {
+        if (active)
+          showToast("danger", "Error: " + (err?.message || "Unknown error"));
+      } finally {
+        if (active) setLoading(false);
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [userId]);
+
+  return { permissions, loading, setPermissions };
+}
+
+export function useSubmitUserPermissionsForUser({ userId, currentUserId }) {
+  const router = useRouter();
+
+  return useCallback(
+    async (permissionIds) => {
+      if (!userId) {
+        showToast("danger", "Missing target user.");
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/setting/userPermission/user/${userId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            permissionIds,
+            userPermissionUpdatedBy: currentUserId,
+          }),
+        });
+
+        const result = await res.json();
+
+        if (res.ok) {
+          showToast("success", result.message || "Updated permissions.");
+
+          setTimeout(() => {
+            router.push("/setting/user");
+          }, 1500);
+        } else {
+          showToast(
+            "danger",
+            result.error || "Failed to update user permissions."
+          );
+        }
+      } catch (err) {
+        showToast(
+          "danger",
+          `Failed to update user permissions: ${
+            err?.message || "Unknown error"
+          }`
+        );
+      }
+    },
+    [userId, currentUserId, router]
+  );
+}

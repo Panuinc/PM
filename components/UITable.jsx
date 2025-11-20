@@ -32,6 +32,7 @@ export default function DataTable({
   itemName = "items",
   onAddNew,
   onEdit,
+  onAssign,
   renderCustomCell,
 }) {
   const [filterValue, setFilterValue] = React.useState("");
@@ -119,8 +120,6 @@ export default function DataTable({
       }
 
       if (columnKey === "actions") {
-        if (!onEdit) return null;
-
         return (
           <div className="flex items-center justify-center w-full h-full p-2 gap-2">
             <Dropdown>
@@ -131,9 +130,17 @@ export default function DataTable({
               </DropdownTrigger>
 
               <DropdownMenu>
-                <DropdownItem key="edit" onPress={() => onEdit(item)}>
-                  Edit
-                </DropdownItem>
+                {onEdit && (
+                  <DropdownItem key="edit" onPress={() => onEdit(item)}>
+                    Edit
+                  </DropdownItem>
+                )}
+
+                {onAssign && (
+                  <DropdownItem key="assign" onPress={() => onAssign(item)}>
+                    Assign Permissions
+                  </DropdownItem>
+                )}
               </DropdownMenu>
             </Dropdown>
           </div>
