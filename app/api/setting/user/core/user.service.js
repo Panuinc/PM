@@ -14,8 +14,8 @@ export class UserService {
     return UserRepository.findById(userId);
   }
 
-  static async getByEmail(userEmail) {
-    return UserRepository.findByEmail(userEmail);
+  static async getByUserEmail(userEmail) {
+    return UserRepository.findByUserEmail(userEmail);
   }
 
   static async create(data) {

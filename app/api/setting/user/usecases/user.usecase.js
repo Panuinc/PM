@@ -51,25 +51,25 @@ export async function CreateUserUseCase(data) {
     };
   }
 
-  const normalizedEmail = parsed.data.userEmail.trim().toLowerCase();
+  const normalizedUserEmail = parsed.data.userEmail.trim().toLowerCase();
 
-  const duplicate = await UserValidator.isDuplicateEmail(normalizedEmail);
+  const duplicate = await UserValidator.isDuplicateUserEmail(normalizedUserEmail);
   if (duplicate) {
     logger.warn({
-      message: "CreateUserUseCase duplicate email",
-      userEmail: normalizedEmail,
+      message: "CreateUserUseCase duplicate userEmail",
+      userEmail: normalizedUserEmail,
     });
 
     throw {
       status: 409,
-      message: `userEmail '${normalizedEmail}' already exists`,
+      message: `userEmail '${normalizedUserEmail}' already exists`,
     };
   }
 
   try {
     const user = await UserService.create({
       ...parsed.data,
-      userEmail: normalizedEmail,
+      userEmail: normalizedUserEmail,
       userCreatedAt: getLocalNow(),
     });
 
@@ -84,12 +84,12 @@ export async function CreateUserUseCase(data) {
       logger.warn({
         message:
           "CreateUserUseCase unique constraint violation on userEmail (P2002)",
-        userEmail: normalizedEmail,
+        userEmail: normalizedUserEmail,
       });
 
       throw {
         status: 409,
-        message: `userEmail '${normalizedEmail}' already exists`,
+        message: `userEmail '${normalizedUserEmail}' already exists`,
       };
     }
 
@@ -136,22 +136,22 @@ export async function UpdateUserUseCase(data) {
     throw { status: 404, message: "User not found" };
   }
 
-  const normalizedEmail = parsed.data.userEmail.trim().toLowerCase();
-  const existingEmailNormalized = existing.userEmail
+  const normalizedUserEmail = parsed.data.userEmail.trim().toLowerCase();
+  const existingUserEmailNormalized = existing.userEmail
     ? existing.userEmail.trim().toLowerCase()
     : "";
 
-  if (normalizedEmail !== existingEmailNormalized) {
-    const duplicate = await UserValidator.isDuplicateEmail(normalizedEmail);
+  if (normalizedUserEmail !== existingUserEmailNormalized) {
+    const duplicate = await UserValidator.isDuplicateUserEmail(normalizedUserEmail);
     if (duplicate) {
       logger.warn({
-        message: "UpdateUserUseCase duplicate email",
-        userEmail: normalizedEmail,
+        message: "UpdateUserUseCase duplicate userEmail",
+        userEmail: normalizedUserEmail,
       });
 
       throw {
         status: 409,
-        message: `userEmail '${normalizedEmail}' already exists`,
+        message: `userEmail '${normalizedUserEmail}' already exists`,
       };
     }
   }
@@ -161,7 +161,7 @@ export async function UpdateUserUseCase(data) {
   try {
     const updatedUser = await UserService.update(userId, {
       ...rest,
-      userEmail: normalizedEmail,
+      userEmail: normalizedUserEmail,
       userUpdatedAt: getLocalNow(),
     });
 
@@ -176,12 +176,12 @@ export async function UpdateUserUseCase(data) {
       logger.warn({
         message:
           "UpdateUserUseCase unique constraint violation on userEmail (P2002)",
-        userEmail: normalizedEmail,
+        userEmail: normalizedUserEmail,
       });
 
       throw {
         status: 409,
-        message: `userEmail '${normalizedEmail}' already exists`,
+        message: `userEmail '${normalizedUserEmail}' already exists`,
       };
     }
 

@@ -35,7 +35,7 @@ export const UserRepository = {
     });
   },
 
-  findByEmail: async (userEmail) => {
+  findByUserEmail: async (userEmail) => {
     return prisma.user.findUnique({
       where: { userEmail },
     });

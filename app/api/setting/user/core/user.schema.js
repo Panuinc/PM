@@ -6,21 +6,21 @@ import {
 } from "@/lib/zodSchema";
 
 export const userPostSchema = z.object({
-  userFirstName: preprocessString("Please provide first name"),
-  userLastName: preprocessString("Please provide last name"),
-  userEmail: preprocessString("Please provide email"),
-  userPassword: preprocessString("Please provide password"),
+  userFirstName: preprocessString("Please provide userFirstname"),
+  userLastName: preprocessString("Please provide userLastName"),
+  userEmail: preprocessString("Please provide userEmail"),
+  userPassword: preprocessString("Please provide userPassword"),
   userCreatedBy: preprocessString("Please provide the creator ID"),
 });
 
 export const userPutSchema = z.object({
   userId: preprocessString("Please provide the user ID"),
-  userFirstName: preprocessString("Please provide first name"),
-  userLastName: preprocessString("Please provide last name"),
-  userEmail: preprocessString("Please provide email"),
+  userFirstName: preprocessString("Please provide userFirstname"),
+  userLastName: preprocessString("Please provide userLastName"),
+  userEmail: preprocessString("Please provide userEmail"),
   userStatus: preprocessEnum(
     ["Enable", "Disable"],
-    "Please provide user status"
+    "Please provide userStatus"
   ),
   userUpdatedBy: preprocessString("Please provide the updater ID"),
 });
