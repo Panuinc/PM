@@ -49,22 +49,6 @@ model User {
   @@index([userUpdatedBy])
 }
 
-model Department {
-  departmentId        String    @id @default(cuid())
-  departmentName      String
-  departmentStatus    Status
-  departmentCreatedBy String
-  departmentCreatedAt DateTime
-  departmentUpdatedBy String?
-  departmentUpdatedAt DateTime?
-
-  createdByUser User? @relation("DepartmentCreatedByUser", fields: [departmentCreatedBy], references: [userId])
-  updatedByUser User? @relation("DepartmentUpdatedByUser", fields: [departmentUpdatedBy], references: [userId])
-
-  @@index([departmentCreatedBy])
-  @@index([departmentUpdatedBy])
-}
-
 model Permission {
   permissionId        String    @id @default(cuid())
   permissionName      String    @unique
@@ -105,3 +89,20 @@ model UserPermission {
   @@index([userPermissionCreatedBy])
   @@index([userPermissionUpdatedBy])
 }
+
+model Department {
+  departmentId        String    @id @default(cuid())
+  departmentName      String @unique
+  departmentStatus    Status @default(Enable)
+  departmentCreatedBy String
+  departmentCreatedAt DateTime
+  departmentUpdatedBy String?
+  departmentUpdatedAt DateTime?
+
+  createdByUser User? @relation("DepartmentCreatedByUser", fields: [departmentCreatedBy], references: [userId])
+  updatedByUser User? @relation("DepartmentUpdatedByUser", fields: [departmentUpdatedBy], references: [userId])
+
+  @@index([departmentCreatedBy])
+  @@index([departmentUpdatedBy])
+}
+
