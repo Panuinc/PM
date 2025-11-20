@@ -7,8 +7,14 @@ export function useSessionUser() {
 
   const permissions = user.permissions ?? [];
 
+  const userName =
+    user.userFirstName && user.userLastName
+      ? `${user.userFirstName} ${user.userLastName}`
+      : user.userFirstName || user.userLastName || "";
+
   return {
     ...user,
+    userName,
     permissions,
     isLoading: status === "loading",
     session: sessionData,
