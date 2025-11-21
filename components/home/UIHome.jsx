@@ -7,22 +7,22 @@ export default function UIHome({ headerTopic, user }) {
     <>
       <UIHeader header={headerTopic} />
 
-      <div className="flex flex-col items-center w-full p-6 gap-8">
-        <div className="w-full max-w-4xl bg-background border rounded-lg shadow-sm p-8">
-          <h1 className="text-4xl font-bold tracking-tight mb-2">
+      <div className="flex flex-col items-center justify-start w-full h-full gap-2 overflow-auto">
+        <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2 border-1 border-foreground">
+          <h1 className="flex items-center justify-center w-full h-full p-2 gap-2 text-4xl">
             Welcome, {user?.userFirstName} {user?.userLastName} 🎉
           </h1>
-          <p className="text-muted-foreground text-lg">
+          <p className="flex items-center justify-center w-full h-full p-2 gap-2 text-xl">
             Glad to have you back! Here’s a quick look at your account.
           </p>
         </div>
 
-        <div className="w-full max-w-4xl bg-background border rounded-lg shadow-sm p-8">
-          <h2 className="text-2xl font-semibold mb-6">
+        <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2 border-1 border-foreground">
+          <h2 className="flex items-center justify-center w-full h-full p-2 gap-2 text-3xl">
             Your Personal Information
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
+          <div className="grid grid-cols-1 xl:grid-cols-2 p-2 w-8/12 h-full gap-2">
             <InfoItem label="User ID" value={user?.userId} />
             <InfoItem
               label="Full Name"
@@ -31,46 +31,33 @@ export default function UIHome({ headerTopic, user }) {
 
             <InfoItem label="Email" value={user?.userEmail} />
             <InfoItem label="Status" value={user?.userStatus} />
-
-            <InfoItem
-              label="Created At"
-              value={new Date(user?.userCreatedAt).toLocaleString()}
-            />
-            <InfoItem
-              label="Updated At"
-              value={new Date(user?.userUpdatedAt).toLocaleString()}
-            />
-
-            <InfoItem label="Created By" value={user?.userCreatedBy ?? "-"} />
-            <InfoItem label="Updated By" value={user?.userUpdatedBy ?? "-"} />
           </div>
         </div>
 
-        <div className="w-full max-w-4xl bg-background border rounded-lg shadow-sm p-8">
-          <h2 className="text-2xl font-semibold mb-6">Your Permissions</h2>
+        <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2 border-1 border-foreground">
+          <h2 className="flex items-center justify-center w-full h-full p-2 gap-2 text-2xl">
+            Your Permissions
+          </h2>
 
           {user?.userPermissions?.length === 0 && (
             <p className="text-muted-foreground">No permissions assigned.</p>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col xl:flex-row items-center justify-center w-full h-full p-2 gap-2">
             {user?.userPermissions?.map((item) => (
               <div
                 key={item.userPermissionId}
-                className="border rounded-md p-4 hover:bg-muted transition"
+                className="flex items-center justify-center w-full h-full p-2 gap-2 border-1 border-foreground"
               >
                 <div className="font-medium text-lg">
                   {item.permission.permissionName}
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  Status: {item.userPermissionStatus}
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="text-muted-foreground text-center py-4">
+        <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2 border-1 border-foreground">
           Use the menu on the left to navigate across the system.
         </div>
       </div>
