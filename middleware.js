@@ -59,9 +59,9 @@ export async function middleware(req) {
   }
 
   const permissions = session.user?.permissions ?? [];
-  const isSuperAdmin = permissions.includes("superadmin");
+  const isAdminSuperAdmin = permissions.includes("admin.superadmin");
 
-  if (isSuperAdmin) return NextResponse.next();
+  if (isAdminSuperAdmin) return NextResponse.next();
 
   /* ----------------------------- API PBAC ----------------------------- */
   if (pathname.startsWith("/api")) {

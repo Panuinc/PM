@@ -18,6 +18,6 @@ export function useSessionUser() {
     permissions,
     isLoading: status === "loading",
     session: sessionData,
-    isSuperAdmin: permissions.includes("superadmin"),
+    isAdminSuperAdmin: permissions.includes("admin.superadmin"),
   };
 }

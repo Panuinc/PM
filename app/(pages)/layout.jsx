@@ -71,7 +71,7 @@ function SubMenu({ text, onClick, path }) {
 
 export default function PagesLayout({ children }) {
   const { data: session, status } = useSession();
-  const { isSuperAdmin, permissions } = useSessionUser();
+  const { isAdminSuperAdmin, permissions } = useSessionUser();
 
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState("dashboard");
@@ -92,7 +92,7 @@ export default function PagesLayout({ children }) {
   };
 
   const menuData = useMemo(() => {
-    if (isSuperAdmin) return allMenuData;
+    if (isAdminSuperAdmin) return allMenuData;
 
     const result = {};
 
@@ -109,7 +109,7 @@ export default function PagesLayout({ children }) {
     }
 
     return result;
-  }, [allMenuData, permissions, isSuperAdmin]);
+  }, [allMenuData, permissions, isAdminSuperAdmin]);
 
   useEffect(() => {
     const currentPath = pathname;

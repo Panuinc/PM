@@ -3,10 +3,10 @@
 import { useSessionUser } from "@/hooks/useSessionUser";
 
 export function useSePermission () {
-  const { permissions = [], isSuperAdmin } = useSessionUser();
+  const { permissions = [], isAdminSuperAdmin } = useSessionUser();
 
   const can = (permName) => {
-    if (isSuperAdmin) return true;
+    if (isAdminSuperAdmin) return true;
     if (!permName) return false;
     return permissions.includes(permName);
   };
