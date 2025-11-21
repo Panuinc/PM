@@ -7,7 +7,7 @@ import { useSePermission } from "@/hooks/useSePermission";
 import {
   useUserPermissionsForUser,
   useSubmitUserPermissionsForUser,
-} from "@/app/api/setting/userPermission/hooks/useUserPermission";
+} from "@/app/api/setting/userPermission/hooks";
 import { useUser } from "@/app/api/setting/user/hooks";
 import UIAssignPermission from "@/components/setting/user/UIAssignPermission";
 
@@ -51,23 +51,34 @@ export default function UserPermissionAssignPage() {
   };
 
   const handleSubmit = async () => {
-    await submitUserPermissions(Array.from(selectedIds));
+    const permissionIds = Array.from(selectedIds);
+    await submitUserPermissions(permissionIds);
   };
+
+  const handleCancel = () => router.back();
+
+  const total = permissions.length;
+  const selectedCount = selectedIds.size;
+
+  const headerTopic = useMemo(
+    () => `Assign Permissions for User: ${targetUserId}`,
+    [targetUserId]
+  );
 
   if (loading || loadingUser) return <UILoading />;
 
   return (
     <UIAssignPermission
-      headerTopic={`Assign Permissions for User: ${targetUserId}`}
+      headerTopic={headerTopic}
       userName={userName}
       targetUserFullName={user?.userFullName ?? targetUserId}
-      total={permissions.length}
-      selectedCount={selectedIds.size}
+      total={total}
+      selectedCount={selectedCount}
       permissions={permissions}
       selectedIds={selectedIds}
       handleToggle={handleToggle}
       handleSubmit={handleSubmit}
-      handleCancel={() => router.back()}
+      handleCancel={handleCancel}
     />
   );
 }

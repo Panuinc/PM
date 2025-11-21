@@ -1,45 +1,245 @@
 import { UserPermissionService } from "@/app/api/setting/userPermission/core/userPermission.service";
-import { userPermissionAssignSchema } from "@/app/api/setting/userPermission/core/userPermission.schema";
+import {
+  userPermissionPostSchema,
+  userPermissionPutSchema,
+  userPermissionAssignSchema,
+} from "@/app/api/setting/userPermission/core/userPermission.schema";
+import { UserPermissionValidator } from "@/app/api/setting/userPermission/core/userPermission.validator";
 import { getLocalNow } from "@/lib/getLocalNow";
+import logger from "@/lib/logger.node";
 
-export async function GetPermissionsForUserUseCase(userId) {
-  if (!userId) throw { status: 400, message: "Invalid user ID" };
-  return UserPermissionService.getPermissionsWithAssignmentForUser(userId);
+export async function GetAllUserPermissionUseCase(page = 1, limit = 1000000) {
+  const skip = (page - 1) * limit;
+  const userPermissions = await UserPermissionService.getAllPaginated(
+    skip,
+    limit
+  );
+  const total = await UserPermissionService.countAll();
+  return { userPermissions, total };
 }
 
-export async function UpdateUserPermissionsForUserUseCase(data) {
-  const parsed = userPermissionAssignSchema.safeParse(data);
+export async function GetUserPermissionByIdUseCase(userPermissionId) {
+  if (!userPermissionId || typeof userPermissionId !== "string") {
+    throw { status: 400, message: "Invalid userPermission ID" };
+  }
+
+  const userPermission = await UserPermissionService.getById(userPermissionId);
+  if (!userPermission)
+    throw { status: 404, message: "UserPermission not found" };
+
+  return userPermission;
+}
+
+export async function CreateUserPermissionUseCase(data) {
+  logger.info({
+    message: "CreateUserPermissionUseCase start",
+    userPermissionUserId: data?.userPermissionUserId,
+    userPermissionPermissionId: data?.userPermissionPermissionId,
+    userPermissionCreatedBy: data?.userPermissionCreatedBy,
+  });
+
+  const parsed = userPermissionPostSchema.safeParse(data);
   if (!parsed.success) {
+    const fieldErrors = parsed.error.flatten().fieldErrors;
+
+    logger.warn({
+      message: "CreateUserPermissionUseCase validation failed",
+      errors: fieldErrors,
+    });
+
+    throw { status: 422, message: "Invalid input", details: fieldErrors };
+  }
+
+  const userId = parsed.data.userPermissionUserId.trim().toLowerCase();
+  const permissionId = parsed.data.userPermissionPermissionId
+    .trim()
+    .toLowerCase();
+
+  const duplicate = await UserPermissionValidator.isDuplicate(
+    userId,
+    permissionId
+  );
+  if (duplicate) {
     throw {
-      status: 422,
-      message: "Invalid input",
-      details: parsed.error.flatten().fieldErrors,
+      status: 409,
+      message: `UserPermission for this user & permission already exists`,
     };
   }
 
-  const userId = parsed.data.userPermissionUserId.toLowerCase();
-  const updaterId = parsed.data.userPermissionUpdatedBy.toLowerCase();
+  try {
+    const created = await UserPermissionService.create({
+      ...parsed.data,
+      userPermissionUserId: userId,
+      userPermissionPermissionId: permissionId,
+      userPermissionCreatedAt: getLocalNow(),
+    });
+
+    logger.info({
+      message: "CreateUserPermissionUseCase success",
+      userPermissionId: created.userPermissionId,
+    });
+
+    return created;
+  } catch (error) {
+    logger.error({ message: "CreateUserPermissionUseCase error", error });
+
+    if (error.code === "P2002") {
+      throw {
+        status: 409,
+        message: `UserPermission already exists`,
+      };
+    }
+    throw error;
+  }
+}
+
+export async function UpdateUserPermissionUseCase(data) {
+  logger.info({
+    message: "UpdateUserPermissionUseCase start",
+    userPermissionId: data?.userPermissionId,
+    userPermissionUserId: data?.userPermissionUserId,
+    userPermissionPermissionId: data?.userPermissionPermissionId,
+    userPermissionUpdatedBy: data?.userPermissionUpdatedBy,
+  });
+
+  const parsed = userPermissionPutSchema.safeParse(data);
+  if (!parsed.success) {
+    const fieldErrors = parsed.error.flatten().fieldErrors;
+
+    logger.warn({
+      message: "UpdateUserPermissionUseCase validation failed",
+      errors: fieldErrors,
+    });
+
+    throw { status: 422, message: "Invalid input", details: fieldErrors };
+  }
+
+  const existing = await UserPermissionService.getById(
+    parsed.data.userPermissionId
+  );
+  if (!existing) {
+    throw { status: 404, message: "UserPermission not found" };
+  }
+
+  const userId = parsed.data.userPermissionUserId.trim().toLowerCase();
+  const permissionId = parsed.data.userPermissionPermissionId
+    .trim()
+    .toLowerCase();
+
+  const existingUserId = existing.userPermissionUserId.trim().toLowerCase();
+  const existingPermissionId = existing.userPermissionPermissionId
+    .trim()
+    .toLowerCase();
+
+  if (userId !== existingUserId || permissionId !== existingPermissionId) {
+    const duplicate = await UserPermissionValidator.isDuplicate(
+      userId,
+      permissionId
+    );
+    if (duplicate) {
+      throw {
+        status: 409,
+        message: `UserPermission for this user & permission already exists`,
+      };
+    }
+  }
+
+  const { userPermissionId, ...rest } = parsed.data;
+
+  try {
+    const updated = await UserPermissionService.update(userPermissionId, {
+      ...rest,
+      userPermissionUserId: userId,
+      userPermissionPermissionId: permissionId,
+      userPermissionUpdatedAt: getLocalNow(),
+    });
+
+    logger.info({
+      message: "UpdateUserPermissionUseCase success",
+      userPermissionId,
+    });
+
+    return updated;
+  } catch (error) {
+    logger.error({ message: "UpdateUserPermissionUseCase error", error });
+
+    if (error.code === "P2002") {
+      throw {
+        status: 409,
+        message: `UserPermission already exists`,
+      };
+    }
+    throw error;
+  }
+}
+
+export async function GetPermissionsForUserUseCase(userId) {
+  if (!userId || typeof userId !== "string") {
+    throw { status: 400, message: "Invalid user ID" };
+  }
+
+  logger.info({
+    message: "GetPermissionsForUserUseCase start",
+    userId,
+  });
+
+  const permissions =
+    await UserPermissionService.getPermissionsWithAssignmentForUser(userId);
+
+  logger.info({
+    message: "GetPermissionsForUserUseCase success",
+    userId,
+    permissionsCount: permissions.length,
+  });
+
+  return permissions;
+}
+
+export async function UpdateUserPermissionsForUserUseCase(data) {
+  logger.info({
+    message: "UpdateUserPermissionsForUserUseCase start",
+    userId: data?.userPermissionUserId,
+    permissionIds: data?.permissionIds,
+    userPermissionUpdatedBy: data?.userPermissionUpdatedBy,
+  });
+
+  const parsed = userPermissionAssignSchema.safeParse(data);
+  if (!parsed.success) {
+    const fieldErrors = parsed.error.flatten().fieldErrors;
+
+    logger.warn({
+      message: "UpdateUserPermissionsForUserUseCase validation failed",
+      errors: fieldErrors,
+    });
+
+    throw { status: 422, message: "Invalid input", details: fieldErrors };
+  }
+
+  const userId = parsed.data.userPermissionUserId.trim().toLowerCase();
+  const updaterId = parsed.data.userPermissionUpdatedBy.trim().toLowerCase();
   const now = getLocalNow();
 
-  const normalizedIds = [
-    ...new Set(parsed.data.permissionIds.map((id) => id.toLowerCase())),
-  ];
+  const normalizedPermissionIds = Array.from(
+    new Set(
+      (parsed.data.permissionIds || []).map((id) => id.trim().toLowerCase())
+    )
+  );
 
   const existing = await UserPermissionService.getByUserId(userId);
   const existingSet = new Set(
-    existing.map((e) => e.userPermissionPermissionId)
+    existing.map((e) => e.userPermissionPermissionId.trim().toLowerCase())
   );
 
   await UserPermissionService.deleteManyByUserAndPermissionIdsNotIn(
     userId,
-    normalizedIds
+    normalizedPermissionIds
   );
 
-  for (const pid of normalizedIds) {
-    if (!existingSet.has(pid)) {
+  for (const permissionId of normalizedPermissionIds) {
+    if (!existingSet.has(permissionId)) {
       await UserPermissionService.create({
         userPermissionUserId: userId,
-        userPermissionPermissionId: pid,
+        userPermissionPermissionId: permissionId,
         userPermissionStatus: "Enable",
         userPermissionCreatedBy: updaterId,
         userPermissionCreatedAt: now,
@@ -47,5 +247,13 @@ export async function UpdateUserPermissionsForUserUseCase(data) {
     }
   }
 
-  return UserPermissionService.getPermissionsWithAssignmentForUser(userId);
+  logger.info({
+    message: "UpdateUserPermissionsForUserUseCase success",
+    userId,
+  });
+
+  const permissions =
+    await UserPermissionService.getPermissionsWithAssignmentForUser(userId);
+
+  return permissions;
 }
