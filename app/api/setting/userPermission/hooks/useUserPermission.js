@@ -16,7 +16,7 @@ export function useUserPermissionsForUser(userId) {
     (async () => {
       try {
         const res = await fetch(
-          `/api/setting/userPermission/user/${userId}`,
+          `/api/setting/userPermission/assign/${userId}`,
           { credentials: "include" }
         );
 
@@ -48,7 +48,7 @@ export function useSubmitUserPermissionsForUser({ userId, currentUserId }) {
 
       try {
         const res = await fetch(
-          `/api/setting/userPermission/user/${userId}`,
+          `/api/setting/userPermission/assign/${userId}`,
           {
             method: "PUT",
             credentials: "include",
