@@ -1,40 +1,16 @@
 import { z } from "zod";
-import { preprocessString, preprocessEnum, formatData } from "@/lib/zodSchema";
 
-export const userPermissionPostSchema = z.object({
-  userPermissionUserId: preprocessString("Please provide userPermissionUserId"),
-  userPermissionPermissionId: preprocessString(
-    "Please provide userPermissionPermissionId"
-  ),
-  userPermissionCreatedBy: preprocessString("Please provide the creator ID"),
-});
-
-export const userPermissionPutSchema = z.object({
-  userPermissionId: preprocessString("Please provide the userPermission ID"),
-  userPermissionUserId: preprocessString("Please provide userPermissionUserId"),
-  userPermissionPermissionId: preprocessString(
-    "Please provide userPermissionPermissionId"
-  ),
-  userPermissionStatus: preprocessEnum(
-    ["Enable", "Disable"],
-    "Please provide userPermissionStatus"
-  ),
-  userPermissionUpdatedBy: preprocessString("Please provide the updater ID"),
-});
+function preprocessString(message) {
+  return z.preprocess(
+    (value) => (typeof value === "string" ? value.trim() : value),
+    z.string({ required_error: message })
+  );
+}
 
 export const userPermissionAssignSchema = z.object({
-  userPermissionUserId: preprocessString("Please provide the user ID"),
-  permissionIds: z
-    .array(preprocessString("Please provide permission ID"))
+  userPermissionUserId: preprocessString("Please provide user ID"),
+  permissionIds: z.array(preprocessString("Please provide permission ID"))
     .optional()
     .default([]),
-  userPermissionUpdatedBy: preprocessString("Please provide the updater ID"),
+  userPermissionUpdatedBy: preprocessString("Please provide updater ID"),
 });
-
-export const formatUserPermissionData = (userPermissions) => {
-  return formatData(
-    userPermissions,
-    ["userPermissionCreatedAt", "userPermissionUpdatedAt"],
-    []
-  );
-};
