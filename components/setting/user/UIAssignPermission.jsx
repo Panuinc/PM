@@ -5,7 +5,6 @@ import { Button, Checkbox } from "@heroui/react";
 export default function UIAssignPermission({
   headerTopic,
   userName,
-  targetUserFullName,
   total,
   selectedCount,
   permissions,
@@ -14,77 +13,94 @@ export default function UIAssignPermission({
   handleSubmit,
   handleCancel,
 }) {
+  function groupPermissions(list) {
+    const groups = {};
+
+    list.forEach((p) => {
+      const [category, action] = p.permissionName.split(".");
+
+      const groupName = action ? category : "Other";
+
+      if (!groups[groupName]) groups[groupName] = [];
+      groups[groupName].push(p);
+    });
+
+    return groups;
+  }
+  const grouped = groupPermissions(permissions);
+
   return (
     <>
       <UIHeader header={headerTopic} />
 
-      <div className="flex flex-row items-center justify-between w-full h-fit p-2 gap-2">
-        <div className="flex flex-col items-start justify-center w-full h-full p-2 gap-1">
-          <div className="text-sm">
-            Update By : <span className="font-semibold">{userName}</span>
-          </div>
-          <div className="text-xs text-default-500">
-            User : <span className="font-semibold">{targetUserFullName}</span>
+      <div className="flex flex-col items-center justify-start w-full h-full gap-2 overflow-auto">
+        <div className="flex flex-row items-center justify-center w-full h-fit p-2 gap-2">
+          <div className="flex items-center justify-end w-full h-full p-2 gap-2">
+            Update By : {userName}
           </div>
         </div>
 
-        <div className="flex flex-row items-center justify-end w-full h-full p-2 gap-4">
-          <div className="text-sm">
-            Total Permissions : <span className="font-semibold">{total}</span>
+        <div className="flex flex-row items-center justify-end w-full h-fit p-2 gap-2">
+          <div className="flex items-center justify-center h-full p-2 gap-2">
+            Total Permissions : {total}
           </div>
-          <div className="text-sm">
-            Selected :{" "}
-            <span className="font-semibold text-success">{selectedCount}</span>
+          <div className="flex items-center justify-center h-full p-2 gap-2">
+            Selected : {selectedCount}
           </div>
         </div>
-      </div>
 
-      <div className="flex flex-col items-center justify-start w-full h-full p-2 gap-2 overflow-auto">
-        <div className="flex flex-col items-start justify-start w-full max-w-3xl h-fit p-4 gap-2 border-1 rounded-md">
-
-          {permissions.map((p) => (
-            <div
-              key={p.permissionId}
-              className="flex flex-row items-center justify-between w-full py-1"
-            >
-              <div className="flex-1">
-                <Checkbox
-                  isSelected={selectedIds.has(p.permissionId)}
-                  onValueChange={(checked) => handleToggle(p.permissionId, checked)}
-                  radius="none"
-                >
-                  <span className="font-mono text-sm">{p.permissionName}</span>
-                </Checkbox>
+        <div className="flex flex-col items-center justify-center w-full h-fit gap-2">
+          {Object.entries(grouped).map(([category, items]) => (
+            <div key={category} className="w-full border-1 p-2 rounded-md">
+              <div className="font-bold text-lg mb-2 capitalize">
+                {category}
               </div>
+
+              {items.map((p) => (
+                <div
+                  key={p.permissionId}
+                  className="flex flex-row items-center justify-start w-full p-2 gap-2"
+                >
+                  <Checkbox
+                    isSelected={selectedIds.has(p.permissionId)}
+                    onValueChange={(checked) =>
+                      handleToggle(p.permissionId, checked)
+                    }
+                    radius="none"
+                  >
+                    {p.permissionName}
+                  </Checkbox>
+                </div>
+              ))}
             </div>
           ))}
 
           {permissions.length === 0 && (
-            <div className="text-sm text-default-500">
+            <div className="flex flex-row items-center justify-start w-full h-full p-2 gap-2">
               No permissions defined.
             </div>
           )}
         </div>
 
-        <div className="flex flex-row items-center justify-end w-full max-w-3xl h-fit p-2 gap-2">
-          <div className="flex items-center justify-center w-full sm:w-2/12 h-full p-1">
+        <div className="flex flex-row items-center justify-end w-full h-fit p-2 gap-2">
+          <div className="flex items-center justify-center w-full xl:w-2/12 h-full p-2 gap-2">
             <Button
               type="button"
               color="primary"
               radius="none"
-              className="w-full p-2 font-semibold"
+              className="w-full p-2 gap-2 text-background font-semibold"
               onPress={handleSubmit}
             >
               Save
             </Button>
           </div>
 
-          <div className="flex items-center justify-center w-full sm:w-2/12 h-full p-1">
+          <div className="flex items-center justify-center w-full xl:w-2/12 h-full p-2 gap-2">
             <Button
               type="button"
               color="danger"
               radius="none"
-              className="w-full p-2 font-semibold"
+              className="w-full p-2 gap-2 font-semibold"
               onPress={handleCancel}
             >
               Cancel

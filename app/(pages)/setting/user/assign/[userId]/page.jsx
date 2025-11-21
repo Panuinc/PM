@@ -59,15 +59,14 @@ export default function UserPermissionAssignPage() {
   if (loading || loadingUser) return <UILoading />;
 
   const headerTopic = useMemo(
-    () => `Assign Permissions for User: ${targetUserId}`,
-    [targetUserId]
+    () => `Assign Permissions for User: ${user?.userFullName}`,
+    [user?.userFullName]
   );
 
   return (
     <UIAssignPermission
       headerTopic={headerTopic}
       userName={userName}
-      targetUserFullName={user?.userFullName ?? targetUserId}
       total={permissions.length}
       selectedCount={selectedIds.size}
       permissions={permissions}
