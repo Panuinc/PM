@@ -1,4 +1,4 @@
-import { DeliveryRepository } from "@/app/api/setting/delivery/core/delivery.repository";
+import { DeliveryRepository } from "@/app/api/logistic/delivery/core/delivery.repository";
 
 export class DeliveryService {
   static async getAllPaginated(skip, take) {

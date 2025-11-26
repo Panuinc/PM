@@ -1,4 +1,4 @@
-import { DeliveryRepository } from "@/app/api/setting/delivery/core/delivery.repository";
+import { DeliveryRepository } from "@/app/api/logistic/delivery/core/delivery.repository";
 
 export const DeliveryValidator = {
   async isDuplicateDeliveryInvoiceNumber(deliveryInvoiceNumber) {

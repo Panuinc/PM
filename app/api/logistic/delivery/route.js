@@ -1,7 +1,7 @@
 import {
   getAllDelivery,
   createDelivery,
-} from "@/app/api/setting/delivery/core/delivery.controller";
+} from "@/app/api/logistic/delivery/core/delivery.controller";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";

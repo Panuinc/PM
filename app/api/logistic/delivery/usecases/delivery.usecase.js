@@ -1,9 +1,9 @@
-import { DeliveryService } from "@/app/api/setting/delivery/core/delivery.service";
+import { DeliveryService } from "@/app/api/logistic/delivery/core/delivery.service";
 import {
   deliveryPostSchema,
   deliveryPutSchema,
-} from "@/app/api/setting/delivery/core/delivery.schema";
-import { DeliveryValidator } from "@/app/api/setting/delivery/core/delivery.validator";
+} from "@/app/api/logistic/delivery/core/delivery.schema";
+import { DeliveryValidator } from "@/app/api/logistic/delivery/core/delivery.validator";
 import { getLocalNow } from "@/lib/getLocalNow";
 import logger from "@/lib/logger.node";
 

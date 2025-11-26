@@ -4,8 +4,8 @@ import {
   GetDeliveryByIdUseCase,
   CreateDeliveryUseCase,
   UpdateDeliveryUseCase,
-} from "@/app/api/setting/delivery/usecases/delivery.usecase";
-import { formatDeliveryData } from "@/app/api/setting/delivery/core/delivery.schema";
+} from "@/app/api/logistic/delivery/usecases/delivery.usecase";
+import { formatDeliveryData } from "@/app/api/logistic/delivery/core/delivery.schema";
 
 function normalizeError(error) {
   const fallback = {

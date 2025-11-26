@@ -27,7 +27,7 @@ function formatDeliveryFromApi(delivery, index) {
   };
 }
 
-export function useDeliverys(apiUrl = "/api/setting/delivery") {
+export function useDeliverys(apiUrl = "/api/logistic/delivery") {
   const [deliverys, setDeliverys] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -86,7 +86,7 @@ export function useDelivery(deliveryId) {
 
     (async () => {
       try {
-        const res = await fetch(`/api/setting/delivery/${deliveryId}`, {
+        const res = await fetch(`/api/logistic/delivery/${deliveryId}`, {
           credentials: "include",
         });
 
@@ -142,8 +142,8 @@ export function useSubmitDelivery({
 
       const url =
         mode === "create"
-          ? "/api/setting/delivery"
-          : `/api/setting/delivery/${deliveryId}`;
+          ? "/api/logistic/delivery"
+          : `/api/logistic/delivery/${deliveryId}`;
 
       const method = mode === "create" ? "POST" : "PUT";
 
@@ -161,7 +161,7 @@ export function useSubmitDelivery({
 
         if (res.ok) {
           showToast("success", result.message || "Success");
-          setTimeout(() => router.push("/setting/delivery"), 1500);
+          setTimeout(() => router.push("/logistic/delivery"), 1500);
         } else {
           if (result.details && typeof result.details === "object") {
             setErrors(result.details);
