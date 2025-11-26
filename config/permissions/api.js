@@ -16,4 +16,11 @@ export const apiActionRules = {
     POST: "userPermission.create",
     PUT: "userPermission.update",
   },
+
+    "/api/logistic/delivery": {
+    GET: "delivery.read",
+    POST: "delivery.create",
+    PUT: "delivery.update",
+  },
+
 };
