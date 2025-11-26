@@ -22,6 +22,8 @@ function formatDeliveryFromApi(delivery, index) {
     deliveryUpdatedBy: delivery.updatedByUser
       ? `${delivery.updatedByUser.userFirstName} ${delivery.updatedByUser.userLastName}`
       : "-",
+
+    deliveryReturns: delivery.deliveryReturn || [],
   };
 }
 
@@ -47,7 +49,9 @@ export function useDeliverys(apiUrl = "/api/setting/delivery") {
         if (!active) return;
 
         const formatted = Array.isArray(data.deliverys)
-          ? data.deliverys.map((u, i) => formatDeliveryFromApi(u, i)).filter(Boolean)
+          ? data.deliverys
+              .map((u, i) => formatDeliveryFromApi(u, i))
+              .filter(Boolean)
           : [];
 
         setDeliverys(formatted);
@@ -119,12 +123,17 @@ export function useDelivery(deliveryId) {
   return { delivery, loading };
 }
 
-export function useSubmitDelivery({ mode = "create", deliveryId, currentDeliveryId }) {
+export function useSubmitDelivery({
+  mode = "create",
+  deliveryId,
+  currentDeliveryId,
+}) {
   const router = useRouter();
 
   return useCallback(
     async (formRef, formData, setErrors) => {
-      const byField = mode === "create" ? "deliveryCreatedBy" : "deliveryUpdatedBy";
+      const byField =
+        mode === "create" ? "deliveryCreatedBy" : "deliveryUpdatedBy";
 
       const payload = {
         ...formData,
@@ -132,7 +141,9 @@ export function useSubmitDelivery({ mode = "create", deliveryId, currentDelivery
       };
 
       const url =
-        mode === "create" ? "/api/setting/delivery" : `/api/setting/delivery/${deliveryId}`;
+        mode === "create"
+          ? "/api/setting/delivery"
+          : `/api/setting/delivery/${deliveryId}`;
 
       const method = mode === "create" ? "POST" : "PUT";
 

@@ -7,11 +7,12 @@ export const DeliveryRepository = {
       take,
       orderBy: { deliveryCreatedAt: "asc" },
       include: {
+        deliveryReturn: true,
         createdByUser: {
-          select: {userId: true, userFirstName: true, userLastName: true },
+          select: { userId: true, userFirstName: true, userLastName: true },
         },
         updatedByUser: {
-          select: {userId: true, userFirstName: true, userLastName: true },
+          select: { userId: true, userFirstName: true, userLastName: true },
         },
       },
     });
@@ -25,11 +26,12 @@ export const DeliveryRepository = {
     return prisma.delivery.findUnique({
       where: { deliveryId },
       include: {
+        deliveryReturn: true,
         createdByUser: {
-          select: {userId: true, userFirstName: true, userLastName: true },
+          select: { userId: true, userFirstName: true, userLastName: true },
         },
         updatedByUser: {
-          select: {userId: true, userFirstName: true, userLastName: true },
+          select: { userId: true, userFirstName: true, userLastName: true },
         },
       },
     });
@@ -43,10 +45,21 @@ export const DeliveryRepository = {
 
   create: async (data) => {
     return prisma.delivery.create({
-      data,
+      data: {
+        ...data,
+        deliveryReturn: {
+          create:
+            data.deliveryReturns?.map((r) => ({
+              deliveryReturnCode: r.deliveryReturnCode,
+              deliveryReturnQuantity: r.deliveryReturnQuantity,
+              deliveryReturnRemark: r.deliveryReturnRemark || null,
+            })) || [],
+        },
+      },
       include: {
+        deliveryReturn: true,
         createdByUser: {
-          select: {userId: true, userFirstName: true, userLastName: true },
+          select: { userId: true, userFirstName: true, userLastName: true },
         },
       },
     });
@@ -55,10 +68,23 @@ export const DeliveryRepository = {
   update: async (deliveryId, data) => {
     return prisma.delivery.update({
       where: { deliveryId },
-      data,
+      data: {
+        ...data,
+        deliveryReturn: {
+          deleteMany: {},
+
+          create:
+            data.deliveryReturns?.map((r) => ({
+              deliveryReturnCode: r.deliveryReturnCode,
+              deliveryReturnQuantity: r.deliveryReturnQuantity,
+              deliveryReturnRemark: r.deliveryReturnRemark || null,
+            })) || [],
+        },
+      },
       include: {
+        deliveryReturn: true,
         updatedByUser: {
-          select: {userId: true, userFirstName: true, userLastName: true },
+          select: { userId: true, userFirstName: true, userLastName: true },
         },
       },
     });

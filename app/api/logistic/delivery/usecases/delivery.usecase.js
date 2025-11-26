@@ -51,25 +51,30 @@ export async function CreateDeliveryUseCase(data) {
     };
   }
 
-  const normalizedDeliveryName = parsed.data.deliveryInvoiceNumber.trim().toLowerCase();
+  const normalizedDeliveryInvoiceNumber = parsed.data.deliveryInvoiceNumber
+    .trim()
+    .toLowerCase();
 
-  const duplicate = await DeliveryValidator.isDuplicateDeliveryInvoiceNumber(normalizedDeliveryName);
+  const duplicate = await DeliveryValidator.isDuplicateDeliveryInvoiceNumber(
+    normalizedDeliveryInvoiceNumber
+  );
+
   if (duplicate) {
     logger.warn({
       message: "CreateDeliveryUseCase duplicate deliveryInvoiceNumber",
-      deliveryInvoiceNumber: normalizedDeliveryName,
+      deliveryInvoiceNumber: normalizedDeliveryInvoiceNumber,
     });
 
     throw {
       status: 409,
-      message: `deliveryInvoiceNumber '${normalizedDeliveryName}' already exists`,
+      message: `deliveryInvoiceNumber '${normalizedDeliveryInvoiceNumber}' already exists`,
     };
   }
 
   try {
     const delivery = await DeliveryService.create({
       ...parsed.data,
-      deliveryInvoiceNumber: normalizedDeliveryName,
+      deliveryInvoiceNumber: normalizedDeliveryInvoiceNumber,
       deliveryCreatedAt: getLocalNow(),
     });
 
@@ -84,12 +89,12 @@ export async function CreateDeliveryUseCase(data) {
       logger.warn({
         message:
           "CreateDeliveryUseCase unique constraint violation on deliveryInvoiceNumber (P2002)",
-        deliveryInvoiceNumber: normalizedDeliveryName,
+        deliveryInvoiceNumber: normalizedDeliveryInvoiceNumber,
       });
 
       throw {
         status: 409,
-        message: `deliveryInvoiceNumber '${normalizedDeliveryName}' already exists`,
+        message: `deliveryInvoiceNumber '${normalizedDeliveryInvoiceNumber}' already exists`,
       };
     }
 
@@ -136,22 +141,28 @@ export async function UpdateDeliveryUseCase(data) {
     throw { status: 404, message: "Delivery not found" };
   }
 
-  const normalizedDeliveryName = parsed.data.deliveryInvoiceNumber.trim().toLowerCase();
-  const existingDeliveryNameNormalized = existing.deliveryInvoiceNumber
+  const normalizedDeliveryInvoiceNumber = parsed.data.deliveryInvoiceNumber
+    .trim()
+    .toLowerCase();
+
+  const existingInvoiceNormalized = existing.deliveryInvoiceNumber
     ? existing.deliveryInvoiceNumber.trim().toLowerCase()
     : "";
 
-  if (normalizedDeliveryName !== existingDeliveryNameNormalized) {
-    const duplicate = await DeliveryValidator.isDuplicateDeliveryInvoiceNumber(normalizedDeliveryName);
+  if (normalizedDeliveryInvoiceNumber !== existingInvoiceNormalized) {
+    const duplicate = await DeliveryValidator.isDuplicateDeliveryInvoiceNumber(
+      normalizedDeliveryInvoiceNumber
+    );
+
     if (duplicate) {
       logger.warn({
         message: "UpdateDeliveryUseCase duplicate deliveryInvoiceNumber",
-        deliveryInvoiceNumber: normalizedDeliveryName,
+        deliveryInvoiceNumber: normalizedDeliveryInvoiceNumber,
       });
 
       throw {
         status: 409,
-        message: `deliveryInvoiceNumber '${normalizedDeliveryName}' already exists`,
+        message: `deliveryInvoiceNumber '${normalizedDeliveryInvoiceNumber}' already exists`,
       };
     }
   }
@@ -161,7 +172,7 @@ export async function UpdateDeliveryUseCase(data) {
   try {
     const updatedDelivery = await DeliveryService.update(deliveryId, {
       ...rest,
-      deliveryInvoiceNumber: normalizedDeliveryName,
+      deliveryInvoiceNumber: normalizedDeliveryInvoiceNumber,
       deliveryUpdatedAt: getLocalNow(),
     });
 
@@ -176,12 +187,12 @@ export async function UpdateDeliveryUseCase(data) {
       logger.warn({
         message:
           "UpdateDeliveryUseCase unique constraint violation on deliveryInvoiceNumber (P2002)",
-        deliveryInvoiceNumber: normalizedDeliveryName,
+        deliveryInvoiceNumber: normalizedDeliveryInvoiceNumber,
       });
 
       throw {
         status: 409,
-        message: `deliveryInvoiceNumber '${normalizedDeliveryName}' already exists`,
+        message: `deliveryInvoiceNumber '${normalizedDeliveryInvoiceNumber}' already exists`,
       };
     }
 
