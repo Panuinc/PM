@@ -1,4 +1,4 @@
-import { LayoutDashboard, Settings } from "lucide-react";
+import { Forklift, LayoutDashboard, Settings } from "lucide-react";
 
 export const menuConfig = {
   dashboard: {
@@ -33,6 +33,18 @@ export const menuConfig = {
         text: "Department",
         path: "/setting/department",
         requiredPermissions: ["department.read"],
+      },
+    ],
+  },
+  logistic: {
+    icon: <Forklift />,
+    label: "Logistic",
+    requiredPermissions: ["menu.logistic"],
+    subMenus: [
+      {
+        text: "Delivery",
+        path: "/logistic/delivery",
+        requiredPermissions: ["delivery.read"],
       },
     ],
   },
