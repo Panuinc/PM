@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -15,6 +15,11 @@ enum Status {
 enum UserStatus {
   Enable
   Disable
+}
+
+enum DeliveryStatus {
+  PendingApprove
+  Approved
 }
 
 model User {
@@ -37,6 +42,9 @@ model User {
 
   createdDepartments Department[] @relation("DepartmentCreatedByUser")
   updatedDepartments Department[] @relation("DepartmentUpdatedByUser")
+
+  createdDeliverys Delivery[] @relation("DeliveryCreatedByUser")
+  updatedDeliverys Delivery[] @relation("DeliveryUpdatedByUser")
 
   createdPermissions Permission[] @relation("PermissionCreatedByUser")
   updatedPermissions Permission[] @relation("PermissionUpdatedByUser")
@@ -92,8 +100,8 @@ model UserPermission {
 
 model Department {
   departmentId        String    @id @default(cuid())
-  departmentName      String @unique
-  departmentStatus    Status @default(Enable)
+  departmentName      String    @unique
+  departmentStatus    Status    @default(Enable)
   departmentCreatedBy String
   departmentCreatedAt DateTime
   departmentUpdatedBy String?
@@ -106,3 +114,34 @@ model Department {
   @@index([departmentUpdatedBy])
 }
 
+model Delivery {
+  deliveryId            String         @id @default(cuid())
+  deliveryInvoiceNumber String         @unique
+  deliveryLocation      String
+  deliveryPicture       String
+  deliveryStatus        DeliveryStatus @default(PendingApprove)
+  deliveryCreatedBy     String
+  deliveryCreatedAt     DateTime
+  deliveryUpdatedBy     String?
+  deliveryUpdatedAt     DateTime?
+
+  createdByUser User? @relation("DeliveryCreatedByUser", fields: [deliveryCreatedBy], references: [userId])
+  updatedByUser User? @relation("DeliveryUpdatedByUser", fields: [deliveryUpdatedBy], references: [userId])
+
+  deliveryReturn DeliveryReturn[]
+
+  @@index([deliveryCreatedBy])
+  @@index([deliveryUpdatedBy])
+}
+
+model DeliveryReturn {
+  deliveryReturnId         String  @id @default(cuid())
+  deliveryReturnDeliveryId String
+  deliveryReturnCode       String
+  deliveryReturnQuantity   Int
+  deliveryReturnRemark     String?
+
+  delivery Delivery @relation(fields: [deliveryReturnDeliveryId], references: [deliveryId])
+
+  @@index([deliveryReturnDeliveryId])
+}

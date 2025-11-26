@@ -1,0 +1,195 @@
+import { DeliveryService } from "@/app/api/setting/delivery/core/delivery.service";
+import {
+  deliveryPostSchema,
+  deliveryPutSchema,
+} from "@/app/api/setting/delivery/core/delivery.schema";
+import { DeliveryValidator } from "@/app/api/setting/delivery/core/delivery.validator";
+import { getLocalNow } from "@/lib/getLocalNow";
+import logger from "@/lib/logger.node";
+
+export async function GetAllDeliveryUseCase(page = 1, limit = 1000000) {
+  const skip = (page - 1) * limit;
+  const deliverys = await DeliveryService.getAllPaginated(skip, limit);
+  const total = await DeliveryService.countAll();
+
+  return { deliverys, total };
+}
+
+export async function GetDeliveryByIdUseCase(deliveryId) {
+  if (!deliveryId || typeof deliveryId !== "string") {
+    throw { status: 400, message: "Invalid delivery ID" };
+  }
+
+  const delivery = await DeliveryService.getById(deliveryId);
+  if (!delivery) {
+    throw { status: 404, message: "Delivery not found" };
+  }
+
+  return delivery;
+}
+
+export async function CreateDeliveryUseCase(data) {
+  logger.info({
+    message: "CreateDeliveryUseCase start",
+    deliveryName: data?.deliveryName,
+    deliveryCreatedBy: data?.deliveryCreatedBy,
+  });
+
+  const parsed = deliveryPostSchema.safeParse(data);
+  if (!parsed.success) {
+    const fieldErrors = parsed.error.flatten().fieldErrors;
+
+    logger.warn({
+      message: "CreateDeliveryUseCase validation failed",
+      errors: fieldErrors,
+    });
+
+    throw {
+      status: 422,
+      message: "Invalid input",
+      details: fieldErrors,
+    };
+  }
+
+  const normalizedDeliveryName = parsed.data.deliveryName.trim().toLowerCase();
+
+  const duplicate = await DeliveryValidator.isDuplicateDeliveryName(normalizedDeliveryName);
+  if (duplicate) {
+    logger.warn({
+      message: "CreateDeliveryUseCase duplicate deliveryName",
+      deliveryName: normalizedDeliveryName,
+    });
+
+    throw {
+      status: 409,
+      message: `deliveryName '${normalizedDeliveryName}' already exists`,
+    };
+  }
+
+  try {
+    const delivery = await DeliveryService.create({
+      ...parsed.data,
+      deliveryName: normalizedDeliveryName,
+      deliveryCreatedAt: getLocalNow(),
+    });
+
+    logger.info({
+      message: "CreateDeliveryUseCase success",
+      deliveryId: delivery.deliveryId,
+    });
+
+    return delivery;
+  } catch (error) {
+    if (error && typeof error === "object" && error.code === "P2002") {
+      logger.warn({
+        message:
+          "CreateDeliveryUseCase unique constraint violation on deliveryName (P2002)",
+        deliveryName: normalizedDeliveryName,
+      });
+
+      throw {
+        status: 409,
+        message: `deliveryName '${normalizedDeliveryName}' already exists`,
+      };
+    }
+
+    logger.error({
+      message: "CreateDeliveryUseCase error",
+      error,
+    });
+
+    throw error;
+  }
+}
+
+export async function UpdateDeliveryUseCase(data) {
+  logger.info({
+    message: "UpdateDeliveryUseCase start",
+    deliveryId: data?.deliveryId,
+    deliveryName: data?.deliveryName,
+    deliveryUpdatedBy: data?.deliveryUpdatedBy,
+  });
+
+  const parsed = deliveryPutSchema.safeParse(data);
+  if (!parsed.success) {
+    const fieldErrors = parsed.error.flatten().fieldErrors;
+
+    logger.warn({
+      message: "UpdateDeliveryUseCase validation failed",
+      errors: fieldErrors,
+    });
+
+    throw {
+      status: 422,
+      message: "Invalid input",
+      details: fieldErrors,
+    };
+  }
+
+  const existing = await DeliveryService.getById(parsed.data.deliveryId);
+  if (!existing) {
+    logger.warn({
+      message: "UpdateDeliveryUseCase delivery not found",
+      deliveryId: parsed.data.deliveryId,
+    });
+
+    throw { status: 404, message: "Delivery not found" };
+  }
+
+  const normalizedDeliveryName = parsed.data.deliveryName.trim().toLowerCase();
+  const existingDeliveryNameNormalized = existing.deliveryName
+    ? existing.deliveryName.trim().toLowerCase()
+    : "";
+
+  if (normalizedDeliveryName !== existingDeliveryNameNormalized) {
+    const duplicate = await DeliveryValidator.isDuplicateDeliveryName(normalizedDeliveryName);
+    if (duplicate) {
+      logger.warn({
+        message: "UpdateDeliveryUseCase duplicate deliveryName",
+        deliveryName: normalizedDeliveryName,
+      });
+
+      throw {
+        status: 409,
+        message: `deliveryName '${normalizedDeliveryName}' already exists`,
+      };
+    }
+  }
+
+  const { deliveryId, ...rest } = parsed.data;
+
+  try {
+    const updatedDelivery = await DeliveryService.update(deliveryId, {
+      ...rest,
+      deliveryName: normalizedDeliveryName,
+      deliveryUpdatedAt: getLocalNow(),
+    });
+
+    logger.info({
+      message: "UpdateDeliveryUseCase success",
+      deliveryId,
+    });
+
+    return updatedDelivery;
+  } catch (error) {
+    if (error && typeof error === "object" && error.code === "P2002") {
+      logger.warn({
+        message:
+          "UpdateDeliveryUseCase unique constraint violation on deliveryName (P2002)",
+        deliveryName: normalizedDeliveryName,
+      });
+
+      throw {
+        status: 409,
+        message: `deliveryName '${normalizedDeliveryName}' already exists`,
+      };
+    }
+
+    logger.error({
+      message: "UpdateDeliveryUseCase error",
+      error,
+    });
+
+    throw error;
+  }
+}
