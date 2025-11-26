@@ -35,9 +35,9 @@ export const DeliveryRepository = {
     });
   },
 
-  findByDeliveryName: async (deliveryName) => {
+  findByDeliveryInvoiceNumber: async (deliveryInvoiceNumber) => {
     return prisma.delivery.findUnique({
-      where: { deliveryName },
+      where: { deliveryInvoiceNumber },
     });
   },
 

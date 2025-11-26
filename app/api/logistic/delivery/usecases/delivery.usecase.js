@@ -31,7 +31,7 @@ export async function GetDeliveryByIdUseCase(deliveryId) {
 export async function CreateDeliveryUseCase(data) {
   logger.info({
     message: "CreateDeliveryUseCase start",
-    deliveryName: data?.deliveryName,
+    deliveryInvoiceNumber: data?.deliveryInvoiceNumber,
     deliveryCreatedBy: data?.deliveryCreatedBy,
   });
 
@@ -51,25 +51,25 @@ export async function CreateDeliveryUseCase(data) {
     };
   }
 
-  const normalizedDeliveryName = parsed.data.deliveryName.trim().toLowerCase();
+  const normalizedDeliveryName = parsed.data.deliveryInvoiceNumber.trim().toLowerCase();
 
-  const duplicate = await DeliveryValidator.isDuplicateDeliveryName(normalizedDeliveryName);
+  const duplicate = await DeliveryValidator.isDuplicateDeliveryInvoiceNumber(normalizedDeliveryName);
   if (duplicate) {
     logger.warn({
-      message: "CreateDeliveryUseCase duplicate deliveryName",
-      deliveryName: normalizedDeliveryName,
+      message: "CreateDeliveryUseCase duplicate deliveryInvoiceNumber",
+      deliveryInvoiceNumber: normalizedDeliveryName,
     });
 
     throw {
       status: 409,
-      message: `deliveryName '${normalizedDeliveryName}' already exists`,
+      message: `deliveryInvoiceNumber '${normalizedDeliveryName}' already exists`,
     };
   }
 
   try {
     const delivery = await DeliveryService.create({
       ...parsed.data,
-      deliveryName: normalizedDeliveryName,
+      deliveryInvoiceNumber: normalizedDeliveryName,
       deliveryCreatedAt: getLocalNow(),
     });
 
@@ -83,13 +83,13 @@ export async function CreateDeliveryUseCase(data) {
     if (error && typeof error === "object" && error.code === "P2002") {
       logger.warn({
         message:
-          "CreateDeliveryUseCase unique constraint violation on deliveryName (P2002)",
-        deliveryName: normalizedDeliveryName,
+          "CreateDeliveryUseCase unique constraint violation on deliveryInvoiceNumber (P2002)",
+        deliveryInvoiceNumber: normalizedDeliveryName,
       });
 
       throw {
         status: 409,
-        message: `deliveryName '${normalizedDeliveryName}' already exists`,
+        message: `deliveryInvoiceNumber '${normalizedDeliveryName}' already exists`,
       };
     }
 
@@ -106,7 +106,7 @@ export async function UpdateDeliveryUseCase(data) {
   logger.info({
     message: "UpdateDeliveryUseCase start",
     deliveryId: data?.deliveryId,
-    deliveryName: data?.deliveryName,
+    deliveryInvoiceNumber: data?.deliveryInvoiceNumber,
     deliveryUpdatedBy: data?.deliveryUpdatedBy,
   });
 
@@ -136,22 +136,22 @@ export async function UpdateDeliveryUseCase(data) {
     throw { status: 404, message: "Delivery not found" };
   }
 
-  const normalizedDeliveryName = parsed.data.deliveryName.trim().toLowerCase();
-  const existingDeliveryNameNormalized = existing.deliveryName
-    ? existing.deliveryName.trim().toLowerCase()
+  const normalizedDeliveryName = parsed.data.deliveryInvoiceNumber.trim().toLowerCase();
+  const existingDeliveryNameNormalized = existing.deliveryInvoiceNumber
+    ? existing.deliveryInvoiceNumber.trim().toLowerCase()
     : "";
 
   if (normalizedDeliveryName !== existingDeliveryNameNormalized) {
-    const duplicate = await DeliveryValidator.isDuplicateDeliveryName(normalizedDeliveryName);
+    const duplicate = await DeliveryValidator.isDuplicateDeliveryInvoiceNumber(normalizedDeliveryName);
     if (duplicate) {
       logger.warn({
-        message: "UpdateDeliveryUseCase duplicate deliveryName",
-        deliveryName: normalizedDeliveryName,
+        message: "UpdateDeliveryUseCase duplicate deliveryInvoiceNumber",
+        deliveryInvoiceNumber: normalizedDeliveryName,
       });
 
       throw {
         status: 409,
-        message: `deliveryName '${normalizedDeliveryName}' already exists`,
+        message: `deliveryInvoiceNumber '${normalizedDeliveryName}' already exists`,
       };
     }
   }
@@ -161,7 +161,7 @@ export async function UpdateDeliveryUseCase(data) {
   try {
     const updatedDelivery = await DeliveryService.update(deliveryId, {
       ...rest,
-      deliveryName: normalizedDeliveryName,
+      deliveryInvoiceNumber: normalizedDeliveryName,
       deliveryUpdatedAt: getLocalNow(),
     });
 
@@ -175,13 +175,13 @@ export async function UpdateDeliveryUseCase(data) {
     if (error && typeof error === "object" && error.code === "P2002") {
       logger.warn({
         message:
-          "UpdateDeliveryUseCase unique constraint violation on deliveryName (P2002)",
-        deliveryName: normalizedDeliveryName,
+          "UpdateDeliveryUseCase unique constraint violation on deliveryInvoiceNumber (P2002)",
+        deliveryInvoiceNumber: normalizedDeliveryName,
       });
 
       throw {
         status: 409,
-        message: `deliveryName '${normalizedDeliveryName}' already exists`,
+        message: `deliveryInvoiceNumber '${normalizedDeliveryName}' already exists`,
       };
     }
 

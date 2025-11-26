@@ -1,15 +1,15 @@
 import { DeliveryRepository } from "@/app/api/setting/delivery/core/delivery.repository";
 
 export const DeliveryValidator = {
-  async isDuplicateDeliveryName(deliveryName) {
-    if (!deliveryName || typeof deliveryName !== "string") {
+  async isDuplicateDeliveryInvoiceNumber(deliveryInvoiceNumber) {
+    if (!deliveryInvoiceNumber || typeof deliveryInvoiceNumber !== "string") {
       throw {
         status: 400,
-        message: "Invalid deliveryName",
+        message: "Invalid deliveryInvoiceNumber",
       };
     }
 
-    const existing = await DeliveryRepository.findByDeliveryName(deliveryName);
+    const existing = await DeliveryRepository.findByDeliveryInvoiceNumber(deliveryInvoiceNumber);
     return !!existing;
   },
 };

@@ -6,13 +6,13 @@ import {
 } from "@/lib/zodSchema";
 
 export const deliveryPostSchema = z.object({
-  deliveryName: preprocessString("Please provide deliveryName"),
+  deliveryInvoiceNumber: preprocessString("Please provide deliveryInvoiceNumber"),
   deliveryCreatedBy: preprocessString("Please provide the creator ID"),
 });
 
 export const deliveryPutSchema = z.object({
   deliveryId: preprocessString("Please provide the delivery ID"),
-  deliveryName: preprocessString("Please deliveryName"),
+  deliveryInvoiceNumber: preprocessString("Please deliveryInvoiceNumber"),
   deliveryStatus: preprocessEnum(
     ["Enable", "Disable"],
     "Please provide deliveryStatus"

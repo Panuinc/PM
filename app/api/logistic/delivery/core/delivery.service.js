@@ -13,8 +13,8 @@ export class DeliveryService {
     return DeliveryRepository.findById(deliveryId);
   }
 
-  static async getByDeliveryName(deliveryName) {
-    return DeliveryRepository.findByDeliveryName(deliveryName);
+  static async getByDeliveryInvoiceNumber(deliveryInvoiceNumber) {
+    return DeliveryRepository.findByDeliveryInvoiceNumber(deliveryInvoiceNumber);
   }
 
   static async create(data) {
