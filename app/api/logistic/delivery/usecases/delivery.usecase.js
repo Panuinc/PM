@@ -173,7 +173,6 @@ export async function UpdateDeliveryUseCase(data) {
     ...rest,
     deliveryInvoiceNumber: normalizedDeliveryInvoiceNumber,
     deliveryUpdatedAt: getLocalNow(),
-    deliveryReturns: deliveryReturns || [],
   };
 
   try {

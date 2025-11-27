@@ -41,7 +41,6 @@ export default function DeliveryUpdate() {
       deliveryPicture: "",
       deliveryFile: null,
       deliveryStatus: "",
-      deliveryReturns: [],
     },
     submitDelivery
   );
@@ -54,7 +53,6 @@ export default function DeliveryUpdate() {
         deliveryPicture: delivery.deliveryPicture || "",
         deliveryFile: null,
         deliveryStatus: delivery.deliveryStatus || "",
-        deliveryReturns: delivery.deliveryReturns || [],
       });
     }
   }, [delivery]);

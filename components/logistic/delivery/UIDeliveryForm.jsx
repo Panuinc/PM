@@ -6,7 +6,6 @@ import {
   Input,
   Select,
   SelectItem,
-  Textarea,
   Modal,
   ModalContent,
   ModalHeader,
@@ -15,7 +14,7 @@ import {
   useDisclosure,
   Image,
 } from "@heroui/react";
-import { Plus, Trash2, MapPin, Camera, X, RotateCcw } from "lucide-react";
+import { MapPin, Camera, X, RotateCcw } from "lucide-react";
 
 export default function UIDeliveryForm({
   headerTopic,
@@ -25,8 +24,6 @@ export default function UIDeliveryForm({
   operatedBy,
 }) {
   const { formRef, formData, handleChange, handleSubmit, errors } = formHandler;
-
-  const deliveryReturns = formData.deliveryReturns || [];
 
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
   const [locationError, setLocationError] = useState("");
@@ -70,11 +67,7 @@ export default function UIDeliveryForm({
         try {
           const response = await fetch(
             `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`,
-            {
-              headers: {
-                "Accept-Language": "th,en",
-              },
-            }
+            { headers: { "Accept-Language": "th,en" } }
           );
           const data = await response.json();
 
@@ -106,11 +99,7 @@ export default function UIDeliveryForm({
         setLocationError(errorMessage);
         setIsLoadingLocation(false);
       },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0,
-      }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
   };
 
@@ -120,19 +109,12 @@ export default function UIDeliveryForm({
 
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: facingMode,
-          width: { ideal: 1280 },
-          height: { ideal: 720 },
-        },
+        video: { facingMode, width: { ideal: 1280 }, height: { ideal: 720 } },
         audio: false,
       });
 
       setStream(mediaStream);
-
-      if (videoRef.current) {
-        videoRef.current.srcObject = mediaStream;
-      }
+      if (videoRef.current) videoRef.current.srcObject = mediaStream;
     } catch (error) {
       let errorMessage = "Unable to access camera";
       if (error.name === "NotAllowedError") {
@@ -147,23 +129,17 @@ export default function UIDeliveryForm({
   };
 
   const switchCamera = () => {
-    if (stream) {
-      stream.getTracks().forEach((track) => track.stop());
-    }
+    if (stream) stream.getTracks().forEach((track) => track.stop());
     setFacingMode((prev) => (prev === "environment" ? "user" : "environment"));
   };
 
   useEffect(() => {
-    if (isOpen && !capturedImage) {
-      startCamera();
-    }
+    if (isOpen && !capturedImage) startCamera();
   }, [facingMode, isOpen]);
 
   const openCamera = () => {
     onOpen();
-    setTimeout(() => {
-      startCamera();
-    }, 100);
+    setTimeout(() => startCamera(), 100);
   };
 
   const capturePhoto = () => {
@@ -233,30 +209,6 @@ export default function UIDeliveryForm({
     setCapturedImage(null);
     setCameraError("");
     onClose();
-  };
-
-  const handleAddReturn = () => {
-    const newReturn = {
-      deliveryReturnCode: "",
-      deliveryReturnQuantity: "",
-      deliveryReturnRemark: "",
-    };
-    handleChange("deliveryReturns")([...deliveryReturns, newReturn]);
-  };
-
-  const handleRemoveReturn = (index) => {
-    const updated = deliveryReturns.filter((_, i) => i !== index);
-    handleChange("deliveryReturns")(updated);
-  };
-
-  const handleReturnChange = (index, field, value) => {
-    const updated = deliveryReturns.map((item, i) => {
-      if (i === index) {
-        return { ...item, [field]: value };
-      }
-      return item;
-    });
-    handleChange("deliveryReturns")(updated);
   };
 
   return (
@@ -388,126 +340,6 @@ export default function UIDeliveryForm({
               </div>
             </div>
           )}
-
-          <div className="flex flex-col items-center justify-start w-full h-fit p-2 gap-2">
-            <div className="flex flex-col items-end justify-center w-full h-fit p-2 gap-2">
-              <div className="flex items-center justify-start w-full h-full p-2 gap-2">
-                Delivery Returns
-              </div>
-              <div className="flex items-center justify-center w-full xl:w-2/12 h-full p-2 gap-2">
-                <Button
-                  type="button"
-                  color="primary"
-                  radius="none"
-                  className="w-full p-2 gap-2 text-background font-semibold"
-                  onPress={handleAddReturn}
-                  startContent={<Plus size={16} />}
-                >
-                  Add Return
-                </Button>
-              </div>
-            </div>
-
-            {deliveryReturns.length > 0 && (
-              <div className="flex flex-col items-center justify-start w-full h-fit gap-4">
-                {deliveryReturns.map((returnItem, index) => (
-                  <div
-                    key={returnItem.deliveryReturnId || index}
-                    className="flex flex-col items-center justify-start w-full h-fit p-4 gap-2 border-1 rounded"
-                  >
-                    <div className="flex flex-row items-center justify-between w-full h-fit">
-                      <div className="text-sm font-medium">
-                        Items Return {index + 1}
-                      </div>
-                      <Button
-                        type="button"
-                        color="none"
-                        radius="none"
-                        isIconOnly
-                        className="text-danger"
-                        onPress={() => handleRemoveReturn(index)}
-                      >
-                        <Trash2 size={16} />
-                      </Button>
-                    </div>
-
-                    <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit gap-2">
-                      <div className="flex items-center justify-center w-full h-full gap-2">
-                        <Input
-                          name={`deliveryReturnCode_${index}`}
-                          type="text"
-                          label="Return Code"
-                          color="default"
-                          variant="faded"
-                          radius="none"
-                          labelPlacement="outside"
-                          placeholder="Enter Return Code"
-                          isRequired
-                          value={returnItem.deliveryReturnCode || ""}
-                          onChange={(e) =>
-                            handleReturnChange(
-                              index,
-                              "deliveryReturnCode",
-                              e.target.value
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="flex items-center justify-center w-full h-full gap-2">
-                        <Input
-                          name={`deliveryReturnQuantity_${index}`}
-                          type="number"
-                          label="Quantity"
-                          color="default"
-                          variant="faded"
-                          radius="none"
-                          labelPlacement="outside"
-                          placeholder="Enter Quantity"
-                          isRequired
-                          value={returnItem.deliveryReturnQuantity || ""}
-                          onChange={(e) =>
-                            handleReturnChange(
-                              index,
-                              "deliveryReturnQuantity",
-                              parseInt(e.target.value, 10) || ""
-                            )
-                          }
-                        />
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit gap-2">
-                      <div className="flex items-center justify-center w-full h-full gap-2">
-                        <Textarea
-                          name={`deliveryReturnRemark_${index}`}
-                          label="Remark"
-                          color="default"
-                          variant="faded"
-                          radius="none"
-                          labelPlacement="outside"
-                          placeholder="Enter Remark (Optional)"
-                          value={returnItem.deliveryReturnRemark || ""}
-                          onChange={(e) =>
-                            handleReturnChange(
-                              index,
-                              "deliveryReturnRemark",
-                              e.target.value
-                            )
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {deliveryReturns.length === 0 && (
-              <div className="flex items-center justify-center w-full h-20 p-2 gap-2 border-1 border-dashed text-gray-400">
-                No delivery returns added
-              </div>
-            )}
-          </div>
 
           <div className="flex flex-row items-center justify-end w-full h-fit p-2 gap-2">
             <div className="flex items-center justify-center w-full xl:w-2/12 h-full p-2 gap-2">

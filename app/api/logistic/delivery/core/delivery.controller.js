@@ -13,7 +13,6 @@ function normalizeError(error) {
     status: 500,
     message: "Internal server error",
   };
-
   if (!error) return fallback;
 
   if (typeof error === "object" && !Array.isArray(error)) {
@@ -131,11 +130,6 @@ export async function createDelivery(request) {
       const deliveryLocation = String(formData.get("deliveryLocation") || "");
       const deliveryCreatedBy = String(formData.get("deliveryCreatedBy") || "");
 
-      const deliveryReturns = parseJsonSafe(
-        formData.get("deliveryReturns"),
-        undefined
-      );
-
       const file = formData.get("file");
       if (!file) {
         throw {
@@ -156,7 +150,6 @@ export async function createDelivery(request) {
         deliveryLocation,
         deliveryPicture,
         deliveryCreatedBy,
-        deliveryReturns,
       });
 
       return NextResponse.json(
@@ -196,11 +189,6 @@ export async function updateDelivery(request, deliveryId) {
       const deliveryStatus = String(formData.get("deliveryStatus") || "");
       const deliveryUpdatedBy = String(formData.get("deliveryUpdatedBy") || "");
 
-      const deliveryReturns = parseJsonSafe(
-        formData.get("deliveryReturns"),
-        undefined
-      );
-
       const file = formData.get("file");
 
       let deliveryPicture = String(formData.get("deliveryPicture") || "");
@@ -225,7 +213,6 @@ export async function updateDelivery(request, deliveryId) {
         deliveryPicture,
         deliveryStatus,
         deliveryUpdatedBy,
-        deliveryReturns,
       });
 
       return NextResponse.json({

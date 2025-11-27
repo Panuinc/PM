@@ -128,20 +128,6 @@ model Delivery {
   createdByUser User? @relation("DeliveryCreatedByUser", fields: [deliveryCreatedBy], references: [userId])
   updatedByUser User? @relation("DeliveryUpdatedByUser", fields: [deliveryUpdatedBy], references: [userId])
 
-  deliveryReturn DeliveryReturn[]
-
   @@index([deliveryCreatedBy])
   @@index([deliveryUpdatedBy])
-}
-
-model DeliveryReturn {
-  deliveryReturnId         String  @id @default(cuid())
-  deliveryReturnDeliveryId String
-  deliveryReturnCode       String
-  deliveryReturnQuantity   Int
-  deliveryReturnRemark     String?
-
-  delivery Delivery @relation(fields: [deliveryReturnDeliveryId], references: [deliveryId])
-
-  @@index([deliveryReturnDeliveryId])
 }

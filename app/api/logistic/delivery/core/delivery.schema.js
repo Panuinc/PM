@@ -1,23 +1,5 @@
 import { z } from "zod";
-import {
-  preprocessString,
-  preprocessEnum,
-  preprocessInt,
-  preprocessStringOptional,
-  formatData,
-} from "@/lib/zodSchema";
-
-export const deliveryReturnSchema = z.object({
-  deliveryReturnCode: preprocessString("Please provide deliveryReturnCode"),
-  deliveryReturnQuantity: preprocessInt(
-    "Please provide deliveryReturnQuantity"
-  ),
-  deliveryReturnRemark: preprocessStringOptional(),
-});
-
-export const deliveryReturnWithIdSchema = deliveryReturnSchema.extend({
-  deliveryReturnId: preprocessStringOptional(),
-});
+import { preprocessString, preprocessEnum, formatData } from "@/lib/zodSchema";
 
 export const deliveryPostSchema = z.object({
   deliveryInvoiceNumber: preprocessString(
@@ -26,7 +8,6 @@ export const deliveryPostSchema = z.object({
   deliveryLocation: preprocessString("Please provide deliveryLocation"),
   deliveryPicture: preprocessString("Please provide deliveryPicture"),
   deliveryCreatedBy: preprocessString("Please provide the creator ID"),
-  deliveryReturns: z.array(deliveryReturnSchema).optional(),
 });
 
 export const deliveryPutSchema = z.object({
@@ -41,7 +22,6 @@ export const deliveryPutSchema = z.object({
     "Please provide deliveryStatus"
   ),
   deliveryUpdatedBy: preprocessString("Please provide the updater ID"),
-  deliveryReturns: z.array(deliveryReturnWithIdSchema).optional(),
 });
 
 export const formatDeliveryData = (deliverys) => {
