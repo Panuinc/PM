@@ -234,7 +234,7 @@ export async function updateDelivery(request, deliveryId) {
         const p = await validateAndSaveImageFile(
           f,
           folder,
-          `product_${Date.now()}_${String(i + 1).padStart(3, "0")}`
+          `product_${String(i + 1).padStart(3, "0")}`
         );
         if (p) productPictures.push(p);
       }
