@@ -14,7 +14,7 @@ import {
   useDisclosure,
   Image,
 } from "@heroui/react";
-import { Camera, X, RotateCcw } from "lucide-react";
+import { Camera, X, RotateCcw, Trash2 } from "lucide-react";
 
 export default function UIDeliveryForm({
   headerTopic,
@@ -36,15 +36,22 @@ export default function UIDeliveryForm({
   const [cameraError, setCameraError] = useState("");
 
   const [facingMode, setFacingMode] = useState("environment");
-  const [localPreviewUrl, setLocalPreviewUrl] = useState("");
+
+  const [captureTarget, setCaptureTarget] = useState("invoice");
+
+  const [localInvoicePreviewUrl, setLocalInvoicePreviewUrl] = useState("");
+  const [localProductPreviewUrls, setLocalProductPreviewUrls] = useState([]);
 
   const pendingResubmitRef = useRef(false);
 
   useEffect(() => {
     return () => {
-      if (localPreviewUrl) URL.revokeObjectURL(localPreviewUrl);
+      if (localInvoicePreviewUrl) URL.revokeObjectURL(localInvoicePreviewUrl);
+      if (Array.isArray(localProductPreviewUrls)) {
+        localProductPreviewUrls.forEach((u) => u && URL.revokeObjectURL(u));
+      }
     };
-  }, [localPreviewUrl]);
+  }, [localInvoicePreviewUrl, localProductPreviewUrls]);
 
   useEffect(() => {
     if (!isOpen && stream) {
@@ -180,7 +187,8 @@ export default function UIDeliveryForm({
     if (isOpen && !capturedImage) startCamera();
   }, [facingMode, isOpen]);
 
-  const openCamera = () => {
+  const openCamera = (target) => {
+    setCaptureTarget(target);
     onOpen();
     setTimeout(() => startCamera(), 100);
   };
@@ -215,7 +223,7 @@ export default function UIDeliveryForm({
   const confirmPhoto = async () => {
     if (!capturedImage) return;
 
-    const invoiceNumber = formData.deliveryInvoiceNumber?.trim();
+    const invoiceNumber = String(formData.deliveryInvoiceNumber || "").trim();
     if (!invoiceNumber) {
       setCameraError("Please enter Invoice Number before taking a photo.");
       return;
@@ -226,17 +234,25 @@ export default function UIDeliveryForm({
       const blob = await response.blob();
 
       const safeInvoiceNumber = invoiceNumber.replace(/[^a-zA-Z0-9-_]/g, "_");
-      const fileName = `${safeInvoiceNumber}.jpg`;
-
+      const fileName = `${safeInvoiceNumber}_${captureTarget}_${Date.now()}.jpg`;
       const file = new File([blob], fileName, { type: "image/jpeg" });
 
-      if (localPreviewUrl) URL.revokeObjectURL(localPreviewUrl);
+      if (captureTarget === "invoice") {
+        if (localInvoicePreviewUrl) URL.revokeObjectURL(localInvoicePreviewUrl);
+        const previewUrl = URL.createObjectURL(file);
+        setLocalInvoicePreviewUrl(previewUrl);
 
-      const previewUrl = URL.createObjectURL(file);
-      setLocalPreviewUrl(previewUrl);
+        handleChange("deliveryFile")(file);
+        handleChange("deliveryPicture")(previewUrl);
+      } else {
+        const previewUrl = URL.createObjectURL(file);
+        setLocalProductPreviewUrls((prev) => [...prev, previewUrl]);
 
-      handleChange("deliveryFile")(file);
-      handleChange("deliveryPicture")(previewUrl);
+        const nextFiles = Array.isArray(formData.deliveryProductFiles)
+          ? [...formData.deliveryProductFiles, file]
+          : [file];
+        handleChange("deliveryProductFiles")(nextFiles);
+      }
 
       onClose();
     } catch {
@@ -254,6 +270,42 @@ export default function UIDeliveryForm({
     onClose();
   };
 
+  const removeLocalProductFile = (index) => {
+    const files = Array.isArray(formData.deliveryProductFiles)
+      ? [...formData.deliveryProductFiles]
+      : [];
+    if (index < 0 || index >= files.length) return;
+
+    files.splice(index, 1);
+    handleChange("deliveryProductFiles")(files);
+
+    setLocalProductPreviewUrls((prev) => {
+      const next = [...prev];
+      const removedUrl = next[index];
+      if (removedUrl) URL.revokeObjectURL(removedUrl);
+      next.splice(index, 1);
+      return next;
+    });
+  };
+
+  const deleteExistingProductPhoto = (photoId) => {
+    if (!photoId) return;
+
+    const existing = Array.isArray(formData.deliveryProductPhotos)
+      ? formData.deliveryProductPhotos
+      : [];
+
+    const nextExisting = existing.filter((p) => p?.deliveryPhotoId !== photoId);
+    handleChange("deliveryProductPhotos")(nextExisting);
+
+    const currentDelete = Array.isArray(formData.deliveryDeletePhotoIds)
+      ? formData.deliveryDeletePhotoIds
+      : [];
+    if (!currentDelete.includes(photoId)) {
+      handleChange("deliveryDeletePhotoIds")([...currentDelete, photoId]);
+    }
+  };
+
   return (
     <>
       <UIHeader header={headerTopic} />
@@ -263,7 +315,6 @@ export default function UIDeliveryForm({
         onSubmit={handleSubmitWithAutoLocation}
         className="flex flex-col items-center justify-start w-full h-full overflow-auto"
       >
-        {/* hidden field กันบาง hook ไปอ่านจาก DOM/FormData */}
         <input
           type="hidden"
           name="deliveryLocation"
@@ -326,11 +377,25 @@ export default function UIDeliveryForm({
                 color="secondary"
                 radius="none"
                 className="w-full p-2 gap-2 font-semibold"
-                onPress={openCamera}
+                onPress={() => openCamera("invoice")}
                 startContent={<Camera size={16} />}
                 isDisabled={isLoadingLocation}
               >
-                Take Photo
+                Take Invoice Photo
+              </Button>
+            </div>
+
+            <div className="flex items-end justify-center w-full xl:w-2/12 h-full p-2 gap-2">
+              <Button
+                type="button"
+                color="secondary"
+                radius="none"
+                className="w-full p-2 gap-2 font-semibold"
+                onPress={() => openCamera("product")}
+                startContent={<Camera size={16} />}
+                isDisabled={isLoadingLocation}
+              >
+                Take Product Photo
               </Button>
             </div>
           </div>
@@ -338,18 +403,92 @@ export default function UIDeliveryForm({
           {formData.deliveryPicture && (
             <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2">
               <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-sm text-gray-500">
-                Current Picture Preview:
+                Invoice Picture Preview:
               </div>
               <div className="flex items-center justify-center w-full xl:w-6/12 h-fit p-2 gap-2">
                 <Image
                   src={formData.deliveryPicture}
-                  alt="Delivery Picture"
+                  alt="Delivery Invoice Picture"
                   className="max-h-64 object-contain rounded"
                   fallbackSrc="https://via.placeholder.com/300x200?text=Image+Not+Found"
                 />
               </div>
             </div>
           )}
+
+          {Array.isArray(formData.deliveryProductPhotos) &&
+            formData.deliveryProductPhotos.length > 0 && (
+              <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2">
+                <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-sm text-gray-500">
+                  Product Photos (Saved):
+                </div>
+
+                <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 w-full xl:w-10/12 p-2">
+                  {formData.deliveryProductPhotos.map((p) => (
+                    <div
+                      key={p.deliveryPhotoId}
+                      className="flex flex-col gap-2 p-2 rounded border border-default-200"
+                    >
+                      <img
+                        src={p.deliveryPhotoPath}
+                        alt="Product"
+                        className="w-full h-40 object-cover rounded"
+                      />
+                      {isUpdate && (
+                        <Button
+                          type="button"
+                          color="danger"
+                          radius="none"
+                          variant="flat"
+                          className="w-full font-semibold"
+                          startContent={<Trash2 size={16} />}
+                          onPress={() =>
+                            deleteExistingProductPhoto(p.deliveryPhotoId)
+                          }
+                        >
+                          Remove
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+          {Array.isArray(localProductPreviewUrls) &&
+            localProductPreviewUrls.length > 0 && (
+              <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2">
+                <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-sm text-gray-500">
+                  Product Photos (To Upload):
+                </div>
+
+                <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 w-full xl:w-10/12 p-2">
+                  {localProductPreviewUrls.map((src, idx) => (
+                    <div
+                      key={`${src}_${idx}`}
+                      className="flex flex-col gap-2 p-2 rounded border border-default-200"
+                    >
+                      <img
+                        src={src}
+                        alt="Product pending"
+                        className="w-full h-40 object-cover rounded"
+                      />
+                      <Button
+                        type="button"
+                        color="danger"
+                        radius="none"
+                        variant="flat"
+                        className="w-full font-semibold"
+                        startContent={<Trash2 size={16} />}
+                        onPress={() => removeLocalProductFile(idx)}
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
           {isUpdate && (
             <div className="flex flex-col xl:flex-row items-center justify-end w-full h-fit p-2 gap-2">
@@ -391,6 +530,7 @@ export default function UIDeliveryForm({
                 {isLoadingLocation ? "Getting location..." : "Submit"}
               </Button>
             </div>
+
             <div className="flex items-center justify-center w-full xl:w-2/12 h-full p-2 gap-2">
               <Button
                 type="button"
@@ -414,7 +554,12 @@ export default function UIDeliveryForm({
         scrollBehavior="inside"
       >
         <ModalContent>
-          <ModalHeader className="flex flex-col gap-1">Take Photo</ModalHeader>
+          <ModalHeader className="flex flex-col gap-1">
+            {captureTarget === "invoice"
+              ? "Take Invoice Photo"
+              : "Take Product Photo"}
+          </ModalHeader>
+
           <ModalBody>
             <div className="flex flex-col items-center justify-center w-full gap-4">
               {cameraError && (
@@ -443,6 +588,7 @@ export default function UIDeliveryForm({
               )}
             </div>
           </ModalBody>
+
           <ModalFooter>
             {!capturedImage ? (
               <>
@@ -454,6 +600,7 @@ export default function UIDeliveryForm({
                 >
                   Switch Camera
                 </Button>
+
                 <Button
                   color="primary"
                   onPress={capturePhoto}
@@ -462,6 +609,7 @@ export default function UIDeliveryForm({
                 >
                   Capture
                 </Button>
+
                 <Button
                   color="danger"
                   variant="light"
@@ -481,9 +629,11 @@ export default function UIDeliveryForm({
                 >
                   Retake
                 </Button>
+
                 <Button color="primary" onPress={confirmPhoto}>
                   Confirm (Use on Submit)
                 </Button>
+
                 <Button
                   color="danger"
                   variant="light"

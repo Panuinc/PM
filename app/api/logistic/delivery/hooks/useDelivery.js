@@ -7,6 +7,16 @@ import { useRouter } from "next/navigation";
 function formatDeliveryFromApi(delivery, index) {
   if (!delivery) return null;
 
+  const photos = Array.isArray(delivery.deliveryPhotos)
+    ? delivery.deliveryPhotos
+    : [];
+  const productPhotos = photos
+    .filter((p) => p?.deliveryPhotoType === "Product")
+    .map((p) => ({
+      deliveryPhotoId: p.deliveryPhotoId,
+      deliveryPhotoPath: p.deliveryPhotoPath,
+    }));
+
   return {
     ...delivery,
     deliveryIndex: index != null ? index + 1 : undefined,
@@ -16,6 +26,7 @@ function formatDeliveryFromApi(delivery, index) {
     deliveryUpdatedBy: delivery.updatedByUser
       ? `${delivery.updatedByUser.userFirstName} ${delivery.updatedByUser.userLastName}`
       : "-",
+    deliveryProductPhotos: productPhotos,
   };
 }
 
@@ -132,8 +143,14 @@ export function useSubmitDelivery({
       const method = mode === "create" ? "POST" : "PUT";
 
       try {
-        if (formData?.deliveryFile) {
+        const hasInvoiceFile = !!formData?.deliveryFile;
+        const hasProductFiles =
+          Array.isArray(formData?.deliveryProductFiles) &&
+          formData.deliveryProductFiles.length > 0;
+
+        if (hasInvoiceFile || hasProductFiles) {
           const fd = new FormData();
+
           fd.append(
             "deliveryInvoiceNumber",
             formData.deliveryInvoiceNumber || ""
@@ -144,10 +161,22 @@ export function useSubmitDelivery({
             fd.append("deliveryStatus", formData.deliveryStatus || "");
 
           fd.append(byField, currentDeliveryId || "");
-          fd.append("file", formData.deliveryFile);
+
+          if (hasInvoiceFile) fd.append("file", formData.deliveryFile);
 
           if (formData.deliveryPicture)
             fd.append("deliveryPicture", formData.deliveryPicture);
+
+          for (const f of formData.deliveryProductFiles || []) {
+            if (f) fd.append("productFiles", f);
+          }
+
+          if (mode === "update") {
+            const ids = Array.isArray(formData.deliveryDeletePhotoIds)
+              ? formData.deliveryDeletePhotoIds
+              : [];
+            fd.append("deliveryDeletePhotoIds", JSON.stringify(ids));
+          }
 
           const res = await fetch(url, {
             method,

@@ -130,26 +130,39 @@ export async function createDelivery(request) {
       const deliveryLocation = String(formData.get("deliveryLocation") || "");
       const deliveryCreatedBy = String(formData.get("deliveryCreatedBy") || "");
 
-      const file = formData.get("file");
-      if (!file) {
-        throw {
-          status: 422,
-          message: "Please provide delivery picture file",
-        };
+      const invoiceFile = formData.get("file");
+      if (!invoiceFile) {
+        throw { status: 422, message: "Please provide delivery picture file" };
       }
 
-      const baseName = sanitizeBaseName(deliveryInvoiceNumber);
+      const invoiceFolder = sanitizeBaseName(deliveryInvoiceNumber);
+      const folder = `delivery/${invoiceFolder}`;
+
       const deliveryPicture = await validateAndSaveImageFile(
-        file,
-        "delivery",
-        baseName
+        invoiceFile,
+        folder,
+        `invoice_${invoiceFolder}`
       );
+
+      const productFiles = formData.getAll("productFiles").filter(Boolean);
+      const productPictures = [];
+
+      for (let i = 0; i < productFiles.length; i++) {
+        const f = productFiles[i];
+        const p = await validateAndSaveImageFile(
+          f,
+          folder,
+          `product_${String(i + 1).padStart(3, "0")}`
+        );
+        if (p) productPictures.push(p);
+      }
 
       const delivery = await CreateDeliveryUseCase({
         deliveryInvoiceNumber,
         deliveryLocation,
         deliveryPicture,
         deliveryCreatedBy,
+        deliveryProductPictures: productPictures,
       });
 
       return NextResponse.json(
@@ -189,7 +202,10 @@ export async function updateDelivery(request, deliveryId) {
       const deliveryStatus = String(formData.get("deliveryStatus") || "");
       const deliveryUpdatedBy = String(formData.get("deliveryUpdatedBy") || "");
 
-      const file = formData.get("file");
+      const invoiceFile = formData.get("file");
+
+      const deletePhotoIdsRaw = formData.get("deliveryDeletePhotoIds");
+      const deliveryDeletePhotoIds = parseJsonSafe(deletePhotoIdsRaw, []);
 
       let deliveryPicture = String(formData.get("deliveryPicture") || "");
       if (!deliveryPicture) {
@@ -197,13 +213,30 @@ export async function updateDelivery(request, deliveryId) {
         deliveryPicture = existing?.deliveryPicture || "";
       }
 
-      if (file) {
-        const baseName = sanitizeBaseName(deliveryInvoiceNumber || deliveryId);
+      const invoiceFolder = sanitizeBaseName(
+        deliveryInvoiceNumber || deliveryId
+      );
+      const folder = `delivery/${invoiceFolder}`;
+
+      if (invoiceFile) {
         deliveryPicture = await validateAndSaveImageFile(
-          file,
-          "delivery",
-          baseName
+          invoiceFile,
+          folder,
+          `invoice_${invoiceFolder}`
         );
+      }
+
+      const productFiles = formData.getAll("productFiles").filter(Boolean);
+      const productPictures = [];
+
+      for (let i = 0; i < productFiles.length; i++) {
+        const f = productFiles[i];
+        const p = await validateAndSaveImageFile(
+          f,
+          folder,
+          `product_${Date.now()}_${String(i + 1).padStart(3, "0")}`
+        );
+        if (p) productPictures.push(p);
       }
 
       const delivery = await UpdateDeliveryUseCase({
@@ -213,6 +246,8 @@ export async function updateDelivery(request, deliveryId) {
         deliveryPicture,
         deliveryStatus,
         deliveryUpdatedBy,
+        deliveryProductPictures: productPictures,
+        deliveryDeletePhotoIds,
       });
 
       return NextResponse.json({

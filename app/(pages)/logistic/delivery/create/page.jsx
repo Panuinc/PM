@@ -30,6 +30,10 @@ export default function DeliveryCreate() {
       deliveryLocation: "",
       deliveryPicture: "",
       deliveryFile: null,
+
+      deliveryProductFiles: [],
+      deliveryProductPhotos: [],
+      deliveryDeletePhotoIds: [],
     },
     submitDelivery
   );

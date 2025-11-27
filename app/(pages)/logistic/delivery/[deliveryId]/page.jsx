@@ -41,6 +41,11 @@ export default function DeliveryUpdate() {
       deliveryPicture: "",
       deliveryFile: null,
       deliveryStatus: "",
+
+      deliveryProductFiles: [],
+
+      deliveryProductPhotos: [],
+      deliveryDeletePhotoIds: [],
     },
     submitDelivery
   );
@@ -53,6 +58,12 @@ export default function DeliveryUpdate() {
         deliveryPicture: delivery.deliveryPicture || "",
         deliveryFile: null,
         deliveryStatus: delivery.deliveryStatus || "",
+
+        deliveryProductFiles: [],
+        deliveryProductPhotos: Array.isArray(delivery.deliveryProductPhotos)
+          ? delivery.deliveryProductPhotos
+          : [],
+        deliveryDeletePhotoIds: [],
       });
     }
   }, [delivery]);

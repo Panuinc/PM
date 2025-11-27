@@ -13,6 +13,9 @@ export const DeliveryRepository = {
         updatedByUser: {
           select: { userId: true, userFirstName: true, userLastName: true },
         },
+        deliveryPhotos: {
+          orderBy: { deliveryPhotoCreatedAt: "asc" },
+        },
       },
     });
   },
@@ -30,6 +33,9 @@ export const DeliveryRepository = {
         },
         updatedByUser: {
           select: { userId: true, userFirstName: true, userLastName: true },
+        },
+        deliveryPhotos: {
+          orderBy: { deliveryPhotoCreatedAt: "asc" },
         },
       },
     });
@@ -50,6 +56,7 @@ export const DeliveryRepository = {
         createdByUser: {
           select: { userId: true, userFirstName: true, userLastName: true },
         },
+        deliveryPhotos: { orderBy: { deliveryPhotoCreatedAt: "asc" } },
       },
     });
   },
@@ -67,6 +74,22 @@ export const DeliveryRepository = {
         updatedByUser: {
           select: { userId: true, userFirstName: true, userLastName: true },
         },
+        deliveryPhotos: { orderBy: { deliveryPhotoCreatedAt: "asc" } },
+      },
+    });
+  },
+
+  createPhoto: async (data) => {
+    return prisma.deliveryPhoto.create({ data });
+  },
+
+  deletePhotosByIds: async (deliveryId, photoIds) => {
+    if (!Array.isArray(photoIds) || photoIds.length === 0) return { count: 0 };
+
+    return prisma.deliveryPhoto.deleteMany({
+      where: {
+        deliveryPhotoDeliveryId: deliveryId,
+        deliveryPhotoId: { in: photoIds },
       },
     });
   },

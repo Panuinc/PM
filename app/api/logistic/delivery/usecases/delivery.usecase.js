@@ -71,19 +71,30 @@ export async function CreateDeliveryUseCase(data) {
     };
   }
 
+  const now = getLocalNow();
+  const { deliveryProductPictures = [], ...rest } = parsed.data;
+
   try {
     const delivery = await DeliveryService.create({
-      ...parsed.data,
+      ...rest,
       deliveryInvoiceNumber: normalizedDeliveryInvoiceNumber,
-      deliveryCreatedAt: getLocalNow(),
+      deliveryCreatedAt: now,
     });
+
+    await DeliveryService.addProductPhotos(
+      delivery.deliveryId,
+      deliveryProductPictures,
+      parsed.data.deliveryCreatedBy,
+      now
+    );
+
+    const full = await DeliveryService.getById(delivery.deliveryId);
 
     logger.info({
       message: "CreateDeliveryUseCase success",
       deliveryId: delivery.deliveryId,
     });
-
-    return delivery;
+    return full;
   } catch (error) {
     if (error && typeof error === "object" && error.code === "P2002") {
       logger.warn({
@@ -167,26 +178,48 @@ export async function UpdateDeliveryUseCase(data) {
     }
   }
 
-  const { deliveryId, deliveryReturns, ...rest } = parsed.data;
+  const now = getLocalNow();
+  const {
+    deliveryId,
+    deliveryProductPictures = [],
+    deliveryDeletePhotoIds = [],
+    ...rest
+  } = parsed.data;
 
   const updateData = {
     ...rest,
     deliveryInvoiceNumber: normalizedDeliveryInvoiceNumber,
-    deliveryUpdatedAt: getLocalNow(),
+    deliveryUpdatedAt: now,
   };
 
   try {
-    const updatedDelivery = await DeliveryService.update(
+    if (
+      Array.isArray(deliveryDeletePhotoIds) &&
+      deliveryDeletePhotoIds.length > 0
+    ) {
+      await DeliveryService.deleteProductPhotosByIds(
+        deliveryId,
+        deliveryDeletePhotoIds
+      );
+    }
+
+    await DeliveryService.update(deliveryId, updateData);
+
+    await DeliveryService.addProductPhotos(
       deliveryId,
-      updateData
+      deliveryProductPictures,
+      parsed.data.deliveryUpdatedBy,
+      now
     );
+
+    const full = await DeliveryService.getById(deliveryId);
 
     logger.info({
       message: "UpdateDeliveryUseCase success",
       deliveryId,
     });
 
-    return updatedDelivery;
+    return full;
   } catch (error) {
     if (error && typeof error === "object" && error.code === "P2002") {
       logger.warn({

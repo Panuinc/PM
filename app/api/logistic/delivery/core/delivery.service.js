@@ -24,7 +24,6 @@ export class DeliveryService {
         message: "DeliveryService.create called without data",
       };
     }
-
     const deliveryData = {
       ...data,
     };
@@ -39,7 +38,27 @@ export class DeliveryService {
         message: "DeliveryService.update called without data",
       };
     }
-
     return DeliveryRepository.update(deliveryId, data);
+  }
+
+  static async addProductPhotos(deliveryId, photoPaths, createdBy, createdAt) {
+    if (!Array.isArray(photoPaths) || photoPaths.length === 0) return;
+
+    for (let i = 0; i < photoPaths.length; i++) {
+      const path = String(photoPaths[i] || "").trim();
+      if (!path) continue;
+
+      await DeliveryRepository.createPhoto({
+        deliveryPhotoDeliveryId: deliveryId,
+        deliveryPhotoType: "Product",
+        deliveryPhotoPath: path,
+        deliveryPhotoCreatedBy: createdBy || null,
+        deliveryPhotoCreatedAt: createdAt,
+      });
+    }
+  }
+
+  static async deleteProductPhotosByIds(deliveryId, photoIds) {
+    return DeliveryRepository.deletePhotosByIds(deliveryId, photoIds);
   }
 }
