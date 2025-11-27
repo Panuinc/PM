@@ -61,4 +61,25 @@ export class DeliveryService {
   static async deleteProductPhotosByIds(deliveryId, photoIds) {
     return DeliveryRepository.deletePhotosByIds(deliveryId, photoIds);
   }
+
+  static async delete(deliveryId) {
+    const photos = await prisma.deliveryPhoto.findMany({
+      where: { deliveryPhotoDeliveryId: deliveryId },
+      select: { deliveryPhotoPath: true },
+    });
+
+    await prisma.deliveryPhoto.deleteMany({
+      where: { deliveryPhotoDeliveryId: deliveryId },
+    });
+
+    await prisma.delivery.delete({
+      where: { deliveryId },
+    });
+
+    for (const p of photos) {
+      if (p.deliveryPhotoPath) await deleteFile(p.deliveryPhotoPath);
+    }
+
+    return true;
+  }
 }

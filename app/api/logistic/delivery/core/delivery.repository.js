@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { deleteFile } from "@/lib/fileStore";
 
 export const DeliveryRepository = {
   getAll: async (skip = 0, take = 10) => {
@@ -86,11 +87,27 @@ export const DeliveryRepository = {
   deletePhotosByIds: async (deliveryId, photoIds) => {
     if (!Array.isArray(photoIds) || photoIds.length === 0) return { count: 0 };
 
-    return prisma.deliveryPhoto.deleteMany({
+    const photos = await prisma.deliveryPhoto.findMany({
+      where: {
+        deliveryPhotoDeliveryId: deliveryId,
+        deliveryPhotoId: { in: photoIds },
+      },
+      select: { deliveryPhotoPath: true },
+    });
+
+    const result = await prisma.deliveryPhoto.deleteMany({
       where: {
         deliveryPhotoDeliveryId: deliveryId,
         deliveryPhotoId: { in: photoIds },
       },
     });
+
+    for (const p of photos) {
+      if (p.deliveryPhotoPath) {
+        await deleteFile(p.deliveryPhotoPath);
+      }
+    }
+
+    return result;
   },
 };
