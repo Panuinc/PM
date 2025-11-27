@@ -6,7 +6,8 @@ import UILoading from "@/components/UILoading";
 
 const columns = [
   { name: "ID", uid: "deliveryIndex", sortable: true },
-  { name: "DEPARTMENT NAME", uid: "deliveryName", sortable: true },
+  { name: "INVOICE NUMBER", uid: "deliveryInvoiceNumber", sortable: true },
+  { name: "LOCATION", uid: "deliveryLocation", sortable: true },
   { name: "STATUS", uid: "deliveryStatus", sortable: true },
   { name: "CREATED BY", uid: "deliveryCreatedBy", sortable: true },
   { name: "CREATED AT", uid: "deliveryCreatedAt", sortable: true },
@@ -16,13 +17,13 @@ const columns = [
 ];
 
 const statusOptions = [
-  { name: "Enable", uid: "Enable" },
-  { name: "Disable", uid: "Disable" },
+  { name: "Pending Approve", uid: "PendingApprove" },
+  { name: "Approved", uid: "Approved" },
 ];
 
 const statusColorMap = {
-  Enable: "success",
-  Disable: "danger",
+  PendingApprove: "warning",
+  Approved: "success",
 };
 
 export default function UIDeliveryList({
@@ -33,11 +34,11 @@ export default function UIDeliveryList({
   onEdit,
 }) {
   const total = Deliverys.length;
-  const enabled = Deliverys.filter(
-    (delivery) => delivery.deliveryStatus === "Enable"
+  const pendingApprove = Deliverys.filter(
+    (delivery) => delivery.deliveryStatus === "PendingApprove"
   ).length;
-  const disabled = Deliverys.filter(
-    (delivery) => delivery.deliveryStatus === "Disable"
+  const approved = Deliverys.filter(
+    (delivery) => delivery.deliveryStatus === "Approved"
   ).length;
 
   const normalized = Array.isArray(Deliverys)
@@ -75,18 +76,18 @@ export default function UIDeliveryList({
         </div>
         <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2 border-1">
           <div className="flex items-center justify-start w-full h-full p-2 gap-2">
-            Enabled Deliverys
+            Pending Approve
           </div>
-          <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-success text-lg">
-            {enabled}
+          <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-warning text-lg">
+            {pendingApprove}
           </div>
         </div>
         <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2 border-1">
           <div className="flex items-center justify-start w-full h-full p-2 gap-2">
-            Disabled Deliverys
+            Approved
           </div>
-          <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-danger text-lg">
-            {disabled}
+          <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-success text-lg">
+            {approved}
           </div>
         </div>
       </div>
@@ -102,7 +103,7 @@ export default function UIDeliveryList({
             data={normalized}
             statusOptions={statusOptions}
             statusColorMap={statusColorMap}
-            searchPlaceholder="Search by delivery name..."
+            searchPlaceholder="Search by invoice number..."
             emptyContent="No deliverys found"
             itemName="deliverys"
             onAddNew={onAddNew}

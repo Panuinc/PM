@@ -26,7 +26,10 @@ export default function DeliveryCreate() {
 
   const formHandler = useFormHandler(
     {
-      deliveryName: "",
+      deliveryInvoiceNumber: "",
+      deliveryLocation: "",
+      deliveryPicture: "",
+      deliveryReturns: [],
     },
     submitDelivery
   );

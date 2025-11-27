@@ -167,14 +167,20 @@ export async function UpdateDeliveryUseCase(data) {
     }
   }
 
-  const { deliveryId, ...rest } = parsed.data;
+  const { deliveryId, deliveryReturns, ...rest } = parsed.data;
+
+  const updateData = {
+    ...rest,
+    deliveryInvoiceNumber: normalizedDeliveryInvoiceNumber,
+    deliveryUpdatedAt: getLocalNow(),
+    deliveryReturns: deliveryReturns || [],
+  };
 
   try {
-    const updatedDelivery = await DeliveryService.update(deliveryId, {
-      ...rest,
-      deliveryInvoiceNumber: normalizedDeliveryInvoiceNumber,
-      deliveryUpdatedAt: getLocalNow(),
-    });
+    const updatedDelivery = await DeliveryService.update(
+      deliveryId,
+      updateData
+    );
 
     logger.info({
       message: "UpdateDeliveryUseCase success",
@@ -195,7 +201,6 @@ export async function UpdateDeliveryUseCase(data) {
         message: `deliveryInvoiceNumber '${normalizedDeliveryInvoiceNumber}' already exists`,
       };
     }
-
     logger.error({
       message: "UpdateDeliveryUseCase error",
       error,

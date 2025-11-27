@@ -15,6 +15,10 @@ export const deliveryReturnSchema = z.object({
   deliveryReturnRemark: preprocessStringOptional(),
 });
 
+export const deliveryReturnWithIdSchema = deliveryReturnSchema.extend({
+  deliveryReturnId: preprocessStringOptional(),
+});
+
 export const deliveryPostSchema = z.object({
   deliveryInvoiceNumber: preprocessString(
     "Please provide deliveryInvoiceNumber"
@@ -37,13 +41,7 @@ export const deliveryPutSchema = z.object({
     "Please provide deliveryStatus"
   ),
   deliveryUpdatedBy: preprocessString("Please provide the updater ID"),
-  deliveryReturns: z
-    .array(
-      deliveryReturnSchema.extend({
-        deliveryReturnId: preprocessStringOptional(),
-      })
-    )
-    .optional(),
+  deliveryReturns: z.array(deliveryReturnWithIdSchema).optional(),
 });
 
 export const formatDeliveryData = (deliverys) => {

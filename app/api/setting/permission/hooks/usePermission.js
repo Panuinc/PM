@@ -7,15 +7,9 @@ import { useRouter } from "next/navigation";
 function formatPermissionFromApi(permission, index) {
   if (!permission) return null;
 
-  const fullName = `${permission.userFirstName ?? ""} ${
-    permission.userLastName ?? ""
-  }`.trim();
-
   return {
     ...permission,
     permissionIndex: index != null ? index + 1 : undefined,
-    permissionFullName: fullName || "-",
-    permissionStatus: permission.permissionStatus || "-",
     permissionCreatedBy: permission.createdByUser
       ? `${permission.createdByUser.userFirstName} ${permission.createdByUser.userLastName}`
       : "-",

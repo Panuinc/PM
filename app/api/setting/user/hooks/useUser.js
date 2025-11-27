@@ -7,15 +7,9 @@ import { useRouter } from "next/navigation";
 function formatUserFromApi(user, index) {
   if (!user) return null;
 
-  const fullName = `${user.userFirstName ?? ""} ${
-    user.userLastName ?? ""
-  }`.trim();
-
   return {
     ...user,
     userIndex: index != null ? index + 1 : undefined,
-    userFullName: fullName || "-",
-    userStatus: user.userStatus || "-",
     userCreatedBy: user.createdByUser
       ? `${user.createdByUser.userFirstName} ${user.createdByUser.userLastName}`
       : "-",

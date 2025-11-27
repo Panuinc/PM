@@ -7,22 +7,15 @@ import { useRouter } from "next/navigation";
 function formatDeliveryFromApi(delivery, index) {
   if (!delivery) return null;
 
-  const fullName = `${delivery.userFirstName ?? ""} ${
-    delivery.userLastName ?? ""
-  }`.trim();
-
   return {
     ...delivery,
     deliveryIndex: index != null ? index + 1 : undefined,
-    deliveryFullName: fullName || "-",
-    deliveryStatus: delivery.deliveryStatus || "-",
     deliveryCreatedBy: delivery.createdByUser
       ? `${delivery.createdByUser.userFirstName} ${delivery.createdByUser.userLastName}`
       : "-",
     deliveryUpdatedBy: delivery.updatedByUser
       ? `${delivery.updatedByUser.userFirstName} ${delivery.updatedByUser.userLastName}`
       : "-",
-
     deliveryReturns: delivery.deliveryReturn || [],
   };
 }

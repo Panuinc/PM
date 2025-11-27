@@ -7,15 +7,9 @@ import { useRouter } from "next/navigation";
 function formatDepartmentFromApi(department, index) {
   if (!department) return null;
 
-  const fullName = `${department.userFirstName ?? ""} ${
-    department.userLastName ?? ""
-  }`.trim();
-
   return {
     ...department,
     departmentIndex: index != null ? index + 1 : undefined,
-    departmentFullName: fullName || "-",
-    departmentStatus: department.departmentStatus || "-",
     departmentCreatedBy: department.createdByUser
       ? `${department.createdByUser.userFirstName} ${department.createdByUser.userLastName}`
       : "-",

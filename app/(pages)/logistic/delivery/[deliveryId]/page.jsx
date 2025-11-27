@@ -36,14 +36,25 @@ export default function DeliveryUpdate() {
 
   const formHandler = useFormHandler(
     {
-      deliveryName: "",
+      deliveryInvoiceNumber: "",
+      deliveryLocation: "",
+      deliveryPicture: "",
       deliveryStatus: "",
+      deliveryReturns: [],
     },
     submitDelivery
   );
 
   useEffect(() => {
-    if (delivery) formHandler.setFormData(delivery);
+    if (delivery) {
+      formHandler.setFormData({
+        deliveryInvoiceNumber: delivery.deliveryInvoiceNumber || "",
+        deliveryLocation: delivery.deliveryLocation || "",
+        deliveryPicture: delivery.deliveryPicture || "",
+        deliveryStatus: delivery.deliveryStatus || "",
+        deliveryReturns: delivery.deliveryReturns || [],
+      });
+    }
   }, [delivery]);
 
   if (deliveryLoading) return <UILoading />;
