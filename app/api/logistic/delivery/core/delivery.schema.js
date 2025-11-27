@@ -19,10 +19,9 @@ export const deliveryPostSchema = z.object({
   deliveryInvoiceNumber: preprocessString(
     "Please provide deliveryInvoiceNumber"
   ),
-  deliveryCreatedBy: preprocessString("Please provide the creator ID"),
   deliveryLocation: preprocessString("Please provide deliveryLocation"),
   deliveryPicture: preprocessString("Please provide deliveryPicture"),
-
+  deliveryCreatedBy: preprocessString("Please provide the creator ID"),
   deliveryReturns: z.array(deliveryReturnSchema).optional(),
 });
 
@@ -31,15 +30,13 @@ export const deliveryPutSchema = z.object({
   deliveryInvoiceNumber: preprocessString(
     "Please provide deliveryInvoiceNumber"
   ),
+  deliveryLocation: preprocessString("Please provide deliveryLocation"),
+  deliveryPicture: preprocessString("Please provide deliveryPicture"),
   deliveryStatus: preprocessEnum(
     ["PendingApprove", "Approved"],
     "Please provide deliveryStatus"
   ),
   deliveryUpdatedBy: preprocessString("Please provide the updater ID"),
-
-  deliveryLocation: preprocessString("Please provide deliveryLocation"),
-  deliveryPicture: preprocessString("Please provide deliveryPicture"),
-
   deliveryReturns: z
     .array(
       deliveryReturnSchema.extend({
