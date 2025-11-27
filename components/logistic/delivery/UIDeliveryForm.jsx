@@ -38,7 +38,13 @@ export default function UIDeliveryForm({
   const [capturedImage, setCapturedImage] = useState(null);
   const [cameraError, setCameraError] = useState("");
   const [facingMode, setFacingMode] = useState("environment");
-  const [isUploading, setIsUploading] = useState(false);
+  const [localPreviewUrl, setLocalPreviewUrl] = useState("");
+
+  useEffect(() => {
+    return () => {
+      if (localPreviewUrl) URL.revokeObjectURL(localPreviewUrl);
+    };
+  }, [localPreviewUrl]);
 
   useEffect(() => {
     if (!isOpen && stream) {
@@ -183,6 +189,7 @@ export default function UIDeliveryForm({
 
   const retakePhoto = () => {
     setCapturedImage(null);
+    setCameraError("");
     startCamera();
   };
 
@@ -195,37 +202,26 @@ export default function UIDeliveryForm({
       return;
     }
 
-    setIsUploading(true);
-
     try {
       const response = await fetch(capturedImage);
       const blob = await response.blob();
 
-      const formDataUpload = new FormData();
       const safeInvoiceNumber = invoiceNumber.replace(/[^a-zA-Z0-9-_]/g, "_");
       const fileName = `${safeInvoiceNumber}.jpg`;
-      formDataUpload.append("file", blob, fileName);
-      formDataUpload.append("typeFolder", "delivery");
-      formDataUpload.append("baseName", safeInvoiceNumber);
 
-      const uploadResponse = await fetch("/api/logistic/delivery/upload", {
-        method: "POST",
-        body: formDataUpload,
-      });
+      const file = new File([blob], fileName, { type: "image/jpeg" });
 
-      if (!uploadResponse.ok) {
-        throw new Error("Upload failed");
-      }
+      if (localPreviewUrl) URL.revokeObjectURL(localPreviewUrl);
 
-      const result = await uploadResponse.json();
+      const previewUrl = URL.createObjectURL(file);
+      setLocalPreviewUrl(previewUrl);
 
-      handleChange("deliveryPicture")(result.filePath || result.url);
+      handleChange("deliveryFile")(file);
+      handleChange("deliveryPicture")(previewUrl);
 
       onClose();
-    } catch (error) {
-      setCameraError("Failed to upload photo. Please try again.");
-    } finally {
-      setIsUploading(false);
+    } catch {
+      setCameraError("Failed to prepare photo. Please try again.");
     }
   };
 
@@ -335,23 +331,6 @@ export default function UIDeliveryForm({
           </div>
 
           <div className="flex flex-col xl:flex-row items-end justify-center w-full h-fit p-2 gap-2">
-            {/* <div className="flex items-center justify-center w-full h-full p-2 gap-2">
-              <Input
-                name="deliveryPicture"
-                type="text"
-                label="Picture URL"
-                color="default"
-                variant="faded"
-                radius="none"
-                labelPlacement="outside"
-                placeholder="Take a photo or enter URL"
-                isRequired
-                value={formData.deliveryPicture || ""}
-                onChange={handleChange("deliveryPicture")}
-                isInvalid={!!errors.deliveryPicture}
-                errorMessage={errors.deliveryPicture}
-              />
-            </div> */}
             <div className="flex items-end justify-center w-full xl:w-2/12 h-full p-2 gap-2">
               <Button
                 type="button"
@@ -490,7 +469,7 @@ export default function UIDeliveryForm({
                             handleReturnChange(
                               index,
                               "deliveryReturnQuantity",
-                              parseInt(e.target.value) || ""
+                              parseInt(e.target.value, 10) || ""
                             )
                           }
                         />
@@ -630,12 +609,8 @@ export default function UIDeliveryForm({
                 >
                   Retake
                 </Button>
-                <Button
-                  color="primary"
-                  onPress={confirmPhoto}
-                  isLoading={isUploading}
-                >
-                  {isUploading ? "Uploading..." : "Confirm & Upload"}
+                <Button color="primary" onPress={confirmPhoto}>
+                  Confirm (Use on Submit)
                 </Button>
                 <Button
                   color="danger"

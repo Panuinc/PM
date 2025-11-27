@@ -128,11 +128,6 @@ export function useSubmitDelivery({
       const byField =
         mode === "create" ? "deliveryCreatedBy" : "deliveryUpdatedBy";
 
-      const payload = {
-        ...formData,
-        [byField]: currentDeliveryId,
-      };
-
       const url =
         mode === "create"
           ? "/api/logistic/delivery"
@@ -141,6 +136,58 @@ export function useSubmitDelivery({
       const method = mode === "create" ? "POST" : "PUT";
 
       try {
+        if (formData?.deliveryFile) {
+          const fd = new FormData();
+
+          fd.append(
+            "deliveryInvoiceNumber",
+            formData.deliveryInvoiceNumber || ""
+          );
+          fd.append("deliveryLocation", formData.deliveryLocation || "");
+
+          if (mode === "update") {
+            fd.append("deliveryStatus", formData.deliveryStatus || "");
+          }
+
+          fd.append(byField, currentDeliveryId || "");
+          fd.append(
+            "deliveryReturns",
+            JSON.stringify(formData.deliveryReturns || [])
+          );
+          fd.append("file", formData.deliveryFile);
+
+          if (formData.deliveryPicture) {
+            fd.append("deliveryPicture", formData.deliveryPicture);
+          }
+
+          const res = await fetch(url, {
+            method,
+            credentials: "include",
+            body: fd,
+          });
+
+          const result = await res.json().catch(() => ({}));
+
+          if (res.ok) {
+            showToast("success", result.message || "Success");
+            setTimeout(() => router.push("/logistic/delivery"), 1500);
+          } else {
+            if (result.details && typeof result.details === "object") {
+              setErrors(result.details);
+            } else {
+              setErrors({});
+            }
+            showToast("danger", result.error || "Failed to submit Delivery.");
+          }
+
+          return;
+        }
+
+        const payload = {
+          ...formData,
+          [byField]: currentDeliveryId,
+        };
+
         const res = await fetch(url, {
           method,
           headers: {

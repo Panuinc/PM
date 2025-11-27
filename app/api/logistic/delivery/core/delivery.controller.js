@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { saveUploadedFile } from "@/lib/fileStore";
 import {
   GetAllDeliveryUseCase,
   GetDeliveryByIdUseCase,
@@ -47,6 +48,44 @@ function buildErrorResponse(error) {
   return NextResponse.json(body, { status: normalized.status });
 }
 
+function parseJsonSafe(value, fallbackValue) {
+  if (value == null || value === "") return fallbackValue;
+  try {
+    return JSON.parse(String(value));
+  } catch {
+    return fallbackValue;
+  }
+}
+
+function sanitizeBaseName(input) {
+  const v = String(input || "").trim();
+  if (!v) return `file_${Date.now()}`;
+  return v.replace(/[^a-zA-Z0-9-_]/g, "_");
+}
+
+async function validateAndSaveImageFile(file, typeFolder, baseName) {
+  if (!file) return null;
+
+  const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+  if (!allowedTypes.includes(file.type)) {
+    throw {
+      status: 400,
+      message: "Invalid file type. Only images are allowed.",
+    };
+  }
+
+  const maxSize = 10 * 1024 * 1024;
+  if (file.size > maxSize) {
+    throw {
+      status: 400,
+      message: "File size exceeds 10MB limit.",
+    };
+  }
+
+  const filePath = await saveUploadedFile(file, typeFolder, baseName);
+  return `/${filePath}`;
+}
+
 export async function getAllDelivery(request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -81,6 +120,54 @@ export async function getDeliveryById(request, deliveryId) {
 
 export async function createDelivery(request) {
   try {
+    const contentType = request.headers.get("content-type") || "";
+
+    if (contentType.includes("multipart/form-data")) {
+      const formData = await request.formData();
+
+      const deliveryInvoiceNumber = String(
+        formData.get("deliveryInvoiceNumber") || ""
+      );
+      const deliveryLocation = String(formData.get("deliveryLocation") || "");
+      const deliveryCreatedBy = String(formData.get("deliveryCreatedBy") || "");
+
+      const deliveryReturns = parseJsonSafe(
+        formData.get("deliveryReturns"),
+        undefined
+      );
+
+      const file = formData.get("file");
+      if (!file) {
+        throw {
+          status: 422,
+          message: "Please provide delivery picture file",
+        };
+      }
+
+      const baseName = sanitizeBaseName(deliveryInvoiceNumber);
+      const deliveryPicture = await validateAndSaveImageFile(
+        file,
+        "delivery",
+        baseName
+      );
+
+      const delivery = await CreateDeliveryUseCase({
+        deliveryInvoiceNumber,
+        deliveryLocation,
+        deliveryPicture,
+        deliveryCreatedBy,
+        deliveryReturns,
+      });
+
+      return NextResponse.json(
+        {
+          message: "Created",
+          delivery: formatDeliveryData([delivery])[0],
+        },
+        { status: 201 }
+      );
+    }
+
     const data = await request.json();
     const delivery = await CreateDeliveryUseCase(data);
     return NextResponse.json(
@@ -97,6 +184,56 @@ export async function createDelivery(request) {
 
 export async function updateDelivery(request, deliveryId) {
   try {
+    const contentType = request.headers.get("content-type") || "";
+
+    if (contentType.includes("multipart/form-data")) {
+      const formData = await request.formData();
+
+      const deliveryInvoiceNumber = String(
+        formData.get("deliveryInvoiceNumber") || ""
+      );
+      const deliveryLocation = String(formData.get("deliveryLocation") || "");
+      const deliveryStatus = String(formData.get("deliveryStatus") || "");
+      const deliveryUpdatedBy = String(formData.get("deliveryUpdatedBy") || "");
+
+      const deliveryReturns = parseJsonSafe(
+        formData.get("deliveryReturns"),
+        undefined
+      );
+
+      const file = formData.get("file");
+
+      let deliveryPicture = String(formData.get("deliveryPicture") || "");
+      if (!deliveryPicture) {
+        const existing = await GetDeliveryByIdUseCase(deliveryId);
+        deliveryPicture = existing?.deliveryPicture || "";
+      }
+
+      if (file) {
+        const baseName = sanitizeBaseName(deliveryInvoiceNumber || deliveryId);
+        deliveryPicture = await validateAndSaveImageFile(
+          file,
+          "delivery",
+          baseName
+        );
+      }
+
+      const delivery = await UpdateDeliveryUseCase({
+        deliveryId,
+        deliveryInvoiceNumber,
+        deliveryLocation,
+        deliveryPicture,
+        deliveryStatus,
+        deliveryUpdatedBy,
+        deliveryReturns,
+      });
+
+      return NextResponse.json({
+        message: "Updated",
+        delivery: formatDeliveryData([delivery])[0],
+      });
+    }
+
     const data = await request.json();
     const delivery = await UpdateDeliveryUseCase({ ...data, deliveryId });
     return NextResponse.json({

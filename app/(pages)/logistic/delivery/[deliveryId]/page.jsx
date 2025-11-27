@@ -39,6 +39,7 @@ export default function DeliveryUpdate() {
       deliveryInvoiceNumber: "",
       deliveryLocation: "",
       deliveryPicture: "",
+      deliveryFile: null,
       deliveryStatus: "",
       deliveryReturns: [],
     },
@@ -51,6 +52,7 @@ export default function DeliveryUpdate() {
         deliveryInvoiceNumber: delivery.deliveryInvoiceNumber || "",
         deliveryLocation: delivery.deliveryLocation || "",
         deliveryPicture: delivery.deliveryPicture || "",
+        deliveryFile: null,
         deliveryStatus: delivery.deliveryStatus || "",
         deliveryReturns: delivery.deliveryReturns || [],
       });

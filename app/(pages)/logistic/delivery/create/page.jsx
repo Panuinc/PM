@@ -29,6 +29,7 @@ export default function DeliveryCreate() {
       deliveryInvoiceNumber: "",
       deliveryLocation: "",
       deliveryPicture: "",
+      deliveryFile: null,
       deliveryReturns: [],
     },
     submitDelivery
