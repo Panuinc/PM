@@ -1,6 +1,6 @@
 "use client";
 import UIHeader from "@/components/UIHeader";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   Button,
   Input,
@@ -14,7 +14,7 @@ import {
   useDisclosure,
   Image,
 } from "@heroui/react";
-import { MapPin, Camera, X, RotateCcw } from "lucide-react";
+import { Camera, X, RotateCcw } from "lucide-react";
 
 export default function UIDeliveryForm({
   headerTopic,
@@ -34,8 +34,11 @@ export default function UIDeliveryForm({
   const [stream, setStream] = useState(null);
   const [capturedImage, setCapturedImage] = useState(null);
   const [cameraError, setCameraError] = useState("");
+
   const [facingMode, setFacingMode] = useState("environment");
   const [localPreviewUrl, setLocalPreviewUrl] = useState("");
+
+  const pendingResubmitRef = useRef(false);
 
   useEffect(() => {
     return () => {
@@ -50,57 +53,97 @@ export default function UIDeliveryForm({
     }
   }, [isOpen, stream]);
 
-  const getCurrentLocation = () => {
-    setIsLoadingLocation(true);
-    setLocationError("");
+  const getCurrentLocationAsync = useCallback(() => {
+    return new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        reject(new Error("Geolocation is not supported by your browser"));
+        return;
+      }
 
-    if (!navigator.geolocation) {
-      setLocationError("Geolocation is not supported by your browser");
-      setIsLoadingLocation(false);
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+
+          try {
+            const response = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`,
+              { headers: { "Accept-Language": "th,en" } }
+            );
+            const data = await response.json();
+
+            const locationText = data?.display_name
+              ? data.display_name
+              : `${latitude}, ${longitude}`;
+
+            resolve(locationText);
+          } catch {
+            resolve(`${latitude}, ${longitude}`);
+          }
+        },
+        (error) => {
+          let errorMessage = "Unable to retrieve your location";
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              errorMessage =
+                "Location permission denied. Please enable location access.";
+              break;
+            case error.POSITION_UNAVAILABLE:
+              errorMessage = "Location information is unavailable.";
+              break;
+            case error.TIMEOUT:
+              errorMessage = "Location request timed out.";
+              break;
+          }
+          reject(new Error(errorMessage));
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      );
+    });
+  }, []);
+
+  useEffect(() => {
+    const loc = String(formData?.deliveryLocation || "").trim();
+    if (!pendingResubmitRef.current) return;
+    if (!loc) return;
+
+    pendingResubmitRef.current = false;
+
+    const formEl = formRef?.current;
+    if (!formEl) return;
+
+    if (typeof formEl.requestSubmit === "function") {
+      formEl.requestSubmit();
       return;
     }
 
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const { latitude, longitude } = position.coords;
+    const evt = new Event("submit", { bubbles: true, cancelable: true });
+    formEl.dispatchEvent(evt);
+  }, [formData?.deliveryLocation, formRef]);
 
-        try {
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`,
-            { headers: { "Accept-Language": "th,en" } }
-          );
-          const data = await response.json();
+  const handleSubmitWithAutoLocation = async (e) => {
+    e?.preventDefault?.();
+    setLocationError("");
 
-          if (data.display_name) {
-            handleChange("deliveryLocation")(data.display_name);
-          } else {
-            handleChange("deliveryLocation")(`${latitude}, ${longitude}`);
-          }
-        } catch {
-          handleChange("deliveryLocation")(`${latitude}, ${longitude}`);
-        }
+    if (isLoadingLocation) return;
 
+    const currentLocation = String(formData?.deliveryLocation || "").trim();
+
+    if (!currentLocation) {
+      setIsLoadingLocation(true);
+      try {
+        const loc = await getCurrentLocationAsync();
+        pendingResubmitRef.current = true;
+        handleChange("deliveryLocation")(loc);
+      } catch (err) {
+        pendingResubmitRef.current = false;
+        setLocationError(err?.message || "Unable to retrieve your location");
+      } finally {
         setIsLoadingLocation(false);
-      },
-      (error) => {
-        let errorMessage = "Unable to retrieve your location";
-        switch (error.code) {
-          case error.PERMISSION_DENIED:
-            errorMessage =
-              "Location permission denied. Please enable location access.";
-            break;
-          case error.POSITION_UNAVAILABLE:
-            errorMessage = "Location information is unavailable.";
-            break;
-          case error.TIMEOUT:
-            errorMessage = "Location request timed out.";
-            break;
-        }
-        setLocationError(errorMessage);
-        setIsLoadingLocation(false);
-      },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-    );
+      }
+      return;
+    }
+
+    return handleSubmit(e);
   };
 
   const startCamera = async () => {
@@ -217,9 +260,17 @@ export default function UIDeliveryForm({
 
       <form
         ref={formRef}
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmitWithAutoLocation}
         className="flex flex-col items-center justify-start w-full h-full overflow-auto"
       >
+        {/* hidden field กันบาง hook ไปอ่านจาก DOM/FormData */}
+        <input
+          type="hidden"
+          name="deliveryLocation"
+          value={formData.deliveryLocation || ""}
+          readOnly
+        />
+
         <div className="flex flex-col items-center justify-start w-full h-fit gap-2 overflow-auto">
           <div className="flex flex-row items-center justify-center w-full h-fit p-2 gap-2">
             <div className="flex items-center justify-end w-full h-full p-2 gap-2">
@@ -249,36 +300,22 @@ export default function UIDeliveryForm({
             </div>
           </div>
 
-          <div className="flex flex-col xl:flex-row items-end justify-center w-full h-fit p-2 gap-2">
+          <div className="hidden flex-col xl:flex-row items-center justify-center w-full h-fit p-2 gap-2">
             <div className="flex items-center justify-center w-full h-full p-2 gap-2">
               <Input
-                name="deliveryLocation"
+                name="deliveryLocation_visible"
                 type="text"
-                label="Location"
+                label="Location (auto on submit)"
                 color="default"
                 variant="faded"
                 radius="none"
                 labelPlacement="outside"
-                placeholder="Enter Location or Get Current Location"
-                isRequired
+                placeholder="Will be fetched when you press Submit"
                 value={formData.deliveryLocation || ""}
                 onChange={handleChange("deliveryLocation")}
                 isInvalid={!!errors.deliveryLocation || !!locationError}
                 errorMessage={errors.deliveryLocation || locationError}
               />
-            </div>
-            <div className="flex items-end justify-center w-full xl:w-2/12 h-full p-2 gap-2">
-              <Button
-                type="button"
-                color="secondary"
-                radius="none"
-                className="w-full p-2 gap-2 font-semibold"
-                onPress={getCurrentLocation}
-                isLoading={isLoadingLocation}
-                startContent={!isLoadingLocation && <MapPin size={16} />}
-              >
-                {isLoadingLocation ? "Getting..." : "Get Location"}
-              </Button>
             </div>
           </div>
 
@@ -291,6 +328,7 @@ export default function UIDeliveryForm({
                 className="w-full p-2 gap-2 font-semibold"
                 onPress={openCamera}
                 startContent={<Camera size={16} />}
+                isDisabled={isLoadingLocation}
               >
                 Take Photo
               </Button>
@@ -348,8 +386,9 @@ export default function UIDeliveryForm({
                 color="primary"
                 radius="none"
                 className="w-full p-2 gap-2 text-background font-semibold"
+                isLoading={isLoadingLocation}
               >
-                Submit
+                {isLoadingLocation ? "Getting location..." : "Submit"}
               </Button>
             </div>
             <div className="flex items-center justify-center w-full xl:w-2/12 h-full p-2 gap-2">
@@ -359,6 +398,7 @@ export default function UIDeliveryForm({
                 radius="none"
                 className="w-full p-2 gap-2 font-semibold"
                 onPress={() => history.back()}
+                isDisabled={isLoadingLocation}
               >
                 Cancel
               </Button>
