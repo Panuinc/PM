@@ -11,7 +11,6 @@ import {
   FileWarning,
   PenTool,
   Eraser,
-  Eye,
   FileCheck,
   FileX,
   ImageOff,
@@ -26,22 +25,17 @@ export default function UIInvoiceValidationResult({
   if (isValidating) {
     return (
       <div
-        className={`w-full p-4 bg-primary-50 border border-primary-200 rounded-lg ${className}`}
+        className={`w-full p-2 bg-primary-50 border border-primary ${className}`}
       >
-        <div className="flex flex-col items-center justify-center gap-3">
-          <div className="flex items-center gap-2 text-primary-600">
-            <RefreshCw size={20} className="animate-spin" />
+        <div className="flex flex-col items-center justify-center gap-2">
+          <div className="flex items-center gap-2 text-primary">
+            <RefreshCw className="animate-spin" />
             <span className="font-medium">กำลังตรวจสอบรูปภาพ Invoice...</span>
           </div>
-          <Progress
-            size="sm"
-            isIndeterminate
-            color="primary"
-            className="max-w-md"
-          />
-          <p className="text-sm text-gray-500">
+          <Progress isIndeterminate color="primary" className="max-w-md" />
+          <div>
             AI กำลังวิเคราะห์ลายเซ็น 4 ช่อง, รอยขีดข่วน และความสมบูรณ์ของเอกสาร
-          </p>
+          </div>
         </div>
       </div>
     );
@@ -76,34 +70,29 @@ export default function UIInvoiceValidationResult({
   if (isFullyPassed) {
     return (
       <div
-        className={`w-full p-4 bg-success-50 border border-success-200 rounded-lg ${className}`}
+        className={`w-full p-2 bg-success-50 border border-success ${className}`}
       >
-        <div className="flex items-center gap-3">
-          <CheckCircle size={24} className="text-success-600 flex-shrink-0" />
+        <div className="flex items-center gap-2">
+          <CheckCircle className="text-success flex-shrink-0" />
           <div className="flex-1">
-            <p className="font-medium text-success-700">
+            <div className="font-medium text-success">
               ✅ เอกสารผ่านการตรวจสอบทุกเกณฑ์
-            </p>
-            {summary && (
-              <p className="text-sm text-success-600 mt-1">{summary}</p>
-            )}
-            {message && (
-              <p className="text-sm text-success-600 mt-1">{message}</p>
-            )}
+            </div>
+            {summary && <div className="text-success mt-2">{summary}</div>}
+            {message && <div className="text-success mt-2">{message}</div>}
           </div>
           {score !== undefined && score !== null && (
-            <Chip color="success" variant="flat" size="sm">
+            <Chip color="success" variant="flat">
               คะแนน: {score}/100
             </Chip>
           )}
         </div>
 
-        {/* แสดงรายละเอียดลายเซ็น */}
         {details?.signatures && (
-          <div className="mt-3 pt-3 border-t border-success-200">
-            <p className="text-xs font-semibold text-success-600 mb-2">
+          <div className="mt-2 pt-2 border-t border-success">
+            <div className="font-semibold text-success mb-2">
               ลายเซ็นครบ {details.signatures.totalFound}/4 ช่อง
-            </p>
+            </div>
             <div className="flex flex-wrap gap-2">
               <SignatureChip
                 label="ผู้รับของ"
@@ -133,30 +122,30 @@ export default function UIInvoiceValidationResult({
       case "signature_incomplete":
       case "signature_missing":
       case "signature":
-        return <PenTool size={16} />;
+        return <PenTool />;
       case "scratches":
       case "cross_outs":
-        return <Eraser size={16} />;
+        return <Eraser />;
       case "unauthorized_marks":
       case "number_corrections":
       case "liquid_paper":
       case "penMarks":
-        return <FileWarning size={16} />;
+        return <FileWarning />;
       case "invalid_document":
       case "invalid":
-        return <FileX size={16} />;
+        return <FileX />;
       case "image_quality":
       case "blurry":
       case "incomplete":
       case "clarity":
-        return <ImageOff size={16} />;
+        return <ImageOff />;
       case "tears":
       case "stains":
       case "missing_parts":
       case "damage":
-        return <FileWarning size={16} />;
+        return <FileWarning />;
       default:
-        return <Info size={16} />;
+        return <Info />;
     }
   };
 
@@ -201,45 +190,44 @@ export default function UIInvoiceValidationResult({
 
   return (
     <div className={`w-full ${className}`}>
-      {/* Header */}
       <div
-        className={`p-4 rounded-t-lg border ${
+        className={`p-2 border ${
           isRejected
-            ? "bg-danger-50 border-danger-200"
+            ? "bg-danger-50 border-danger"
             : needsReview
-            ? "bg-warning-50 border-warning-200"
-            : "bg-warning-50 border-warning-200"
+            ? "bg-warning-50 border-warning"
+            : "bg-warning-50 border-warning"
         }`}
       >
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col xl:flex-row items-center justify-between">
           <div className="flex items-center gap-2">
             {isRejected ? (
-              <XCircle size={24} className="text-danger-600" />
+              <XCircle className="text-danger" />
             ) : (
-              <AlertTriangle size={24} className="text-warning-600" />
+              <AlertTriangle className="text-warning" />
             )}
             <div>
-              <p
+              <div
                 className={`font-semibold ${
-                  isRejected ? "text-danger-700" : "text-warning-700"
+                  isRejected ? "text-danger" : "text-warning"
                 }`}
               >
                 {isRejected
                   ? "❌ เอกสารไม่ผ่านการตรวจสอบ"
                   : "⚠️ พบข้อสังเกตในเอกสาร"}
-              </p>
-              <p className="text-sm text-gray-600">
+              </div>
+              <div>
                 {errorWarnings.length > 0 &&
                   `${errorWarnings.length} ปัญหาร้ายแรง`}
                 {errorWarnings.length > 0 && normalWarnings.length > 0 && ", "}
                 {normalWarnings.length > 0 &&
                   `${normalWarnings.length} ข้อควรระวัง`}
-              </p>
+              </div>
             </div>
           </div>
           <div className="flex items-center gap-2">
             {decision && (
-              <Chip color={getDecisionColor(decision)} variant="flat" size="sm">
+              <Chip color={getDecisionColor(decision)} variant="flat">
                 {getDecisionText(decision)}
               </Chip>
             )}
@@ -249,17 +237,15 @@ export default function UIInvoiceValidationResult({
                   score >= 80 ? "success" : score >= 50 ? "warning" : "danger"
                 }
                 variant="flat"
-                size="sm"
               >
                 {score}/100
               </Chip>
             )}
             {onRetry && (
               <Button
-                size="sm"
                 variant="light"
                 color="default"
-                startContent={<RefreshCw size={14} />}
+                startContent={<RefreshCw />}
                 onPress={onRetry}
               >
                 ตรวจใหม่
@@ -269,36 +255,32 @@ export default function UIInvoiceValidationResult({
         </div>
       </div>
 
-      {/* Content */}
-      <div className="border border-t-0 border-gray-200 rounded-b-lg divide-y divide-gray-100">
-        {/* Critical Issues */}
+      <div className="border border-t-0 border-gray divide-y divide-gray">
         {errorWarnings.length > 0 && (
-          <div className="p-3 bg-danger-50/50">
-            <p className="text-xs font-semibold text-danger-600 uppercase mb-2">
+          <div className="p-2 bg-danger-50">
+            <div className="font-semibold text-danger uppercase mb-2">
               🚫 ปัญหาร้ายแรง (ต้องแก้ไข)
-            </p>
+            </div>
             <div className="space-y-2">
               {errorWarnings.map((issue, idx) => (
                 <div
                   key={`critical-${idx}`}
-                  className="flex items-start gap-2 p-2 bg-white rounded border border-danger-100"
+                  className="flex items-start gap-2 p-2 bg-white border border-danger"
                 >
-                  <span className="text-danger-500 mt-0.5">
+                  <span className="text-danger mt-0.5">
                     {getWarningIcon(issue.type)}
                   </span>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-danger-700">
+                    <div className="font-medium text-danger">
                       {issue.message}
-                    </p>
+                    </div>
                     {issue.details && (
-                      <p className="text-xs text-danger-600 mt-0.5">
-                        {issue.details}
-                      </p>
+                      <div className="text-danger mt-0.5">{issue.details}</div>
                     )}
                     {issue.locations && issue.locations.length > 0 && (
-                      <p className="text-xs text-danger-500 mt-0.5">
+                      <div className="text-danger mt-0.5">
                         ตำแหน่ง: {issue.locations.join(", ")}
-                      </p>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -307,29 +289,28 @@ export default function UIInvoiceValidationResult({
           </div>
         )}
 
-        {/* Warnings */}
         {normalWarnings.length > 0 && (
-          <div className="p-3 bg-warning-50/50">
-            <p className="text-xs font-semibold text-warning-600 uppercase mb-2">
+          <div className="p-2 bg-warning-50">
+            <div className="font-semibold text-warning uppercase mb-2">
               ⚠️ ข้อควรระวัง
-            </p>
+            </div>
             <div className="space-y-2">
               {normalWarnings.map((warning, idx) => (
                 <div
                   key={`warning-${idx}`}
-                  className="flex items-start gap-2 p-2 bg-white rounded border border-warning-100"
+                  className="flex items-start gap-2 p-2 bg-white border border-warning"
                 >
-                  <span className="text-warning-500 mt-0.5">
+                  <span className="text-warning mt-0.5">
                     {getWarningIcon(warning.type)}
                   </span>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-warning-700">
+                    <div className="font-medium text-warning">
                       {warning.message}
-                    </p>
+                    </div>
                     {warning.details && (
-                      <p className="text-xs text-warning-600 mt-0.5">
+                      <div className="text-warning mt-0.5">
                         {warning.details}
-                      </p>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -338,29 +319,28 @@ export default function UIInvoiceValidationResult({
           </div>
         )}
 
-        {/* Info */}
         {infoWarnings.length > 0 && (
-          <div className="p-3 bg-primary-50/50">
-            <p className="text-xs font-semibold text-primary-600 uppercase mb-2">
+          <div className="p-2 bg-primary-50">
+            <div className="font-semibold text-primary uppercase mb-2">
               ข้อมูลเพิ่มเติม
-            </p>
+            </div>
             <div className="space-y-2">
               {infoWarnings.map((warning, idx) => (
                 <div
                   key={`info-${idx}`}
-                  className="flex items-start gap-2 p-2 bg-white rounded border border-primary-100"
+                  className="flex items-start gap-2 p-2 bg-white border border-primary"
                 >
-                  <span className="text-primary-500 mt-0.5">
+                  <span className="text-primary mt-0.5">
                     {getWarningIcon(warning.type)}
                   </span>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-primary-700">
+                    <div className="font-medium text-primary">
                       {warning.message}
-                    </p>
+                    </div>
                     {warning.details && (
-                      <p className="text-xs text-primary-600 mt-0.5">
+                      <div className="text-primary mt-0.5">
                         {warning.details}
-                      </p>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -369,12 +349,11 @@ export default function UIInvoiceValidationResult({
           </div>
         )}
 
-        {/* Signature Details (New Structure) */}
         {details?.signatures && (
-          <div className="p-3 bg-gray-50">
-            <p className="text-xs font-semibold text-gray-600 uppercase mb-2">
+          <div className="p-2 bg-gray-50">
+            <div className="font-semibold  uppercase mb-2">
               📝 สถานะลายเซ็น ({details.signatures.totalFound || 0}/4 ช่อง)
-            </p>
+            </div>
             <div className="grid grid-cols-2 xl:grid-cols-4 gap-2">
               <SignatureStatusCard
                 label="ผู้รับของ"
@@ -400,19 +379,17 @@ export default function UIInvoiceValidationResult({
           </div>
         )}
 
-        {/* Document Details (New Structure) */}
         {details &&
           (details.cleanliness ||
             details.condition ||
             details.imageQuality) && (
-            <div className="p-3 bg-gray-50">
-              <p className="text-xs font-semibold text-gray-600 uppercase mb-2">
+            <div className="p-2 bg-gray-50">
+              <div className="font-semibold  uppercase mb-2">
                 📋 รายละเอียดการตรวจสอบ
-              </p>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {details.invoiceInfo && (
                   <Chip
-                    size="sm"
                     variant="flat"
                     color={
                       details.invoiceInfo.hasCompanyHeader
@@ -421,9 +398,9 @@ export default function UIInvoiceValidationResult({
                     }
                     startContent={
                       details.invoiceInfo.hasCompanyHeader ? (
-                        <CheckCircle size={12} />
+                        <CheckCircle />
                       ) : (
-                        <XCircle size={12} />
+                        <XCircle />
                       )
                     }
                   >
@@ -432,14 +409,13 @@ export default function UIInvoiceValidationResult({
                 )}
                 {details.cleanliness && (
                   <Chip
-                    size="sm"
                     variant="flat"
                     color={details.cleanliness.isClean ? "success" : "danger"}
                     startContent={
                       details.cleanliness.isClean ? (
-                        <CheckCircle size={12} />
+                        <CheckCircle />
                       ) : (
-                        <XCircle size={12} />
+                        <XCircle />
                       )
                     }
                   >
@@ -448,16 +424,15 @@ export default function UIInvoiceValidationResult({
                 )}
                 {details.condition && (
                   <Chip
-                    size="sm"
                     variant="flat"
                     color={
                       details.condition.isGoodCondition ? "success" : "warning"
                     }
                     startContent={
                       details.condition.isGoodCondition ? (
-                        <CheckCircle size={12} />
+                        <CheckCircle />
                       ) : (
-                        <AlertTriangle size={12} />
+                        <AlertTriangle />
                       )
                     }
                   >
@@ -466,16 +441,15 @@ export default function UIInvoiceValidationResult({
                 )}
                 {details.imageQuality && (
                   <Chip
-                    size="sm"
                     variant="flat"
                     color={
                       details.imageQuality.isAcceptable ? "success" : "warning"
                     }
                     startContent={
                       details.imageQuality.isAcceptable ? (
-                        <CheckCircle size={12} />
+                        <CheckCircle />
                       ) : (
-                        <AlertTriangle size={12} />
+                        <AlertTriangle />
                       )
                     }
                   >
@@ -486,27 +460,21 @@ export default function UIInvoiceValidationResult({
             </div>
           )}
 
-        {/* Old Structure Details */}
         {details &&
           !details.signatures &&
           (details.hasSignature !== undefined ||
             details.hasScratches !== undefined) && (
-            <div className="p-3 bg-gray-50">
-              <p className="text-xs font-semibold text-gray-600 uppercase mb-2">
+            <div className="p-2 bg-gray-50">
+              <div className="font-semibold  uppercase mb-2">
                 รายละเอียดการตรวจสอบ
-              </p>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {details.hasSignature !== undefined && (
                   <Chip
-                    size="sm"
                     variant="flat"
                     color={details.hasSignature ? "success" : "warning"}
                     startContent={
-                      details.hasSignature ? (
-                        <CheckCircle size={12} />
-                      ) : (
-                        <XCircle size={12} />
-                      )
+                      details.hasSignature ? <CheckCircle /> : <XCircle />
                     }
                   >
                     ลายเซ็น: {details.hasSignature ? "พบ" : "ไม่พบ"}
@@ -514,14 +482,13 @@ export default function UIInvoiceValidationResult({
                 )}
                 {details.hasScratches !== undefined && (
                   <Chip
-                    size="sm"
                     variant="flat"
                     color={!details.hasScratches ? "success" : "warning"}
                     startContent={
                       !details.hasScratches ? (
-                        <CheckCircle size={12} />
+                        <CheckCircle />
                       ) : (
-                        <AlertTriangle size={12} />
+                        <AlertTriangle />
                       )
                     }
                   >
@@ -530,15 +497,10 @@ export default function UIInvoiceValidationResult({
                 )}
                 {details.hasPenMarks !== undefined && (
                   <Chip
-                    size="sm"
                     variant="flat"
                     color={!details.hasPenMarks ? "success" : "warning"}
                     startContent={
-                      !details.hasPenMarks ? (
-                        <CheckCircle size={12} />
-                      ) : (
-                        <AlertTriangle size={12} />
-                      )
+                      !details.hasPenMarks ? <CheckCircle /> : <AlertTriangle />
                     }
                   >
                     รอยปากกา: {details.hasPenMarks ? "พบ" : "ไม่พบ"}
@@ -546,14 +508,13 @@ export default function UIInvoiceValidationResult({
                 )}
                 {details.isDocumentClear !== undefined && (
                   <Chip
-                    size="sm"
                     variant="flat"
                     color={details.isDocumentClear ? "success" : "warning"}
                     startContent={
                       details.isDocumentClear ? (
-                        <CheckCircle size={12} />
+                        <CheckCircle />
                       ) : (
-                        <AlertTriangle size={12} />
+                        <AlertTriangle />
                       )
                     }
                   >
@@ -564,13 +525,12 @@ export default function UIInvoiceValidationResult({
             </div>
           )}
 
-        {/* Failed Criteria */}
         {failedCriteria.length > 0 && (
-          <div className="p-3 bg-danger-50/30">
-            <p className="text-xs font-semibold text-danger-600 uppercase mb-2">
+          <div className="p-2 bg-danger-50/30">
+            <div className="font-semibold text-danger uppercase mb-2">
               เกณฑ์ที่ไม่ผ่าน
-            </p>
-            <ul className="list-disc list-inside text-sm text-danger-600 space-y-1">
+            </div>
+            <ul className="list-disc list-inside text-danger space-y-2">
               {failedCriteria.map((criteria, idx) => (
                 <li key={`failed-${idx}`}>{criteria}</li>
               ))}
@@ -578,13 +538,12 @@ export default function UIInvoiceValidationResult({
           </div>
         )}
 
-        {/* Required Actions */}
         {requiredActions.length > 0 && (
-          <div className="p-3 bg-primary-50">
-            <p className="text-xs font-semibold text-primary-600 uppercase mb-2">
+          <div className="p-2 bg-primary-50">
+            <div className="font-semibold text-primary uppercase mb-2">
               🔧 สิ่งที่ต้องแก้ไข
-            </p>
-            <ul className="list-decimal list-inside text-sm text-primary-700 space-y-1">
+            </div>
+            <ul className="list-decimal list-inside text-primary space-y-2">
               {requiredActions.map((action, idx) => (
                 <li key={`action-${idx}`}>{action}</li>
               ))}
@@ -592,13 +551,10 @@ export default function UIInvoiceValidationResult({
           </div>
         )}
 
-        {/* Suggestions (Old Structure) */}
         {suggestions && suggestions.length > 0 && (
-          <div className="p-3 bg-gray-50">
-            <p className="text-xs font-semibold text-gray-600 uppercase mb-2">
-              คำแนะนำ
-            </p>
-            <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+          <div className="p-2 bg-gray-50">
+            <div className="font-semibold  uppercase mb-2">คำแนะนำ</div>
+            <ul className="list-disc list-inside  space-y-2">
               {suggestions.map((suggestion, idx) => (
                 <li key={`suggestion-${idx}`}>{suggestion}</li>
               ))}
@@ -606,49 +562,46 @@ export default function UIInvoiceValidationResult({
           </div>
         )}
 
-        {/* Summary */}
         {summary && (
-          <div className="p-3 bg-gray-50">
-            <p className="text-sm text-gray-700">
+          <div className="p-2 bg-gray-50">
+            <div>
               <span className="font-medium">สรุป: </span>
               {summary}
-            </p>
+            </div>
           </div>
         )}
 
-        {/* Reason */}
         {reason && (
-          <div className="p-3 bg-gray-50">
-            <p className="text-sm text-gray-700">
+          <div className="p-2 bg-gray-50">
+            <div>
               <span className="font-medium">เหตุผล: </span>
               {reason}
-            </p>
+            </div>
           </div>
         )}
 
-        {/* Footer */}
         <div
-          className={`p-3 border-t ${
+          className={`p-2 border-t ${
             canProceed !== false
-              ? "bg-blue-50 border-blue-100"
-              : "bg-danger-50 border-danger-100"
+              ? "bg-blue-50 border-blue"
+              : "bg-danger-50 border-danger"
           }`}
         >
           <div className="flex items-center gap-2">
             {canProceed !== false ? (
               <>
-                <FileCheck size={16} className="text-blue-600" />
-                <p className="text-sm text-blue-700">
+                <FileCheck className="text-blue" />
+                <div className="text-blue">
                   คุณยังสามารถบันทึกข้อมูลได้
                   แต่กรุณาตรวจสอบความถูกต้องของเอกสารก่อน
-                </p>
+                </div>
               </>
             ) : (
               <>
-                <XCircle size={16} className="text-danger-600" />
-                <p className="text-sm text-danger-700 font-medium">
+                <XCircle className="text-danger" />
+                <div className="text-danger font-medium">
                   กรุณาถ่ายรูปใหม่ เอกสารไม่ผ่านเกณฑ์ที่กำหนด
-                </p>
+                </div>
               </>
             )}
           </div>
@@ -665,12 +618,9 @@ function SignatureChip({ label, data }) {
 
   return (
     <Chip
-      size="sm"
       variant="flat"
       color={isComplete ? "success" : "warning"}
-      startContent={
-        isComplete ? <CheckCircle size={12} /> : <AlertTriangle size={12} />
-      }
+      startContent={isComplete ? <CheckCircle /> : <AlertTriangle />}
     >
       {label}: {isComplete ? "✓" : "ไม่ครบ"}
     </Chip>
@@ -680,10 +630,10 @@ function SignatureChip({ label, data }) {
 function SignatureStatusCard({ label, sublabel, data }) {
   if (!data) {
     return (
-      <div className="p-2 bg-gray-100 rounded border border-gray-200">
-        <p className="text-xs font-medium text-gray-600">{label}</p>
-        <p className="text-xs text-gray-400">{sublabel}</p>
-        <p className="text-xs text-gray-500 mt-1">ไม่มีข้อมูล</p>
+      <div className="p-2 bg-gray border border-gray">
+        <div className="font-medium ">{label}</div>
+        <div>{sublabel}</div>
+        <div className=" mt-2">ไม่มีข้อมูล</div>
       </div>
     );
   }
@@ -694,50 +644,42 @@ function SignatureStatusCard({ label, sublabel, data }) {
 
   return (
     <div
-      className={`p-2 rounded border ${
+      className={`p-2 border ${
         isComplete
-          ? "bg-success-50 border-success-200"
+          ? "bg-success-50 border-success"
           : hasSignature
-          ? "bg-warning-50 border-warning-200"
-          : "bg-danger-50 border-danger-200"
+          ? "bg-warning-50 border-warning"
+          : "bg-danger-50 border-danger"
       }`}
     >
       <div className="flex items-center justify-between">
         <div>
-          <p
-            className={`text-xs font-medium ${
+          <div
+            className={`font-medium ${
               isComplete
-                ? "text-success-700"
+                ? "text-success"
                 : hasSignature
-                ? "text-warning-700"
-                : "text-danger-700"
+                ? "text-warning"
+                : "text-danger"
             }`}
           >
             {label}
-          </p>
-          <p className="text-xs text-gray-400">{sublabel}</p>
+          </div>
+          <div>{sublabel}</div>
         </div>
         {isComplete ? (
-          <CheckCircle size={16} className="text-success-500" />
+          <CheckCircle className="text-success" />
         ) : hasSignature ? (
-          <AlertTriangle size={16} className="text-warning-500" />
+          <AlertTriangle className="text-warning" />
         ) : (
-          <XCircle size={16} className="text-danger-500" />
+          <XCircle className="text-danger" />
         )}
       </div>
-      <div className="mt-1 flex gap-2">
-        <span
-          className={`text-xs ${
-            hasSignature ? "text-success-600" : "text-danger-600"
-          }`}
-        >
+      <div className="mt-2 flex gap-2">
+        <span className={`${hasSignature ? "text-success" : "text-danger"}`}>
           {hasSignature ? "✓ ลายเซ็น" : "✗ ลายเซ็น"}
         </span>
-        <span
-          className={`text-xs ${
-            hasDate ? "text-success-600" : "text-warning-600"
-          }`}
-        >
+        <span className={`${hasDate ? "text-success" : "text-warning"}`}>
           {hasDate ? "✓ วันที่" : "✗ วันที่"}
         </span>
       </div>

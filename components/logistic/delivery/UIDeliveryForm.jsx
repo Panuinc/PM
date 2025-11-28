@@ -55,7 +55,6 @@ export default function UIDeliveryForm({
 
   const pendingResubmitRef = useRef(false);
 
-  // Track if data was auto-filled
   const [autoFilledFields, setAutoFilledFields] = useState({
     companyName: false,
     invoiceNumber: false,
@@ -69,19 +68,16 @@ export default function UIDeliveryForm({
     hasWarnings,
   } = useInvoiceValidation();
 
-  // Auto-fill form when validation result has extracted data
   useEffect(() => {
     if (validationResult?.extractedData) {
       const { companyName, invoiceNumber } = validationResult.extractedData;
 
       const newAutoFilled = { companyName: false, invoiceNumber: false };
 
-      // Auto-fill company name if found
       if (
         companyName &&
         (!formData.deliveryCompanyName || autoFilledFields.companyName)
       ) {
-        // Normalize function - remove common words and standardize
         const normalize = (str) => {
           return str
             .toLowerCase()
@@ -95,7 +91,6 @@ export default function UIDeliveryForm({
 
         const normalizedExtracted = normalize(companyName);
 
-        // Define keyword mappings for each company
         const companyKeywords = {
           CHH: [
             "ซื้อฮะฮวด",
@@ -109,10 +104,8 @@ export default function UIDeliveryForm({
           WWS: ["เวสท์วินด์", "westwind", "เซอร์วิสเซส", "services", "wws"],
         };
 
-        // Try to find matching company
         let matchedKey = null;
 
-        // First, try keyword matching
         for (const [key, keywords] of Object.entries(companyKeywords)) {
           const hasMatch = keywords.some(
             (keyword) =>
@@ -126,7 +119,6 @@ export default function UIDeliveryForm({
           }
         }
 
-        // If no keyword match, try matching against options directly
         if (!matchedKey) {
           const matchedCompany = DELIVERY_COMPANY_OPTIONS.find((opt) => {
             const normalizedLabel = normalize(opt.label);
@@ -154,7 +146,6 @@ export default function UIDeliveryForm({
         }
       }
 
-      // Auto-fill invoice number if found
       if (
         invoiceNumber &&
         (!formData.deliveryInvoiceNumber || autoFilledFields.invoiceNumber)
@@ -301,11 +292,6 @@ export default function UIDeliveryForm({
     }
   };
 
-  const switchCamera = () => {
-    if (stream) stream.getTracks().forEach((track) => track.stop());
-    setFacingMode((prev) => (prev === "environment" ? "user" : "environment"));
-  };
-
   useEffect(() => {
     if (isOpen && !capturedImage) startCamera();
   }, [facingMode, isOpen]);
@@ -346,14 +332,10 @@ export default function UIDeliveryForm({
   const confirmPhoto = async () => {
     if (!capturedImage) return;
 
-    // For invoice photos, we no longer require invoice number first
-    // since it will be extracted from the document
-
     try {
       const response = await fetch(capturedImage);
       const blob = await response.blob();
 
-      // Generate temporary filename, will be renamed after extraction
       const timestamp = Date.now();
       const fileName = `invoice_${timestamp}.jpg`;
       const file = new File([blob], fileName, { type: "image/jpeg" });
@@ -366,12 +348,10 @@ export default function UIDeliveryForm({
         handleChange("deliveryFile")(file);
         handleChange("deliveryPicture")(previewUrl);
 
-        // Clear previous auto-fill state
         setAutoFilledFields({ companyName: false, invoiceNumber: false });
 
         onClose();
 
-        // Validate and extract data from invoice
         await validateInvoice(file);
       } else {
         const previewUrl = URL.createObjectURL(file);
@@ -423,7 +403,6 @@ export default function UIDeliveryForm({
     handleChange("deliveryFile")(null);
     handleChange("deliveryPicture")("");
     clearValidation();
-    // Clear auto-filled data when removing photo
     setAutoFilledFields({ companyName: false, invoiceNumber: false });
   };
 
@@ -453,7 +432,6 @@ export default function UIDeliveryForm({
     }
   };
 
-  // Clear auto-fill flag when user manually changes the field
   const handleCompanyChange = (value) => {
     setAutoFilledFields((prev) => ({ ...prev, companyName: false }));
     handleChange("deliveryCompanyName")(value);
@@ -489,38 +467,26 @@ export default function UIDeliveryForm({
             </div>
           </div>
 
-          {/* Instructions Banner */}
           <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2">
-            <div className="w-full xl:w-8/12 p-4 bg-primary-50 border border-primary-200 rounded-lg">
-              <div className="flex items-start gap-3">
-                <Sparkles
-                  size={20}
-                  className="text-primary-600 flex-shrink-0 mt-0.5"
-                />
-                <div>
-                  <p className="font-medium text-primary-700">
-                    ถ่ายรูป Invoice เพื่อเริ่มต้น
-                  </p>
-                  <p className="text-sm text-primary-600 mt-1">
-                    ระบบจะอ่านข้อมูล <strong>ชื่อบริษัท</strong> และ{" "}
-                    <strong>เลขที่เอกสาร</strong> จากรูปภาพโดยอัตโนมัติ
-                  </p>
-                </div>
+            <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+              <Sparkles />
+              <div>
+                ถ่ายรูป Invoice เพื่อเริ่มต้น ระบบจะอ่านข้อมูล
+                <strong>ชื่อบริษัท</strong> และ <strong>เลขที่เอกสาร</strong>
+                จากรูปภาพโดยอัตโนมัติ
               </div>
             </div>
           </div>
 
-          {/* Take Invoice Photo Button - Prominent Position */}
           <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit p-2 gap-2">
-            <div className="flex items-center justify-center w-full xl:w-4/12 h-full p-2 gap-2">
+            <div className="flex items-center justify-center w-full xl:w-6/12 h-full p-2 gap-2">
               <Button
                 type="button"
                 color="primary"
                 radius="none"
-                size="lg"
-                className="w-full p-4 gap-2 font-semibold text-background"
+                className="w-full p-2 gap-2 text-background font-semibold"
                 onPress={() => openCamera("invoice")}
-                startContent={<Camera size={20} />}
+                startContent={<Camera />}
                 isDisabled={isLoadingLocation || isValidating}
               >
                 {formData.deliveryPicture
@@ -530,10 +496,9 @@ export default function UIDeliveryForm({
             </div>
           </div>
 
-          {/* Invoice Picture Preview */}
           {formData.deliveryPicture && (
             <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2">
-              <div className="flex items-center justify-between w-full xl:w-6/12 h-full p-2 gap-2">
+              <div className="flex items-center justify-between w-full h-full p-2 gap-2">
                 <span className="text-sm text-gray-500">
                   Invoice Picture Preview:
                 </span>
@@ -542,29 +507,28 @@ export default function UIDeliveryForm({
                     type="button"
                     color="danger"
                     variant="light"
-                    size="sm"
-                    startContent={<Trash2 size={14} />}
+                    startContent={<Trash2 />}
                     onPress={removeInvoicePhoto}
                   >
                     ลบรูป
                   </Button>
                 )}
               </div>
-              <div className="flex items-center justify-center w-full xl:w-6/12 h-fit p-2 gap-2">
+              <div className="flex items-center justify-center w-full h-fit p-2 gap-2">
                 <Image
                   src={formData.deliveryPicture}
                   alt="Delivery Invoice Picture"
-                  className="max-h-64 object-contain rounded"
+                  radius="none"
+                  className="max-h-64 object-contain"
                   fallbackSrc="https://via.placeholder.com/300x200?text=Image+Not+Found"
                 />
               </div>
             </div>
           )}
 
-          {/* Invoice Validation Result */}
           {(isValidating || validationResult) && (
             <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2">
-              <div className="w-full xl:w-8/12">
+              <div className="flex items-center justify-center w-full h-full p-2 gap-2">
                 <UIInvoiceValidationResult
                   isValidating={isValidating}
                   validationResult={validationResult}
@@ -574,167 +538,101 @@ export default function UIDeliveryForm({
             </div>
           )}
 
-          {/* Extracted Data Display */}
           {validationResult?.extractedData && (
             <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2">
-              <div className="w-full xl:w-8/12 p-4 bg-success-50 border border-success-200 rounded-lg">
-                <div className="flex items-start gap-3">
-                  <Sparkles
-                    size={20}
-                    className="text-success-600 flex-shrink-0 mt-0.5"
-                  />
-                  <div className="flex-1">
-                    <p className="font-medium text-success-700 mb-2">
-                      ข้อมูลที่อ่านได้จากเอกสาร
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {validationResult.extractedData.companyName && (
-                        <Chip
-                          color="success"
-                          variant="flat"
-                          size="sm"
-                          startContent={<span className="text-xs">🏢</span>}
-                        >
-                          บริษัท: {validationResult.extractedData.companyName}
-                        </Chip>
-                      )}
-                      {validationResult.extractedData.invoiceNumber && (
-                        <Chip
-                          color="success"
-                          variant="flat"
-                          size="sm"
-                          startContent={<span className="text-xs">📄</span>}
-                        >
-                          เลขที่: {validationResult.extractedData.invoiceNumber}
-                        </Chip>
-                      )}
-                      {validationResult.extractedData.invoiceDate && (
-                        <Chip
-                          color="default"
-                          variant="flat"
-                          size="sm"
-                          startContent={<span className="text-xs">📅</span>}
-                        >
-                          วันที่: {validationResult.extractedData.invoiceDate}
-                        </Chip>
-                      )}
-                      {validationResult.extractedData.totalAmount && (
-                        <Chip
-                          color="default"
-                          variant="flat"
-                          size="sm"
-                          startContent={<span className="text-xs">💰</span>}
-                        >
-                          ยอดรวม: {validationResult.extractedData.totalAmount}
-                        </Chip>
-                      )}
-                    </div>
-                    {(!validationResult.extractedData.companyName ||
-                      !validationResult.extractedData.invoiceNumber) && (
-                      <div className="flex items-center gap-2 mt-2 text-warning-600">
-                        <AlertCircle size={14} />
-                        <p className="text-xs">
-                          บางข้อมูลไม่สามารถอ่านได้ กรุณากรอกเพิ่มเติมด้านล่าง
-                        </p>
-                      </div>
+              <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+                <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2">
+                  <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+                    <Sparkles /> ข้อมูลที่อ่านได้จากเอกสาร
+                  </div>
+                  <div className="flex flex-wrap items-center justify-center w-full h-full p-2 gap-2">
+                    {validationResult.extractedData.companyName && (
+                      <Chip
+                        color="success"
+                        variant="flat"
+                        startContent={<span>🏢</span>}
+                      >
+                        บริษัท: {validationResult.extractedData.companyName}
+                      </Chip>
+                    )}
+                    {validationResult.extractedData.invoiceNumber && (
+                      <Chip
+                        color="success"
+                        variant="flat"
+                        startContent={<span>📄</span>}
+                      >
+                        เลขที่: {validationResult.extractedData.invoiceNumber}
+                      </Chip>
+                    )}
+                    {validationResult.extractedData.invoiceDate && (
+                      <Chip
+                        color="default"
+                        variant="flat"
+                        startContent={<span>📅</span>}
+                      >
+                        วันที่: {validationResult.extractedData.invoiceDate}
+                      </Chip>
+                    )}
+                    {validationResult.extractedData.totalAmount && (
+                      <Chip
+                        color="default"
+                        variant="flat"
+                        startContent={<span>💰</span>}
+                      >
+                        ยอดรวม: {validationResult.extractedData.totalAmount}
+                      </Chip>
                     )}
                   </div>
+                  {(!validationResult.extractedData.companyName ||
+                    !validationResult.extractedData.invoiceNumber) && (
+                    <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+                      <AlertCircle />
+                      บางข้อมูลไม่สามารถอ่านได้ กรุณากรอกเพิ่มเติมด้านล่าง
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           )}
 
-          {/* Company Name and Invoice Number - Now with auto-fill indicators */}
           <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit p-2 gap-2">
             <div className="flex items-center justify-center w-full h-full p-2 gap-2">
-              <div className="w-full relative">
-                <Select
-                  name="deliveryCompanyName"
-                  label={
-                    <span className="flex items-center gap-1">
-                      Company Name
-                      {autoFilledFields.companyName && (
-                        <Chip
-                          size="sm"
-                          color="success"
-                          variant="flat"
-                          className="h-5"
-                        >
-                          <span className="flex items-center gap-1 text-xs">
-                            <Sparkles size={10} /> Auto
-                          </span>
-                        </Chip>
-                      )}
-                    </span>
-                  }
-                  labelPlacement="outside"
-                  placeholder="Please Select Company"
-                  color="default"
-                  variant="faded"
-                  radius="none"
-                  isRequired
-                  selectedKeys={
-                    formData.deliveryCompanyName
-                      ? [formData.deliveryCompanyName]
-                      : []
-                  }
-                  onSelectionChange={(keys) =>
-                    handleCompanyChange([...keys][0])
-                  }
-                  isInvalid={!!errors.deliveryCompanyName}
-                  errorMessage={errors.deliveryCompanyName}
-                  description={
-                    !formData.deliveryPicture
-                      ? "ถ่ายรูป Invoice เพื่อให้ระบบอ่านข้อมูลอัตโนมัติ"
-                      : autoFilledFields.companyName
-                      ? "อ่านจากเอกสารอัตโนมัติ - คุณสามารถแก้ไขได้"
-                      : ""
-                  }
-                >
-                  {DELIVERY_COMPANY_OPTIONS.map((company) => (
-                    <SelectItem key={company.key}>{company.label}</SelectItem>
-                  ))}
-                </Select>
-              </div>
+              <Select
+                name="deliveryCompanyName"
+                labelPlacement="outside"
+                placeholder="Please Select Company"
+                color="default"
+                variant="faded"
+                radius="none"
+                isDisabled
+                selectedKeys={
+                  formData.deliveryCompanyName
+                    ? [formData.deliveryCompanyName]
+                    : []
+                }
+                onSelectionChange={(keys) => handleCompanyChange([...keys][0])}
+                isInvalid={!!errors.deliveryCompanyName}
+                errorMessage={errors.deliveryCompanyName}
+              >
+                {DELIVERY_COMPANY_OPTIONS.map((company) => (
+                  <SelectItem key={company.key}>{company.label}</SelectItem>
+                ))}
+              </Select>
             </div>
             <div className="flex items-center justify-center w-full h-full p-2 gap-2">
               <Input
                 name="deliveryInvoiceNumber"
                 type="text"
-                label={
-                  <span className="flex items-center gap-1">
-                    Invoice Number
-                    {autoFilledFields.invoiceNumber && (
-                      <Chip
-                        size="sm"
-                        color="success"
-                        variant="flat"
-                        className="h-5"
-                      >
-                        <span className="flex items-center gap-1 text-xs">
-                          <Sparkles size={10} /> Auto
-                        </span>
-                      </Chip>
-                    )}
-                  </span>
-                }
                 color="default"
                 variant="faded"
                 radius="none"
                 labelPlacement="outside"
                 placeholder="Enter Invoice Number"
-                isRequired
+                isDisabled
                 value={formData.deliveryInvoiceNumber || ""}
                 onChange={handleInvoiceNumberChange}
                 isInvalid={!!errors.deliveryInvoiceNumber}
                 errorMessage={errors.deliveryInvoiceNumber}
-                description={
-                  !formData.deliveryPicture
-                    ? "ถ่ายรูป Invoice เพื่อให้ระบบอ่านข้อมูลอัตโนมัติ"
-                    : autoFilledFields.invoiceNumber
-                    ? "อ่านจากเอกสารอัตโนมัติ - คุณสามารถแก้ไขได้"
-                    : ""
-                }
               />
             </div>
           </div>
@@ -758,16 +656,15 @@ export default function UIDeliveryForm({
             </div>
           </div>
 
-          {/* Product Photo Button */}
           <div className="flex flex-col xl:flex-row items-end justify-center w-full h-fit p-2 gap-2">
-            <div className="flex items-end justify-center w-full xl:w-2/12 h-full p-2 gap-2">
+            <div className="flex items-end justify-center w-full xl:w-6/12 h-full p-2 gap-2">
               <Button
                 type="button"
                 color="secondary"
                 radius="none"
                 className="w-full p-2 gap-2 font-semibold"
                 onPress={() => openCamera("product")}
-                startContent={<Camera size={16} />}
+                startContent={<Camera />}
                 isDisabled={isLoadingLocation || isValidating}
               >
                 Take Product Photo
@@ -778,29 +675,28 @@ export default function UIDeliveryForm({
           {Array.isArray(formData.deliveryPhotos) &&
             formData.deliveryPhotos.length > 0 && (
               <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2">
-                <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-sm text-gray-500">
+                <div className="flex items-center justify-start w-full h-full p-2 gap-2">
                   Product Photos (Saved):
                 </div>
 
-                <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 w-full xl:w-10/12 p-2">
+                <div className="grid grid-cols-2 xl:grid-cols-4 w-full h-full p-2 gap-2">
                   {formData.deliveryPhotos.map((p) => (
                     <div
                       key={p.deliveryPhotoId}
-                      className="flex flex-col gap-2 p-2 rounded border border-default-200"
+                      className="flex flex-col items-center justify-center w-full h-full p-2 gap-2"
                     >
                       <img
                         src={p.deliveryPhotoPath}
                         alt="Product"
-                        className="w-full h-40 object-cover rounded"
+                        className="flex items-center justify-center w-full h-40 p-2 gap-2 object-cover"
                       />
                       {isUpdate && (
                         <Button
                           type="button"
                           color="danger"
                           radius="none"
-                          variant="flat"
-                          className="w-full font-semibold"
-                          startContent={<Trash2 size={16} />}
+                          className="w-full p-2 gap-2 text-background font-semibold"
+                          startContent={<Trash2 />}
                           onPress={() =>
                             deleteExistingProductPhoto(p.deliveryPhotoId)
                           }
@@ -817,28 +713,27 @@ export default function UIDeliveryForm({
           {Array.isArray(localProductPreviewUrls) &&
             localProductPreviewUrls.length > 0 && (
               <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2">
-                <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-sm text-gray-500">
+                <div className="flex items-center justify-start w-full h-full p-2 gap-2">
                   Product Photos (To Upload):
                 </div>
 
-                <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 w-full xl:w-10/12 p-2">
+                <div className="grid grid-cols-2 xl:grid-cols-4 w-full h-full p-2 gap-2">
                   {localProductPreviewUrls.map((src, idx) => (
                     <div
                       key={`${src}_${idx}`}
-                      className="flex flex-col gap-2 p-2 rounded border border-default-200"
+                      className="flex flex-col items-center justify-center w-full h-full p-2 gap-2"
                     >
                       <img
                         src={src}
                         alt="Product pending"
-                        className="w-full h-40 object-cover rounded"
+                        className="flex items-center justify-center w-full h-40 p-2 gap-2 object-cover"
                       />
                       <Button
                         type="button"
                         color="danger"
                         radius="none"
-                        variant="flat"
-                        className="w-full font-semibold"
-                        startContent={<Trash2 size={16} />}
+                        className="w-full p-2 gap-2 text-background font-semibold"
+                        startContent={<Trash2 />}
                         onPress={() => removeLocalProductFile(idx)}
                       >
                         Remove
@@ -911,31 +806,31 @@ export default function UIDeliveryForm({
         isOpen={isOpen}
         onClose={handleCloseModal}
         size="5xl"
+        radius="none"
         scrollBehavior="inside"
+        className="flex items-center justify-center w-full h-fit p-2 gap-2"
       >
         <ModalContent>
-          <ModalHeader className="flex flex-col gap-1">
+          <ModalHeader className="flex flex-col items-start justify-center w-full h-full p-2 gap-2">
             {captureTarget === "invoice"
               ? "Take Invoice Photo"
               : "Take Product Photo"}
           </ModalHeader>
 
-          <ModalBody>
-            <div className="flex flex-col items-center justify-center w-full gap-4">
+          <ModalBody className="flex flex-col items-center justify-center w-full h-full p-2 gap-2">
+            <div className="flex flex-col items-center justify-start w-full h-full p-2 gap-2 overflow-auto">
               {captureTarget === "invoice" && !capturedImage && (
-                <div className="w-full p-3 bg-primary-50 border border-primary-200 rounded">
-                  <div className="flex items-center gap-2 text-primary-700">
-                    <Sparkles size={16} />
-                    <span className="text-sm">
-                      ถ่ายรูปให้ชัด
-                      ระบบจะอ่านชื่อบริษัทและเลขที่เอกสารให้อัตโนมัติ
-                    </span>
+                <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+                  <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+                    <Sparkles />
+                    ถ่ายรูปให้ชัด
+                    ระบบจะอ่านชื่อบริษัทและเลขที่เอกสารให้อัตโนมัติ
                   </div>
                 </div>
               )}
 
               {cameraError && (
-                <div className="w-full p-4 bg-danger-100 text-danger rounded">
+                <div className="flex items-center justify-center w-full h-full p-2 gap-2">
                   {cameraError}
                 </div>
               )}
@@ -947,7 +842,7 @@ export default function UIDeliveryForm({
                     autoPlay
                     playsInline
                     muted
-                    className="w-full max-h-96 bg-black rounded"
+                    className="flex items-center justify-center w-full h-full p-2 gap-2 overflow-auto"
                   />
                   <canvas ref={canvasRef} className="hidden" />
                 </>
@@ -955,28 +850,21 @@ export default function UIDeliveryForm({
                 <img
                   src={capturedImage}
                   alt="Captured"
-                  className="w-full max-h-96 object-contain rounded"
+                  className="flex items-center justify-center w-full h-full p-2 gap-2 overflow-auto"
                 />
               )}
             </div>
           </ModalBody>
 
-          <ModalFooter>
+          <ModalFooter className="flex flex-row items-center justify-center w-full h-full p-2 gap-2">
             {!capturedImage ? (
-              <>
-                <Button
-                  color="default"
-                  variant="light"
-                  onPress={switchCamera}
-                  startContent={<RotateCcw size={16} />}
-                >
-                  Switch Camera
-                </Button>
-
+              <div className="flex flex-row items-center justify-center w-full h-full p-2 gap-2">
                 <Button
                   color="primary"
+                  radius="none"
+                  className="w-full p-2 gap-2 text-background font-semibold"
                   onPress={capturePhoto}
-                  startContent={<Camera size={16} />}
+                  startContent={<Camera />}
                   isDisabled={!stream}
                 >
                   Capture
@@ -984,25 +872,32 @@ export default function UIDeliveryForm({
 
                 <Button
                   color="danger"
-                  variant="light"
+                  radius="none"
+                  className="w-full p-2 gap-2 text-background font-semibold"
                   onPress={handleCloseModal}
-                  startContent={<X size={16} />}
+                  startContent={<X />}
                 >
                   Cancel
                 </Button>
-              </>
+              </div>
             ) : (
-              <>
+              <div className="flex flex-row items-center justify-center w-full h-full p-2 gap-2">
                 <Button
                   color="default"
-                  variant="light"
+                  radius="none"
+                  className="w-full p-2 gap-2 text-background font-semibold"
                   onPress={retakePhoto}
-                  startContent={<RotateCcw size={16} />}
+                  startContent={<RotateCcw />}
                 >
                   Retake
                 </Button>
 
-                <Button color="primary" onPress={confirmPhoto}>
+                <Button
+                  color="primary"
+                  radius="none"
+                  className="w-full p-2 gap-2 text-background font-semibold"
+                  onPress={confirmPhoto}
+                >
                   {captureTarget === "invoice"
                     ? "Confirm & Extract Data"
                     : "Confirm"}
@@ -1010,13 +905,14 @@ export default function UIDeliveryForm({
 
                 <Button
                   color="danger"
-                  variant="light"
+                  radius="none"
+                  className="w-full p-2 gap-2 text-background font-semibold"
                   onPress={handleCloseModal}
-                  startContent={<X size={16} />}
+                  startContent={<X />}
                 >
                   Cancel
                 </Button>
-              </>
+              </div>
             )}
           </ModalFooter>
         </ModalContent>
