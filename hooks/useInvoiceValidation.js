@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 
 /**
  * Hook สำหรับตรวจสอบรูปภาพ Invoice ด้วย AI
- * 
+ *
  * @returns {Object} - Object containing validation state and functions
  * @property {boolean} isValidating - สถานะกำลังตรวจสอบ
  * @property {Object|null} validationResult - ผลการตรวจสอบ
@@ -30,12 +30,18 @@ export function useInvoiceValidation() {
     if (!allowedTypes.includes(file.type)) {
       const errorResult = {
         valid: false,
-        warnings: [{
-          type: "fileType",
-          severity: "error",
-          message: "ประเภทไฟล์ไม่ถูกต้อง รองรับเฉพาะ JPEG, PNG, GIF, WEBP",
-        }],
         canProceed: false,
+        decision: "REJECT",
+        score: 0,
+        criticalIssues: [
+          {
+            type: "fileType",
+            severity: "critical",
+            message: "ประเภทไฟล์ไม่ถูกต้อง รองรับเฉพาะ JPEG, PNG, GIF, WEBP",
+          },
+        ],
+        warnings: [],
+        summary: "ไฟล์ไม่ถูกต้อง",
       };
       setValidationResult(errorResult);
       return errorResult;
@@ -45,12 +51,18 @@ export function useInvoiceValidation() {
     if (file.size > maxSize) {
       const errorResult = {
         valid: false,
-        warnings: [{
-          type: "fileSize",
-          severity: "error",
-          message: "ขนาดไฟล์เกิน 10MB",
-        }],
         canProceed: false,
+        decision: "REJECT",
+        score: 0,
+        criticalIssues: [
+          {
+            type: "fileSize",
+            severity: "critical",
+            message: "ขนาดไฟล์เกิน 10MB",
+          },
+        ],
+        warnings: [],
+        summary: "ไฟล์ใหญ่เกินไป",
       };
       setValidationResult(errorResult);
       return errorResult;
@@ -75,22 +87,30 @@ export function useInvoiceValidation() {
       }
 
       const result = await response.json();
-      
       result.validatedAt = new Date().toISOString();
-      
+
       setValidationResult(result);
       return result;
     } catch (error) {
       console.error("Invoice validation error:", error);
-      
+
       const errorResult = {
         valid: true,
-        warnings: [],
-        message: "ไม่สามารถตรวจสอบรูปภาพได้ กรุณาตรวจสอบด้วยตนเอง",
         canProceed: true,
+        decision: "NEED_REVIEW",
+        score: null,
+        criticalIssues: [],
+        warnings: [
+          {
+            type: "system_error",
+            severity: "warning",
+            message: "ไม่สามารถตรวจสอบรูปภาพได้ กรุณาตรวจสอบด้วยตนเอง",
+          },
+        ],
+        summary: "ระบบไม่สามารถวิเคราะห์ได้",
         error: error.message,
       };
-      
+
       setValidationResult(errorResult);
       setValidationError(error.message);
       return errorResult;
@@ -108,24 +128,41 @@ export function useInvoiceValidation() {
   }, []);
 
   /**
-   * ตรวจสอบว่ามี warning หรือไม่
+   * ตรวจสอบว่ามี warning หรือไม่ (รองรับทั้ง structure เก่าและใหม่)
    */
-  const hasWarnings = validationResult?.warnings?.length > 0;
+  const hasWarnings =
+    (validationResult?.warnings?.length || 0) > 0 ||
+    (validationResult?.criticalIssues?.length || 0) > 0;
 
   /**
    * ตรวจสอบว่ามี critical issues หรือไม่
    */
-  const hasCriticalIssues = validationResult?.warnings?.some(
-    (w) => w.severity === "error"
-  );
+  const hasCriticalIssues =
+    (validationResult?.criticalIssues?.length || 0) > 0 ||
+    validationResult?.warnings?.some(
+      (w) => w.severity === "error" || w.severity === "critical"
+    );
+
+  /**
+   * ตรวจสอบว่าถูก reject หรือไม่
+   */
+  const isRejected = validationResult?.decision === "REJECT";
 
   /**
    * นับจำนวน warnings ตาม severity
    */
   const warningCounts = {
-    error: validationResult?.warnings?.filter((w) => w.severity === "error").length || 0,
-    warning: validationResult?.warnings?.filter((w) => w.severity === "warning").length || 0,
-    info: validationResult?.warnings?.filter((w) => w.severity === "info").length || 0,
+    critical: validationResult?.criticalIssues?.length || 0,
+    error:
+      validationResult?.warnings?.filter(
+        (w) => w.severity === "error" || w.severity === "critical"
+      ).length || 0,
+    warning:
+      validationResult?.warnings?.filter((w) => w.severity === "warning")
+        .length || 0,
+    info:
+      validationResult?.warnings?.filter((w) => w.severity === "info").length ||
+      0,
   };
 
   return {
@@ -136,6 +173,7 @@ export function useInvoiceValidation() {
     clearValidation,
     hasWarnings,
     hasCriticalIssues,
+    isRejected,
     warningCounts,
   };
 }
