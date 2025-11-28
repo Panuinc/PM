@@ -30,7 +30,7 @@ const statusColorMap = {
 
 function getCompanyLabel(companyKey) {
   const found = DELIVERY_COMPANY_OPTIONS.find((c) => c.key === companyKey);
-  return found ? found.label : companyKey || "-";
+  return found ? found.key : companyKey || "-";
 }
 
 export default function UIDeliveryList({
