@@ -152,7 +152,7 @@ export async function createDelivery(request) {
         const p = await validateAndSaveImageFile(
           f,
           folder,
-          `product_${String(i + 1).padStart(3, "0")}`
+          `product_${deliveryInvoiceNumber}_${String(i + 1).padStart(3, "0")}`
         );
         if (p) productPictures.push(p);
       }

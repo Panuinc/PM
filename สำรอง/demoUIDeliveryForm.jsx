@@ -1,7 +1,5 @@
 "use client";
 import UIHeader from "@/components/UIHeader";
-import UIInvoiceValidationResult from "@/components/logistic/delivery/UIInvoiceValidationResult";
-import { useInvoiceValidation } from "@/hooks/useInvoiceValidation";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   Button,
@@ -45,14 +43,6 @@ export default function UIDeliveryForm({
   const [localProductPreviewUrls, setLocalProductPreviewUrls] = useState([]);
 
   const pendingResubmitRef = useRef(false);
-
-  const {
-    isValidating,
-    validationResult,
-    validateInvoice,
-    clearValidation,
-    hasWarnings,
-  } = useInvoiceValidation();
 
   useEffect(() => {
     return () => {
@@ -254,10 +244,6 @@ export default function UIDeliveryForm({
 
         handleChange("deliveryFile")(file);
         handleChange("deliveryPicture")(previewUrl);
-
-        onClose();
-
-        await validateInvoice(file);
       } else {
         const previewUrl = URL.createObjectURL(file);
         setLocalProductPreviewUrls((prev) => [...prev, previewUrl]);
@@ -266,9 +252,9 @@ export default function UIDeliveryForm({
           ? [...formData.deliveryProductFiles, file]
           : [file];
         handleChange("deliveryProductFiles")(nextFiles);
-
-        onClose();
       }
+
+      onClose();
     } catch {
       setCameraError("Failed to prepare photo. Please try again.");
     }
@@ -300,21 +286,6 @@ export default function UIDeliveryForm({
       next.splice(index, 1);
       return next;
     });
-  };
-
-  const removeInvoicePhoto = () => {
-    if (localInvoicePreviewUrl) URL.revokeObjectURL(localInvoicePreviewUrl);
-    setLocalInvoicePreviewUrl("");
-    handleChange("deliveryFile")(null);
-    handleChange("deliveryPicture")("");
-    clearValidation();
-  };
-
-  const handleRetryValidation = async () => {
-    const file = formData.deliveryFile;
-    if (file) {
-      await validateInvoice(file);
-    }
   };
 
   const deleteExistingProductPhoto = (photoId) => {
@@ -408,7 +379,7 @@ export default function UIDeliveryForm({
                 className="w-full p-2 gap-2 font-semibold"
                 onPress={() => openCamera("invoice")}
                 startContent={<Camera size={16} />}
-                isDisabled={isLoadingLocation || isValidating}
+                isDisabled={isLoadingLocation}
               >
                 Take Invoice Photo
               </Button>
@@ -422,32 +393,17 @@ export default function UIDeliveryForm({
                 className="w-full p-2 gap-2 font-semibold"
                 onPress={() => openCamera("product")}
                 startContent={<Camera size={16} />}
-                isDisabled={isLoadingLocation || isValidating}
+                isDisabled={isLoadingLocation}
               >
                 Take Product Photo
               </Button>
             </div>
           </div>
 
-          {/* Invoice Picture Preview */}
           {formData.deliveryPicture && (
             <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2">
-              <div className="flex items-center justify-between w-full xl:w-6/12 h-full p-2 gap-2">
-                <span className="text-sm text-gray-500">
-                  Invoice Picture Preview:
-                </span>
-                {localInvoicePreviewUrl && (
-                  <Button
-                    type="button"
-                    color="danger"
-                    variant="light"
-                    size="sm"
-                    startContent={<Trash2 size={14} />}
-                    onPress={removeInvoicePhoto}
-                  >
-                    ลบรูป
-                  </Button>
-                )}
+              <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-sm text-gray-500">
+                Invoice Picture Preview:
               </div>
               <div className="flex items-center justify-center w-full xl:w-6/12 h-fit p-2 gap-2">
                 <Image
@@ -455,19 +411,6 @@ export default function UIDeliveryForm({
                   alt="Delivery Invoice Picture"
                   className="max-h-64 object-contain rounded"
                   fallbackSrc="https://via.placeholder.com/300x200?text=Image+Not+Found"
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Invoice Validation Result */}
-          {(isValidating || validationResult) && (
-            <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2">
-              <div className="w-full xl:w-8/12">
-                <UIInvoiceValidationResult
-                  isValidating={isValidating}
-                  validationResult={validationResult}
-                  onRetry={handleRetryValidation}
                 />
               </div>
             </div>
@@ -583,7 +526,6 @@ export default function UIDeliveryForm({
                 radius="none"
                 className="w-full p-2 gap-2 text-background font-semibold"
                 isLoading={isLoadingLocation}
-                isDisabled={isValidating}
               >
                 {isLoadingLocation ? "Getting location..." : "Submit"}
               </Button>
@@ -596,7 +538,7 @@ export default function UIDeliveryForm({
                 radius="none"
                 className="w-full p-2 gap-2 font-semibold"
                 onPress={() => history.back()}
-                isDisabled={isLoadingLocation || isValidating}
+                isDisabled={isLoadingLocation}
               >
                 Cancel
               </Button>
@@ -608,7 +550,7 @@ export default function UIDeliveryForm({
       <Modal
         isOpen={isOpen}
         onClose={handleCloseModal}
-        size="5xl"
+        size="2xl"
         scrollBehavior="inside"
       >
         <ModalContent>
@@ -689,9 +631,7 @@ export default function UIDeliveryForm({
                 </Button>
 
                 <Button color="primary" onPress={confirmPhoto}>
-                  {captureTarget === "invoice"
-                    ? "Confirm & Validate"
-                    : "Confirm"}
+                  Confirm (Use on Submit)
                 </Button>
 
                 <Button
