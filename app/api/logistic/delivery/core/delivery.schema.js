@@ -16,7 +16,7 @@ const preprocessStringArrayJson = (fallback = []) =>
 
 export const DELIVERY_COMPANY_OPTIONS = [
   { key: "CHH", label: "บริษัท ชื้อฮะฮวด อุตสาหกรรม จำกัด" },
-  { key: "DEX", label: "บริษัท ดีไซน์ เอ็กซ์เช้นจ์ จำกัด" },
+  { key: "DXC", label: "บริษัท ดีไซน์ เอ็กซ์เช้นจ์ จำกัด" },
   { key: "WWS", label: "บริษัท เวสท์วินด์ เซอร์วิสเซส จำกัด" },
 ];
 
