@@ -83,6 +83,17 @@ export async function POST(request) {
 ## ตอบเป็น JSON format เท่านั้น:
 {
   "isValidInvoice": true/false,
+  "extractedData": {
+    "companyName": "ชื่อบริษัทที่ออกเอกสาร (ผู้ขาย) จากหัวเอกสารด้านบนซ้าย เช่น 'บริษัท ซื้อฮะฮวด อุตสาหกรรม จำกัด' หรือ null ถ้าไม่พบ",
+    "invoiceNumber": "เลขที่เอกสารจากส่วน 'เลขที่/No.' เช่น IV2509-159 หรือ null ถ้าไม่พบ",
+    "invoiceDate": "วันที่เอกสาร หรือ null",
+    "totalAmount": "ยอดรวมสุทธิ หรือ null",
+    "customerName": "ชื่อลูกค้า/ผู้รับสินค้า จากส่วน 'นามลูกค้า/Name' หรือ null ถ้าไม่พบ",
+    "confidence": {
+      "companyName": 0-100,
+      "invoiceNumber": 0-100
+    }
+  },
   "invoiceInfo": {
     "hasCompanyHeader": true/false,
     "hasDocumentNumber": true/false,
@@ -181,11 +192,21 @@ export async function POST(request) {
 
 **ผ่าน = 100 คะแนนเท่านั้น (ต้องครบทุกเกณฑ์)**
 
+## การ Extract ข้อมูลสำคัญ:
+- **companyName**: ชื่อบริษัทที่ออกเอกสาร (ผู้ขาย/ผู้ส่งสินค้า)
+  - อยู่ที่หัวเอกสารด้านบนซ้าย มักมีโลโก้บริษัทอยู่ด้วย
+  - ตัวอย่าง: "บริษัท ซื้อฮะฮวด อุตสาหกรรม จำกัด", "C.H.H. INDUSTRY CO., LTD."
+  - ให้ใช้ชื่อภาษาไทย ถ้ามีทั้งไทยและอังกฤษ
+- **invoiceNumber**: ดูที่ส่วน "เลขที่/No." ซึ่งอยู่ด้านขวาบนของเอกสาร
+  - รูปแบบมักเป็น "IV2509-159", "INV-XXXX-XXX" หรือตัวเลขผสมตัวอักษร
+  - อยู่ในกรอบข้อมูลด้านขวา ใกล้กับวันที่เอกสาร
+
 ## สำคัญมาก:
 - ตอบเป็น JSON เท่านั้น ไม่ต้องมี markdown code block หรือข้อความอื่นใด
 - ลายเซ็นต้องครบทั้ง 4 ช่อง ถ้าขาดแม้แต่ช่องเดียว = ไม่ผ่าน
 - รอยปากกาใดๆ นอกช่องลายเซ็น = ไม่ผ่าน
-- ตรวจสอบอย่างละเอียดและเข้มงวด`,
+- ตรวจสอบอย่างละเอียดและเข้มงวด
+- พยายาม extract ชื่อบริษัทลูกค้าและเลขที่เอกสารให้ได้มากที่สุด`,
             },
           ],
         },
@@ -208,6 +229,7 @@ export async function POST(request) {
             canProceed: false,
             decision: "NEED_REVIEW",
             message: "ไม่สามารถวิเคราะห์รูปภาพได้ กรุณาตรวจสอบด้วยตนเอง",
+            extractedData: null,
             criticalIssues: [
               {
                 type: "system",
@@ -224,6 +246,7 @@ export async function POST(request) {
           canProceed: false,
           decision: "NEED_REVIEW",
           message: "ไม่สามารถวิเคราะห์รูปภาพได้ กรุณาตรวจสอบด้วยตนเอง",
+          extractedData: null,
           criticalIssues: [
             {
               type: "system",
@@ -458,6 +481,9 @@ export async function POST(request) {
       decision: decision,
       score: result.overallResult?.score || 0,
 
+      // NEW: Extracted data for auto-fill
+      extractedData: result.extractedData || null,
+
       criticalIssues: criticalIssues,
       warnings: warnings,
       allIssues: allIssues,
@@ -487,6 +513,7 @@ export async function POST(request) {
       canProceed: false,
       decision: "NEED_REVIEW",
       score: 0,
+      extractedData: null,
       criticalIssues: [
         {
           type: "system_error",

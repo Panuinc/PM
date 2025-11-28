@@ -16,8 +16,16 @@ import {
   ModalFooter,
   useDisclosure,
   Image,
+  Chip,
 } from "@heroui/react";
-import { Camera, X, RotateCcw, Trash2 } from "lucide-react";
+import {
+  Camera,
+  X,
+  RotateCcw,
+  Trash2,
+  Sparkles,
+  AlertCircle,
+} from "lucide-react";
 
 export default function UIDeliveryForm({
   headerTopic,
@@ -47,6 +55,12 @@ export default function UIDeliveryForm({
 
   const pendingResubmitRef = useRef(false);
 
+  // Track if data was auto-filled
+  const [autoFilledFields, setAutoFilledFields] = useState({
+    companyName: false,
+    invoiceNumber: false,
+  });
+
   const {
     isValidating,
     validationResult,
@@ -54,6 +68,104 @@ export default function UIDeliveryForm({
     clearValidation,
     hasWarnings,
   } = useInvoiceValidation();
+
+  // Auto-fill form when validation result has extracted data
+  useEffect(() => {
+    if (validationResult?.extractedData) {
+      const { companyName, invoiceNumber } = validationResult.extractedData;
+
+      const newAutoFilled = { companyName: false, invoiceNumber: false };
+
+      // Auto-fill company name if found
+      if (
+        companyName &&
+        (!formData.deliveryCompanyName || autoFilledFields.companyName)
+      ) {
+        // Normalize function - remove common words and standardize
+        const normalize = (str) => {
+          return str
+            .toLowerCase()
+            .replace(
+              /บริษัท|จำกัด|มหาชน|\(มหาชน\)|co\.,?\s*ltd\.?|company|limited|inc\.?|corp\.?|industry/gi,
+              ""
+            )
+            .replace(/\s+/g, "")
+            .trim();
+        };
+
+        const normalizedExtracted = normalize(companyName);
+
+        // Define keyword mappings for each company
+        const companyKeywords = {
+          CHH: [
+            "ซื้อฮะฮวด",
+            "ชื้อฮะฮวด",
+            "ฮะฮวด",
+            "chh",
+            "c.h.h",
+            "อุตสาหกรรม",
+          ],
+          DXC: ["ดีไซน์", "เอ็กซ์เช้นจ์", "design", "exchange", "dxc"],
+          WWS: ["เวสท์วินด์", "westwind", "เซอร์วิสเซส", "services", "wws"],
+        };
+
+        // Try to find matching company
+        let matchedKey = null;
+
+        // First, try keyword matching
+        for (const [key, keywords] of Object.entries(companyKeywords)) {
+          const hasMatch = keywords.some(
+            (keyword) =>
+              normalizedExtracted.includes(normalize(keyword)) ||
+              normalize(keyword).includes(normalizedExtracted) ||
+              companyName.toLowerCase().includes(keyword.toLowerCase())
+          );
+          if (hasMatch) {
+            matchedKey = key;
+            break;
+          }
+        }
+
+        // If no keyword match, try matching against options directly
+        if (!matchedKey) {
+          const matchedCompany = DELIVERY_COMPANY_OPTIONS.find((opt) => {
+            const normalizedLabel = normalize(opt.label);
+            const normalizedKey = normalize(opt.key);
+
+            return (
+              normalizedLabel.includes(normalizedExtracted) ||
+              normalizedExtracted.includes(normalizedLabel) ||
+              normalizedKey.includes(normalizedExtracted) ||
+              normalizedExtracted.includes(normalizedKey)
+            );
+          });
+
+          if (matchedCompany) {
+            matchedKey = matchedCompany.key;
+          }
+        }
+
+        if (matchedKey) {
+          handleChange("deliveryCompanyName")(matchedKey);
+          newAutoFilled.companyName = true;
+        } else {
+          console.log("No match found for company:", companyName);
+          console.log("Available options:", DELIVERY_COMPANY_OPTIONS);
+        }
+      }
+
+      // Auto-fill invoice number if found
+      if (
+        invoiceNumber &&
+        (!formData.deliveryInvoiceNumber || autoFilledFields.invoiceNumber)
+      ) {
+        handleChange("deliveryInvoiceNumber")(invoiceNumber);
+        newAutoFilled.invoiceNumber = true;
+      }
+
+      setAutoFilledFields(newAutoFilled);
+    }
+  }, [validationResult]);
 
   useEffect(() => {
     return () => {
@@ -234,18 +346,16 @@ export default function UIDeliveryForm({
   const confirmPhoto = async () => {
     if (!capturedImage) return;
 
-    const invoiceNumber = String(formData.deliveryInvoiceNumber || "").trim();
-    if (!invoiceNumber) {
-      setCameraError("Please enter Invoice Number before taking a photo.");
-      return;
-    }
+    // For invoice photos, we no longer require invoice number first
+    // since it will be extracted from the document
 
     try {
       const response = await fetch(capturedImage);
       const blob = await response.blob();
 
-      const safeInvoiceNumber = invoiceNumber.replace(/[^a-zA-Z0-9-_]/g, "_");
-      const fileName = `${safeInvoiceNumber}_${captureTarget}_${Date.now()}.jpg`;
+      // Generate temporary filename, will be renamed after extraction
+      const timestamp = Date.now();
+      const fileName = `invoice_${timestamp}.jpg`;
       const file = new File([blob], fileName, { type: "image/jpeg" });
 
       if (captureTarget === "invoice") {
@@ -256,8 +366,12 @@ export default function UIDeliveryForm({
         handleChange("deliveryFile")(file);
         handleChange("deliveryPicture")(previewUrl);
 
+        // Clear previous auto-fill state
+        setAutoFilledFields({ companyName: false, invoiceNumber: false });
+
         onClose();
 
+        // Validate and extract data from invoice
         await validateInvoice(file);
       } else {
         const previewUrl = URL.createObjectURL(file);
@@ -309,11 +423,14 @@ export default function UIDeliveryForm({
     handleChange("deliveryFile")(null);
     handleChange("deliveryPicture")("");
     clearValidation();
+    // Clear auto-filled data when removing photo
+    setAutoFilledFields({ companyName: false, invoiceNumber: false });
   };
 
   const handleRetryValidation = async () => {
     const file = formData.deliveryFile;
     if (file) {
+      setAutoFilledFields({ companyName: false, invoiceNumber: false });
       await validateInvoice(file);
     }
   };
@@ -334,6 +451,17 @@ export default function UIDeliveryForm({
     if (!currentDelete.includes(photoId)) {
       handleChange("deliveryDeletePhotoIds")([...currentDelete, photoId]);
     }
+  };
+
+  // Clear auto-fill flag when user manually changes the field
+  const handleCompanyChange = (value) => {
+    setAutoFilledFields((prev) => ({ ...prev, companyName: false }));
+    handleChange("deliveryCompanyName")(value);
+  };
+
+  const handleInvoiceNumberChange = (e) => {
+    setAutoFilledFields((prev) => ({ ...prev, invoiceNumber: false }));
+    handleChange("deliveryInvoiceNumber")(e);
   };
 
   return (
@@ -361,98 +489,43 @@ export default function UIDeliveryForm({
             </div>
           </div>
 
-          {/* Company Name Select */}
+          {/* Instructions Banner */}
+          <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2">
+            <div className="w-full xl:w-8/12 p-4 bg-primary-50 border border-primary-200 rounded-lg">
+              <div className="flex items-start gap-3">
+                <Sparkles
+                  size={20}
+                  className="text-primary-600 flex-shrink-0 mt-0.5"
+                />
+                <div>
+                  <p className="font-medium text-primary-700">
+                    ถ่ายรูป Invoice เพื่อเริ่มต้น
+                  </p>
+                  <p className="text-sm text-primary-600 mt-1">
+                    ระบบจะอ่านข้อมูล <strong>ชื่อบริษัท</strong> และ{" "}
+                    <strong>เลขที่เอกสาร</strong> จากรูปภาพโดยอัตโนมัติ
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Take Invoice Photo Button - Prominent Position */}
           <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit p-2 gap-2">
-            <div className="flex items-center justify-center w-full h-full p-2 gap-2">
-              <Select
-                name="deliveryCompanyName"
-                label="Company Name"
-                labelPlacement="outside"
-                placeholder="Please Select Company"
-                color="default"
-                variant="faded"
-                radius="none"
-                isRequired
-                selectedKeys={
-                  formData.deliveryCompanyName
-                    ? [formData.deliveryCompanyName]
-                    : []
-                }
-                onSelectionChange={(keys) =>
-                  handleChange("deliveryCompanyName")([...keys][0])
-                }
-                isInvalid={!!errors.deliveryCompanyName}
-                errorMessage={errors.deliveryCompanyName}
-              >
-                {DELIVERY_COMPANY_OPTIONS.map((company) => (
-                  <SelectItem key={company.key}>{company.label}</SelectItem>
-                ))}
-              </Select>
-            </div>
-            <div className="flex items-center justify-center w-full h-full p-2 gap-2">
-              <Input
-                name="deliveryInvoiceNumber"
-                type="text"
-                label="Invoice Number"
-                color="default"
-                variant="faded"
-                radius="none"
-                labelPlacement="outside"
-                placeholder="Enter Invoice Number"
-                isRequired
-                value={formData.deliveryInvoiceNumber || ""}
-                onChange={handleChange("deliveryInvoiceNumber")}
-                isInvalid={!!errors.deliveryInvoiceNumber}
-                errorMessage={errors.deliveryInvoiceNumber}
-              />
-            </div>
-          </div>
-
-          <div className="hidden flex-col xl:flex-row items-center justify-center w-full h-fit p-2 gap-2">
-            <div className="flex items-center justify-center w-full h-full p-2 gap-2">
-              <Input
-                name="deliveryLocation_visible"
-                type="text"
-                label="Location (auto on submit)"
-                color="default"
-                variant="faded"
-                radius="none"
-                labelPlacement="outside"
-                placeholder="Will be fetched when you press Submit"
-                value={formData.deliveryLocation || ""}
-                onChange={handleChange("deliveryLocation")}
-                isInvalid={!!errors.deliveryLocation || !!locationError}
-                errorMessage={errors.deliveryLocation || locationError}
-              />
-            </div>
-          </div>
-
-          <div className="flex flex-col xl:flex-row items-end justify-center w-full h-fit p-2 gap-2">
-            <div className="flex items-end justify-center w-full xl:w-2/12 h-full p-2 gap-2">
+            <div className="flex items-center justify-center w-full xl:w-4/12 h-full p-2 gap-2">
               <Button
                 type="button"
-                color="secondary"
+                color="primary"
                 radius="none"
-                className="w-full p-2 gap-2 font-semibold"
+                size="lg"
+                className="w-full p-4 gap-2 font-semibold text-background"
                 onPress={() => openCamera("invoice")}
-                startContent={<Camera size={16} />}
+                startContent={<Camera size={20} />}
                 isDisabled={isLoadingLocation || isValidating}
               >
-                Take Invoice Photo
-              </Button>
-            </div>
-
-            <div className="flex items-end justify-center w-full xl:w-2/12 h-full p-2 gap-2">
-              <Button
-                type="button"
-                color="secondary"
-                radius="none"
-                className="w-full p-2 gap-2 font-semibold"
-                onPress={() => openCamera("product")}
-                startContent={<Camera size={16} />}
-                isDisabled={isLoadingLocation || isValidating}
-              >
-                Take Product Photo
+                {formData.deliveryPicture
+                  ? "ถ่ายรูป Invoice ใหม่"
+                  : "📸 ถ่ายรูป Invoice"}
               </Button>
             </div>
           </div>
@@ -500,6 +573,207 @@ export default function UIDeliveryForm({
               </div>
             </div>
           )}
+
+          {/* Extracted Data Display */}
+          {validationResult?.extractedData && (
+            <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2">
+              <div className="w-full xl:w-8/12 p-4 bg-success-50 border border-success-200 rounded-lg">
+                <div className="flex items-start gap-3">
+                  <Sparkles
+                    size={20}
+                    className="text-success-600 flex-shrink-0 mt-0.5"
+                  />
+                  <div className="flex-1">
+                    <p className="font-medium text-success-700 mb-2">
+                      ข้อมูลที่อ่านได้จากเอกสาร
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {validationResult.extractedData.companyName && (
+                        <Chip
+                          color="success"
+                          variant="flat"
+                          size="sm"
+                          startContent={<span className="text-xs">🏢</span>}
+                        >
+                          บริษัท: {validationResult.extractedData.companyName}
+                        </Chip>
+                      )}
+                      {validationResult.extractedData.invoiceNumber && (
+                        <Chip
+                          color="success"
+                          variant="flat"
+                          size="sm"
+                          startContent={<span className="text-xs">📄</span>}
+                        >
+                          เลขที่: {validationResult.extractedData.invoiceNumber}
+                        </Chip>
+                      )}
+                      {validationResult.extractedData.invoiceDate && (
+                        <Chip
+                          color="default"
+                          variant="flat"
+                          size="sm"
+                          startContent={<span className="text-xs">📅</span>}
+                        >
+                          วันที่: {validationResult.extractedData.invoiceDate}
+                        </Chip>
+                      )}
+                      {validationResult.extractedData.totalAmount && (
+                        <Chip
+                          color="default"
+                          variant="flat"
+                          size="sm"
+                          startContent={<span className="text-xs">💰</span>}
+                        >
+                          ยอดรวม: {validationResult.extractedData.totalAmount}
+                        </Chip>
+                      )}
+                    </div>
+                    {(!validationResult.extractedData.companyName ||
+                      !validationResult.extractedData.invoiceNumber) && (
+                      <div className="flex items-center gap-2 mt-2 text-warning-600">
+                        <AlertCircle size={14} />
+                        <p className="text-xs">
+                          บางข้อมูลไม่สามารถอ่านได้ กรุณากรอกเพิ่มเติมด้านล่าง
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Company Name and Invoice Number - Now with auto-fill indicators */}
+          <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit p-2 gap-2">
+            <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+              <div className="w-full relative">
+                <Select
+                  name="deliveryCompanyName"
+                  label={
+                    <span className="flex items-center gap-1">
+                      Company Name
+                      {autoFilledFields.companyName && (
+                        <Chip
+                          size="sm"
+                          color="success"
+                          variant="flat"
+                          className="h-5"
+                        >
+                          <span className="flex items-center gap-1 text-xs">
+                            <Sparkles size={10} /> Auto
+                          </span>
+                        </Chip>
+                      )}
+                    </span>
+                  }
+                  labelPlacement="outside"
+                  placeholder="Please Select Company"
+                  color="default"
+                  variant="faded"
+                  radius="none"
+                  isRequired
+                  selectedKeys={
+                    formData.deliveryCompanyName
+                      ? [formData.deliveryCompanyName]
+                      : []
+                  }
+                  onSelectionChange={(keys) =>
+                    handleCompanyChange([...keys][0])
+                  }
+                  isInvalid={!!errors.deliveryCompanyName}
+                  errorMessage={errors.deliveryCompanyName}
+                  description={
+                    !formData.deliveryPicture
+                      ? "ถ่ายรูป Invoice เพื่อให้ระบบอ่านข้อมูลอัตโนมัติ"
+                      : autoFilledFields.companyName
+                      ? "อ่านจากเอกสารอัตโนมัติ - คุณสามารถแก้ไขได้"
+                      : ""
+                  }
+                >
+                  {DELIVERY_COMPANY_OPTIONS.map((company) => (
+                    <SelectItem key={company.key}>{company.label}</SelectItem>
+                  ))}
+                </Select>
+              </div>
+            </div>
+            <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+              <Input
+                name="deliveryInvoiceNumber"
+                type="text"
+                label={
+                  <span className="flex items-center gap-1">
+                    Invoice Number
+                    {autoFilledFields.invoiceNumber && (
+                      <Chip
+                        size="sm"
+                        color="success"
+                        variant="flat"
+                        className="h-5"
+                      >
+                        <span className="flex items-center gap-1 text-xs">
+                          <Sparkles size={10} /> Auto
+                        </span>
+                      </Chip>
+                    )}
+                  </span>
+                }
+                color="default"
+                variant="faded"
+                radius="none"
+                labelPlacement="outside"
+                placeholder="Enter Invoice Number"
+                isRequired
+                value={formData.deliveryInvoiceNumber || ""}
+                onChange={handleInvoiceNumberChange}
+                isInvalid={!!errors.deliveryInvoiceNumber}
+                errorMessage={errors.deliveryInvoiceNumber}
+                description={
+                  !formData.deliveryPicture
+                    ? "ถ่ายรูป Invoice เพื่อให้ระบบอ่านข้อมูลอัตโนมัติ"
+                    : autoFilledFields.invoiceNumber
+                    ? "อ่านจากเอกสารอัตโนมัติ - คุณสามารถแก้ไขได้"
+                    : ""
+                }
+              />
+            </div>
+          </div>
+
+          <div className="hidden flex-col xl:flex-row items-center justify-center w-full h-fit p-2 gap-2">
+            <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+              <Input
+                name="deliveryLocation_visible"
+                type="text"
+                label="Location (auto on submit)"
+                color="default"
+                variant="faded"
+                radius="none"
+                labelPlacement="outside"
+                placeholder="Will be fetched when you press Submit"
+                value={formData.deliveryLocation || ""}
+                onChange={handleChange("deliveryLocation")}
+                isInvalid={!!errors.deliveryLocation || !!locationError}
+                errorMessage={errors.deliveryLocation || locationError}
+              />
+            </div>
+          </div>
+
+          {/* Product Photo Button */}
+          <div className="flex flex-col xl:flex-row items-end justify-center w-full h-fit p-2 gap-2">
+            <div className="flex items-end justify-center w-full xl:w-2/12 h-full p-2 gap-2">
+              <Button
+                type="button"
+                color="secondary"
+                radius="none"
+                className="w-full p-2 gap-2 font-semibold"
+                onPress={() => openCamera("product")}
+                startContent={<Camera size={16} />}
+                isDisabled={isLoadingLocation || isValidating}
+              >
+                Take Product Photo
+              </Button>
+            </div>
+          </div>
 
           {Array.isArray(formData.deliveryPhotos) &&
             formData.deliveryPhotos.length > 0 && (
@@ -648,6 +922,18 @@ export default function UIDeliveryForm({
 
           <ModalBody>
             <div className="flex flex-col items-center justify-center w-full gap-4">
+              {captureTarget === "invoice" && !capturedImage && (
+                <div className="w-full p-3 bg-primary-50 border border-primary-200 rounded">
+                  <div className="flex items-center gap-2 text-primary-700">
+                    <Sparkles size={16} />
+                    <span className="text-sm">
+                      ถ่ายรูปให้ชัด
+                      ระบบจะอ่านชื่อบริษัทและเลขที่เอกสารให้อัตโนมัติ
+                    </span>
+                  </div>
+                </div>
+              )}
+
               {cameraError && (
                 <div className="w-full p-4 bg-danger-100 text-danger rounded">
                   {cameraError}
@@ -718,7 +1004,7 @@ export default function UIDeliveryForm({
 
                 <Button color="primary" onPress={confirmPhoto}>
                   {captureTarget === "invoice"
-                    ? "Confirm & Validate"
+                    ? "Confirm & Extract Data"
                     : "Confirm"}
                 </Button>
 
