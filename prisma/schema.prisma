@@ -116,7 +116,8 @@ model Department {
 
 model Delivery {
   deliveryId            String         @id @default(cuid())
-  deliveryInvoiceNumber String         @unique
+  deliveryInvoiceNumber String
+  deliveryCompanyName   String
   deliveryLocation      String
   deliveryPicture       String
   deliveryStatus        DeliveryStatus @default(PendingApprove)
@@ -129,18 +130,19 @@ model Delivery {
   updatedByUser  User?           @relation("DeliveryUpdatedByUser", fields: [deliveryUpdatedBy], references: [userId])
   deliveryPhotos DeliveryPhoto[]
 
+  @@unique([deliveryInvoiceNumber, deliveryCompanyName])
   @@index([deliveryCreatedBy])
   @@index([deliveryUpdatedBy])
 }
 
 model DeliveryPhoto {
-  deliveryPhotoId         String            @id @default(cuid())
+  deliveryPhotoId         String   @id @default(cuid())
   deliveryPhotoDeliveryId String
   deliveryPhotoPath       String
   deliveryPhotoCreatedBy  String?
   deliveryPhotoCreatedAt  DateTime
 
-  delivery               Delivery    @relation(fields: [deliveryPhotoDeliveryId], references: [deliveryId], onDelete: Cascade)
+  delivery Delivery @relation(fields: [deliveryPhotoDeliveryId], references: [deliveryId], onDelete: Cascade)
 
   @@index([deliveryPhotoDeliveryId])
 }

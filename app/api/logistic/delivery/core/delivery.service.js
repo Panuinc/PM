@@ -17,6 +17,13 @@ export class DeliveryService {
     return DeliveryRepository.findByDeliveryInvoiceNumber(deliveryInvoiceNumber);
   }
 
+  static async getByInvoiceAndCompany(deliveryInvoiceNumber, deliveryCompanyName) {
+    return DeliveryRepository.findByInvoiceAndCompany(
+      deliveryInvoiceNumber,
+      deliveryCompanyName
+    );
+  }
+
   static async create(data) {
     if (!data) {
       throw {

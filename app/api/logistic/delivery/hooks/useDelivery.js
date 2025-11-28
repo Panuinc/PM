@@ -148,6 +148,7 @@ export function useSubmitDelivery({
             "deliveryInvoiceNumber",
             formData.deliveryInvoiceNumber || ""
           );
+          fd.append("deliveryCompanyName", formData.deliveryCompanyName || "");
           fd.append("deliveryLocation", formData.deliveryLocation || "");
 
           if (mode === "update")

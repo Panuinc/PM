@@ -32,6 +32,7 @@ export async function CreateDeliveryUseCase(data) {
   logger.info({
     message: "CreateDeliveryUseCase start",
     deliveryInvoiceNumber: data?.deliveryInvoiceNumber,
+    deliveryCompanyName: data?.deliveryCompanyName,
     deliveryCreatedBy: data?.deliveryCreatedBy,
   });
 
@@ -54,20 +55,23 @@ export async function CreateDeliveryUseCase(data) {
   const normalizedDeliveryInvoiceNumber = parsed.data.deliveryInvoiceNumber
     .trim()
     .toLowerCase();
+  const deliveryCompanyName = parsed.data.deliveryCompanyName.trim();
 
-  const duplicate = await DeliveryValidator.isDuplicateDeliveryInvoiceNumber(
-    normalizedDeliveryInvoiceNumber
+  const duplicate = await DeliveryValidator.isDuplicateInvoiceAndCompany(
+    normalizedDeliveryInvoiceNumber,
+    deliveryCompanyName
   );
 
   if (duplicate) {
     logger.warn({
-      message: "CreateDeliveryUseCase duplicate deliveryInvoiceNumber",
+      message: "CreateDeliveryUseCase duplicate invoiceNumber + companyName",
       deliveryInvoiceNumber: normalizedDeliveryInvoiceNumber,
+      deliveryCompanyName,
     });
 
     throw {
       status: 409,
-      message: `deliveryInvoiceNumber '${normalizedDeliveryInvoiceNumber}' already exists`,
+      message: `Invoice '${normalizedDeliveryInvoiceNumber}' already exists for company '${deliveryCompanyName}'`,
     };
   }
 
@@ -78,6 +82,7 @@ export async function CreateDeliveryUseCase(data) {
     const delivery = await DeliveryService.create({
       ...rest,
       deliveryInvoiceNumber: normalizedDeliveryInvoiceNumber,
+      deliveryCompanyName,
       deliveryCreatedAt: now,
     });
 
@@ -98,14 +103,14 @@ export async function CreateDeliveryUseCase(data) {
   } catch (error) {
     if (error && typeof error === "object" && error.code === "P2002") {
       logger.warn({
-        message:
-          "CreateDeliveryUseCase unique constraint violation on deliveryInvoiceNumber (P2002)",
+        message: "CreateDeliveryUseCase unique constraint violation (P2002)",
         deliveryInvoiceNumber: normalizedDeliveryInvoiceNumber,
+        deliveryCompanyName,
       });
 
       throw {
         status: 409,
-        message: `deliveryInvoiceNumber '${normalizedDeliveryInvoiceNumber}' already exists`,
+        message: `Invoice '${normalizedDeliveryInvoiceNumber}' already exists for company '${deliveryCompanyName}'`,
       };
     }
 
@@ -123,6 +128,7 @@ export async function UpdateDeliveryUseCase(data) {
     message: "UpdateDeliveryUseCase start",
     deliveryId: data?.deliveryId,
     deliveryInvoiceNumber: data?.deliveryInvoiceNumber,
+    deliveryCompanyName: data?.deliveryCompanyName,
     deliveryUpdatedBy: data?.deliveryUpdatedBy,
   });
 
@@ -155,25 +161,35 @@ export async function UpdateDeliveryUseCase(data) {
   const normalizedDeliveryInvoiceNumber = parsed.data.deliveryInvoiceNumber
     .trim()
     .toLowerCase();
+  const deliveryCompanyName = parsed.data.deliveryCompanyName.trim();
 
   const existingInvoiceNormalized = existing.deliveryInvoiceNumber
     ? existing.deliveryInvoiceNumber.trim().toLowerCase()
     : "";
+  const existingCompanyNormalized = existing.deliveryCompanyName
+    ? existing.deliveryCompanyName.trim()
+    : "";
 
-  if (normalizedDeliveryInvoiceNumber !== existingInvoiceNormalized) {
-    const duplicate = await DeliveryValidator.isDuplicateDeliveryInvoiceNumber(
-      normalizedDeliveryInvoiceNumber
+  const compositeKeyChanged =
+    normalizedDeliveryInvoiceNumber !== existingInvoiceNormalized ||
+    deliveryCompanyName !== existingCompanyNormalized;
+
+  if (compositeKeyChanged) {
+    const duplicate = await DeliveryValidator.isDuplicateInvoiceAndCompany(
+      normalizedDeliveryInvoiceNumber,
+      deliveryCompanyName
     );
 
     if (duplicate) {
       logger.warn({
-        message: "UpdateDeliveryUseCase duplicate deliveryInvoiceNumber",
+        message: "UpdateDeliveryUseCase duplicate invoiceNumber + companyName",
         deliveryInvoiceNumber: normalizedDeliveryInvoiceNumber,
+        deliveryCompanyName,
       });
 
       throw {
         status: 409,
-        message: `deliveryInvoiceNumber '${normalizedDeliveryInvoiceNumber}' already exists`,
+        message: `Invoice '${normalizedDeliveryInvoiceNumber}' already exists for company '${deliveryCompanyName}'`,
       };
     }
   }
@@ -189,6 +205,7 @@ export async function UpdateDeliveryUseCase(data) {
   const updateData = {
     ...rest,
     deliveryInvoiceNumber: normalizedDeliveryInvoiceNumber,
+    deliveryCompanyName,
     deliveryUpdatedAt: now,
   };
 
@@ -223,14 +240,14 @@ export async function UpdateDeliveryUseCase(data) {
   } catch (error) {
     if (error && typeof error === "object" && error.code === "P2002") {
       logger.warn({
-        message:
-          "UpdateDeliveryUseCase unique constraint violation on deliveryInvoiceNumber (P2002)",
+        message: "UpdateDeliveryUseCase unique constraint violation (P2002)",
         deliveryInvoiceNumber: normalizedDeliveryInvoiceNumber,
+        deliveryCompanyName,
       });
 
       throw {
         status: 409,
-        message: `deliveryInvoiceNumber '${normalizedDeliveryInvoiceNumber}' already exists`,
+        message: `Invoice '${normalizedDeliveryInvoiceNumber}' already exists for company '${deliveryCompanyName}'`,
       };
     }
     logger.error({

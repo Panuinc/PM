@@ -27,6 +27,7 @@ export default function DeliveryCreate() {
   const formHandler = useFormHandler(
     {
       deliveryInvoiceNumber: "",
+      deliveryCompanyName: "",
       deliveryLocation: "",
       deliveryPicture: "",
       deliveryFile: null,

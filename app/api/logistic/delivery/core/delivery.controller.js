@@ -127,6 +127,9 @@ export async function createDelivery(request) {
       const deliveryInvoiceNumber = String(
         formData.get("deliveryInvoiceNumber") || ""
       );
+      const deliveryCompanyName = String(
+        formData.get("deliveryCompanyName") || ""
+      );
       const deliveryLocation = String(formData.get("deliveryLocation") || "");
       const deliveryCreatedBy = String(formData.get("deliveryCreatedBy") || "");
 
@@ -136,7 +139,8 @@ export async function createDelivery(request) {
       }
 
       const invoiceFolder = sanitizeBaseName(deliveryInvoiceNumber);
-      const folder = `delivery/${invoiceFolder}`;
+      const companyFolder = sanitizeBaseName(deliveryCompanyName);
+      const folder = `delivery/${companyFolder}/${invoiceFolder}`;
 
       const deliveryPicture = await validateAndSaveImageFile(
         invoiceFile,
@@ -159,6 +163,7 @@ export async function createDelivery(request) {
 
       const delivery = await CreateDeliveryUseCase({
         deliveryInvoiceNumber,
+        deliveryCompanyName,
         deliveryLocation,
         deliveryPicture,
         deliveryCreatedBy,
@@ -198,6 +203,9 @@ export async function updateDelivery(request, deliveryId) {
       const deliveryInvoiceNumber = String(
         formData.get("deliveryInvoiceNumber") || ""
       );
+      const deliveryCompanyName = String(
+        formData.get("deliveryCompanyName") || ""
+      );
       const deliveryLocation = String(formData.get("deliveryLocation") || "");
       const deliveryStatus = String(formData.get("deliveryStatus") || "");
       const deliveryUpdatedBy = String(formData.get("deliveryUpdatedBy") || "");
@@ -216,7 +224,8 @@ export async function updateDelivery(request, deliveryId) {
       const invoiceFolder = sanitizeBaseName(
         deliveryInvoiceNumber || deliveryId
       );
-      const folder = `delivery/${invoiceFolder}`;
+      const companyFolder = sanitizeBaseName(deliveryCompanyName || "unknown");
+      const folder = `delivery/${companyFolder}/${invoiceFolder}`;
 
       if (invoiceFile) {
         deliveryPicture = await validateAndSaveImageFile(
@@ -242,6 +251,7 @@ export async function updateDelivery(request, deliveryId) {
       const delivery = await UpdateDeliveryUseCase({
         deliveryId,
         deliveryInvoiceNumber,
+        deliveryCompanyName,
         deliveryLocation,
         deliveryPicture,
         deliveryStatus,

@@ -37,6 +37,7 @@ export default function DeliveryUpdate() {
   const formHandler = useFormHandler(
     {
       deliveryInvoiceNumber: "",
+      deliveryCompanyName: "",
       deliveryLocation: "",
       deliveryPicture: "",
       deliveryFile: null,
@@ -54,14 +55,15 @@ export default function DeliveryUpdate() {
     if (delivery) {
       formHandler.setFormData({
         deliveryInvoiceNumber: delivery.deliveryInvoiceNumber || "",
+        deliveryCompanyName: delivery.deliveryCompanyName || "",
         deliveryLocation: delivery.deliveryLocation || "",
         deliveryPicture: delivery.deliveryPicture || "",
         deliveryFile: null,
         deliveryStatus: delivery.deliveryStatus || "",
 
         deliveryProductFiles: [],
-        deliveryProductPhotos: Array.isArray(delivery.deliveryProductPhotos)
-          ? delivery.deliveryProductPhotos
+        deliveryProductPhotos: Array.isArray(delivery.deliveryPhotos)
+          ? delivery.deliveryPhotos
           : [],
         deliveryDeletePhotoIds: [],
       });

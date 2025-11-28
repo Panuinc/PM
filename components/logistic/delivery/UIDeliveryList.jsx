@@ -3,9 +3,11 @@ import React from "react";
 import UIHeader from "@/components/UIHeader";
 import DataTable from "@/components/UITable";
 import UILoading from "@/components/UILoading";
+import { DELIVERY_COMPANY_OPTIONS } from "@/app/api/logistic/delivery/core/delivery.schema";
 
 const columns = [
   { name: "ID", uid: "deliveryIndex", sortable: true },
+  { name: "COMPANY", uid: "deliveryCompanyLabel", sortable: true },
   { name: "INVOICE NUMBER", uid: "deliveryInvoiceNumber", sortable: true },
   { name: "LOCATION", uid: "deliveryLocation", sortable: true },
   { name: "STATUS", uid: "deliveryStatus", sortable: true },
@@ -25,6 +27,11 @@ const statusColorMap = {
   PendingApprove: "warning",
   Approved: "success",
 };
+
+function getCompanyLabel(companyKey) {
+  const found = DELIVERY_COMPANY_OPTIONS.find((c) => c.key === companyKey);
+  return found ? found.label : companyKey || "-";
+}
 
 export default function UIDeliveryList({
   headerTopic,
@@ -46,6 +53,7 @@ export default function UIDeliveryList({
         ...delivery,
         id: delivery.deliveryId,
         deliveryIndex: i + 1,
+        deliveryCompanyLabel: getCompanyLabel(delivery.deliveryCompanyName),
         deliveryCreatedBy: delivery.createdByUser
           ? `${delivery.createdByUser.userFirstName} ${delivery.createdByUser.userLastName}`
           : delivery.deliveryCreatedBy,

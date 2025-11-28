@@ -2,6 +2,7 @@
 import UIHeader from "@/components/UIHeader";
 import UIInvoiceValidationResult from "@/components/logistic/delivery/UIInvoiceValidationResult";
 import { useInvoiceValidation } from "@/hooks/useInvoiceValidation";
+import { DELIVERY_COMPANY_OPTIONS } from "@/app/api/logistic/delivery/core/delivery.schema";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   Button,
@@ -360,7 +361,34 @@ export default function UIDeliveryForm({
             </div>
           </div>
 
+          {/* Company Name Select */}
           <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit p-2 gap-2">
+            <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+              <Select
+                name="deliveryCompanyName"
+                label="Company Name"
+                labelPlacement="outside"
+                placeholder="Please Select Company"
+                color="default"
+                variant="faded"
+                radius="none"
+                isRequired
+                selectedKeys={
+                  formData.deliveryCompanyName
+                    ? [formData.deliveryCompanyName]
+                    : []
+                }
+                onSelectionChange={(keys) =>
+                  handleChange("deliveryCompanyName")([...keys][0])
+                }
+                isInvalid={!!errors.deliveryCompanyName}
+                errorMessage={errors.deliveryCompanyName}
+              >
+                {DELIVERY_COMPANY_OPTIONS.map((company) => (
+                  <SelectItem key={company.key}>{company.label}</SelectItem>
+                ))}
+              </Select>
+            </div>
             <div className="flex items-center justify-center w-full h-full p-2 gap-2">
               <Input
                 name="deliveryInvoiceNumber"

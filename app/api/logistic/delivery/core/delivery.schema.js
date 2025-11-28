@@ -14,9 +14,21 @@ const preprocessStringArrayJson = (fallback = []) =>
     return fallback;
   }, z.array(z.string()).default(fallback));
 
+export const DELIVERY_COMPANY_OPTIONS = [
+  { key: "CHH", label: "บริษัท ชื้อฮะฮวด อุตสาหกรรม จำกัด" },
+  { key: "DEX", label: "บริษัท ดีไซน์ เอ็กซ์เช้นจ์ จำกัด" },
+  { key: "WWS", label: "บริษัท เวสท์วินด์ เซอร์วิสเซส จำกัด" },
+];
+
+export const DELIVERY_COMPANY_KEYS = DELIVERY_COMPANY_OPTIONS.map((c) => c.key);
+
 export const deliveryPostSchema = z.object({
   deliveryInvoiceNumber: preprocessString(
     "Please provide deliveryInvoiceNumber"
+  ),
+  deliveryCompanyName: preprocessEnum(
+    DELIVERY_COMPANY_KEYS,
+    "Please provide deliveryCompanyName"
   ),
   deliveryLocation: preprocessString("Please provide deliveryLocation"),
   deliveryPicture: preprocessString("Please provide deliveryPicture"),
@@ -29,6 +41,10 @@ export const deliveryPutSchema = z.object({
   deliveryId: preprocessString("Please provide the delivery ID"),
   deliveryInvoiceNumber: preprocessString(
     "Please provide deliveryInvoiceNumber"
+  ),
+  deliveryCompanyName: preprocessEnum(
+    DELIVERY_COMPANY_KEYS,
+    "Please provide deliveryCompanyName"
   ),
   deliveryLocation: preprocessString("Please provide deliveryLocation"),
   deliveryPicture: preprocessString("Please provide deliveryPicture"),

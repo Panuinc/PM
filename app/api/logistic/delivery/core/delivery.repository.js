@@ -43,8 +43,22 @@ export const DeliveryRepository = {
   },
 
   findByDeliveryInvoiceNumber: async (deliveryInvoiceNumber) => {
-    return prisma.delivery.findUnique({
+    return prisma.delivery.findFirst({
       where: { deliveryInvoiceNumber },
+    });
+  },
+
+  findByInvoiceAndCompany: async (
+    deliveryInvoiceNumber,
+    deliveryCompanyName
+  ) => {
+    return prisma.delivery.findUnique({
+      where: {
+        deliveryInvoiceNumber_deliveryCompanyName: {
+          deliveryInvoiceNumber,
+          deliveryCompanyName,
+        },
+      },
     });
   },
 
