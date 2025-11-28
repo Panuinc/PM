@@ -45,7 +45,7 @@ export default function DeliveryUpdate() {
 
       deliveryProductFiles: [],
 
-      deliveryProductPhotos: [],
+      deliveryPhotos: [],
       deliveryDeletePhotoIds: [],
     },
     submitDelivery
@@ -62,7 +62,7 @@ export default function DeliveryUpdate() {
         deliveryStatus: delivery.deliveryStatus || "",
 
         deliveryProductFiles: [],
-        deliveryProductPhotos: Array.isArray(delivery.deliveryPhotos)
+        deliveryPhotos: Array.isArray(delivery.deliveryPhotos)
           ? delivery.deliveryPhotos
           : [],
         deliveryDeletePhotoIds: [],

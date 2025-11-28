@@ -321,12 +321,12 @@ export default function UIDeliveryForm({
   const deleteExistingProductPhoto = (photoId) => {
     if (!photoId) return;
 
-    const existing = Array.isArray(formData.deliveryProductPhotos)
-      ? formData.deliveryProductPhotos
+    const existing = Array.isArray(formData.deliveryPhotos)
+      ? formData.deliveryPhotos
       : [];
 
     const nextExisting = existing.filter((p) => p?.deliveryPhotoId !== photoId);
-    handleChange("deliveryProductPhotos")(nextExisting);
+    handleChange("deliveryPhotos")(nextExisting);
 
     const currentDelete = Array.isArray(formData.deliveryDeletePhotoIds)
       ? formData.deliveryDeletePhotoIds
@@ -501,15 +501,15 @@ export default function UIDeliveryForm({
             </div>
           )}
 
-          {Array.isArray(formData.deliveryProductPhotos) &&
-            formData.deliveryProductPhotos.length > 0 && (
+          {Array.isArray(formData.deliveryPhotos) &&
+            formData.deliveryPhotos.length > 0 && (
               <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2">
                 <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-sm text-gray-500">
                   Product Photos (Saved):
                 </div>
 
                 <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 w-full xl:w-10/12 p-2">
-                  {formData.deliveryProductPhotos.map((p) => (
+                  {formData.deliveryPhotos.map((p) => (
                     <div
                       key={p.deliveryPhotoId}
                       className="flex flex-col gap-2 p-2 rounded border border-default-200"

@@ -33,7 +33,7 @@ export default function DeliveryCreate() {
       deliveryFile: null,
 
       deliveryProductFiles: [],
-      deliveryProductPhotos: [],
+      deliveryPhotos: [],
       deliveryDeletePhotoIds: [],
     },
     submitDelivery

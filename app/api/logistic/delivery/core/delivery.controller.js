@@ -142,10 +142,11 @@ export async function createDelivery(request) {
       const companyFolder = sanitizeBaseName(deliveryCompanyName);
       const folder = `delivery/${companyFolder}/${invoiceFolder}`;
 
+      const invoiceBaseName = `invoice_${invoiceFolder}_${Date.now()}`;
       const deliveryPicture = await validateAndSaveImageFile(
         invoiceFile,
         folder,
-        `invoice_${invoiceFolder}`
+        invoiceBaseName
       );
 
       const productFiles = formData.getAll("productFiles").filter(Boolean);
@@ -153,11 +154,8 @@ export async function createDelivery(request) {
 
       for (let i = 0; i < productFiles.length; i++) {
         const f = productFiles[i];
-        const p = await validateAndSaveImageFile(
-          f,
-          folder,
-          `product_${deliveryInvoiceNumber}_${String(i + 1).padStart(3, "0")}`
-        );
+        const baseName = `product_${invoiceFolder}_${Date.now()}_${i}`;
+        const p = await validateAndSaveImageFile(f, folder, baseName);
         if (p) productPictures.push(p);
       }
 
@@ -228,10 +226,11 @@ export async function updateDelivery(request, deliveryId) {
       const folder = `delivery/${companyFolder}/${invoiceFolder}`;
 
       if (invoiceFile) {
+        const baseName = `invoice_${invoiceFolder}_${Date.now()}`;
         deliveryPicture = await validateAndSaveImageFile(
           invoiceFile,
           folder,
-          `invoice_${invoiceFolder}`
+          baseName
         );
       }
 
@@ -240,11 +239,8 @@ export async function updateDelivery(request, deliveryId) {
 
       for (let i = 0; i < productFiles.length; i++) {
         const f = productFiles[i];
-        const p = await validateAndSaveImageFile(
-          f,
-          folder,
-          `product_${String(i + 1).padStart(3, "0")}`
-        );
+        const baseName = `product_${invoiceFolder}_${Date.now()}_${i}`;
+        const p = await validateAndSaveImageFile(f, folder, baseName);
         if (p) productPictures.push(p);
       }
 
