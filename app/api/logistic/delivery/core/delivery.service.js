@@ -50,7 +50,6 @@ export class DeliveryService {
 
       await DeliveryRepository.createPhoto({
         deliveryPhotoDeliveryId: deliveryId,
-        deliveryPhotoType: "Product",
         deliveryPhotoPath: path,
         deliveryPhotoCreatedBy: createdBy || null,
         deliveryPhotoCreatedAt: createdAt,

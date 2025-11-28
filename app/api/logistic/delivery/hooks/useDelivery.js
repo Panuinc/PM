@@ -10,12 +10,6 @@ function formatDeliveryFromApi(delivery, index) {
   const photos = Array.isArray(delivery.deliveryPhotos)
     ? delivery.deliveryPhotos
     : [];
-  const productPhotos = photos
-    .filter((p) => p?.deliveryPhotoType === "Product")
-    .map((p) => ({
-      deliveryPhotoId: p.deliveryPhotoId,
-      deliveryPhotoPath: p.deliveryPhotoPath,
-    }));
 
   return {
     ...delivery,
@@ -26,7 +20,6 @@ function formatDeliveryFromApi(delivery, index) {
     deliveryUpdatedBy: delivery.updatedByUser
       ? `${delivery.updatedByUser.userFirstName} ${delivery.updatedByUser.userLastName}`
       : "-",
-    deliveryProductPhotos: productPhotos,
   };
 }
 

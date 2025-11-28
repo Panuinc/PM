@@ -22,11 +22,6 @@ enum DeliveryStatus {
   Approved
 }
 
-enum DeliveryPhotoType {
-  Invoice
-  Product
-}
-
 model User {
   userId        String     @id @default(cuid())
   userFirstName String
@@ -115,8 +110,6 @@ model Department {
   createdByUser User? @relation("DepartmentCreatedByUser", fields: [departmentCreatedBy], references: [userId])
   updatedByUser User? @relation("DepartmentUpdatedByUser", fields: [departmentUpdatedBy], references: [userId])
 
-  deliveryPhotos DeliveryPhoto[]
-
   @@index([departmentCreatedBy])
   @@index([departmentUpdatedBy])
 }
@@ -143,15 +136,11 @@ model Delivery {
 model DeliveryPhoto {
   deliveryPhotoId         String            @id @default(cuid())
   deliveryPhotoDeliveryId String
-  deliveryPhotoType       DeliveryPhotoType @default(Product)
   deliveryPhotoPath       String
   deliveryPhotoCreatedBy  String?
   deliveryPhotoCreatedAt  DateTime
 
   delivery               Delivery    @relation(fields: [deliveryPhotoDeliveryId], references: [deliveryId], onDelete: Cascade)
-  department             Department? @relation(fields: [departmentDepartmentId], references: [departmentId])
-  departmentDepartmentId String?
 
   @@index([deliveryPhotoDeliveryId])
-  @@index([deliveryPhotoType])
 }
