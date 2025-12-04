@@ -7,7 +7,7 @@ const client = new OpenAI({
 });
 
 const VISION_MODEL =
-  process.env.OPENROUTER_VISION_MODEL || "nvidia/nemotron-nano-12b-v2-vl:free";
+  process.env.OPENROUTER_VISION_MODEL || "google/gemma-3-27b-it:free";
 
 function unknownToNull(v) {
   if (v === "unknown") return null;
@@ -67,19 +67,49 @@ function mergeAiStringsIntoIssues({
   }
 }
 
+function parseModelJson(content) {
+  if (!content || typeof content !== "string") return null;
+
+  const trimmed = content.trim();
+
+  try {
+    return JSON.parse(trimmed);
+  } catch {}
+
+  const m = trimmed.match(/\{[\s\S]*\}/);
+  if (!m) return null;
+
+  let s = m[0];
+
+  s = s.replace(/:\s*unknown(\s*[,\}])/g, ': "unknown"$1');
+  s = s.replace(/\[\s*unknown(\s*[,\]])/g, '["unknown"$1');
+  s = s.replace(/,\s*unknown(\s*[,\]])/g, ', "unknown"$1');
+
+  s = s.replace(/'([^']*)'/g, (_, inner) => `"${inner.replace(/"/g, '\\"')}"`);
+
+  s = s.replace(/,\s*([}\]])/g, "$1");
+
+  try {
+    return JSON.parse(s);
+  } catch {
+    return null;
+  }
+}
+
 const PROMPT = `คุณเป็นผู้เชี่ยวชาญในการตรวจสอบเอกสาร Invoice/ใบส่งสินค้า/ใบกำกับภาษี ของบริษัท C.H.H. INDUSTRY CO., LTD.
-งานของคุณคือตรวจจากภาพเท่านั้น ห้ามเดา หากไม่ชัดให้ตอบ "unknown"
 
-## กฎเหล็ก:
-- ห้ามคาดเดา: ถ้าไม่ชัด/ไม่มั่นใจ ให้ตอบ "unknown"
-- ตอบเป็น JSON เพียว ๆ เท่านั้น (ไม่มี markdown ไม่มีข้อความนอก JSON)
+กฎเหล็ก (สำคัญมาก):
+- ตอบเป็น JSON เพียวๆ เท่านั้น (ห้าม markdown ห้ามข้อความนอก JSON)
+- ห้ามเดา หากไม่ชัดให้ใช้ค่า "unknown" เท่านั้น
+- "unknown" ต้องเป็น STRING ใน JSON เสมอ (ต้องเขียนเป็น "unknown" มีเครื่องหมาย " ")
 - ห้ามใส่ key อื่นนอก schema
-- boolean ต้องเป็น true/false/unknown เท่านั้น
-- string ต้องเป็น string/unknown เท่านั้น
+- boolean ต้องเป็น true/false/"unknown"
+- string ต้องเป็น string/"unknown"
+- array ต้องเป็น [] หรือ ["..."]
 
-## ตอบ JSON ตาม schema นี้เป๊ะ:
+ตอบ JSON ตาม schema นี้เป๊ะ:
 {
-  "isValidInvoice": true/false/unknown,
+  "isValidInvoice": true/false/"unknown",
   "extractedData": {
     "companyName": "string|unknown",
     "invoiceNumber": "string|unknown",
@@ -95,55 +125,55 @@ const PROMPT = `คุณเป็นผู้เชี่ยวชาญใน�
     }
   },
   "invoiceInfo": {
-    "hasCompanyHeader": true/false/unknown,
-    "hasDocumentNumber": true/false/unknown,
+    "hasCompanyHeader": true/false/"unknown",
+    "hasDocumentNumber": true/false/"unknown",
     "documentNumber": "string|unknown",
-    "hasDate": true/false/unknown,
+    "hasDate": true/false/"unknown",
     "documentDate": "string|unknown",
-    "hasItemDetails": true/false/unknown,
-    "hasTotalAmount": true/false/unknown,
+    "hasItemDetails": true/false/"unknown",
+    "hasTotalAmount": true/false/"unknown",
     "totalAmount": "string|unknown",
-    "hasVat": true/false/unknown,
+    "hasVat": true/false/"unknown",
     "description": "string"
   },
   "signatures": {
     "totalFound": 0-4,
     "allFourComplete": true/false,
-    "receivedBy": { "hasSignature": true/false/unknown, "hasDate": true/false/unknown, "details": "string" },
-    "deliveredBy": { "hasSignature": true/false/unknown, "hasDate": true/false/unknown, "details": "string" },
-    "checkedBy": { "hasSignature": true/false/unknown, "hasDate": true/false/unknown, "details": "string" },
-    "issuedBy": { "hasSignature": true/false/unknown, "hasDate": true/false/unknown, "details": "string" },
+    "receivedBy": { "hasSignature": true/false/"unknown", "hasDate": true/false/"unknown", "details": "string" },
+    "deliveredBy": { "hasSignature": true/false/"unknown", "hasDate": true/false/"unknown", "details": "string" },
+    "checkedBy": { "hasSignature": true/false/"unknown", "hasDate": true/false/"unknown", "details": "string" },
+    "issuedBy": { "hasSignature": true/false/"unknown", "hasDate": true/false/"unknown", "details": "string" },
     "summary": "string"
   },
   "cleanliness": {
-    "isClean": true/false/unknown,
-    "hasUnauthorizedMarks": true/false/unknown,
-    "hasScratches": true/false/unknown,
-    "hasCrossOuts": true/false/unknown,
-    "hasNumberCorrections": true/false/unknown,
-    "hasLiquidPaper": true/false/unknown,
-    "hasHighlights": true/false/unknown,
+    "isClean": true/false/"unknown",
+    "hasUnauthorizedMarks": true/false/"unknown",
+    "hasScratches": true/false/"unknown",
+    "hasCrossOuts": true/false/"unknown",
+    "hasNumberCorrections": true/false/"unknown",
+    "hasLiquidPaper": true/false/"unknown",
+    "hasHighlights": true/false/"unknown",
     "markLocations": ["string"],
     "details": "string"
   },
   "condition": {
-    "isGoodCondition": true/false/unknown,
-    "hasTears": true/false/unknown,
-    "hasStains": true/false/unknown,
-    "hasDamagingFolds": true/false/unknown,
-    "hasMissingParts": true/false/unknown,
+    "isGoodCondition": true/false/"unknown",
+    "hasTears": true/false/"unknown",
+    "hasStains": true/false/"unknown",
+    "hasDamagingFolds": true/false/"unknown",
+    "hasMissingParts": true/false/"unknown",
     "details": "string"
   },
   "imageQuality": {
-    "isAcceptable": true/false/unknown,
-    "isClear": true/false/unknown,
-    "isProperlyLit": true/false/unknown,
-    "isComplete": true/false/unknown,
-    "isNotBlurry": true/false/unknown,
+    "isAcceptable": true/false/"unknown",
+    "isClear": true/false/"unknown",
+    "isProperlyLit": true/false/"unknown",
+    "isComplete": true/false/"unknown",
+    "isNotBlurry": true/false/"unknown",
     "details": "string"
   },
   "overallResult": {
-    "passed": true/false/unknown,
+    "passed": true/false/"unknown",
     "score": 0-100,
     "passedCriteria": ["string"],
     "failedCriteria": ["string"],
@@ -153,7 +183,7 @@ const PROMPT = `คุณเป็นผู้เชี่ยวชาญใน�
   },
   "recommendation": {
     "decision": "ACCEPT|REJECT|NEED_REVIEW",
-    "canProceed": true/false/unknown,
+    "canProceed": true/false/"unknown",
     "reason": "string",
     "requiredActions": ["string"]
   }
@@ -201,14 +231,7 @@ export async function POST(request) {
     });
 
     const content = response.choices?.[0]?.message?.content || "";
-    let result;
-
-    try {
-      result = JSON.parse(content);
-    } catch {
-      const m = content.match(/\{[\s\S]*\}/);
-      if (m) result = JSON.parse(m[0]);
-    }
+    let result = parseModelJson(content);
 
     if (!result || typeof result !== "object") {
       return NextResponse.json({
@@ -235,6 +258,7 @@ export async function POST(request) {
     }
 
     result = unknownToNull(result);
+
     if (result.signatures)
       result.signatures = computeSignatures(result.signatures);
 
@@ -438,10 +462,10 @@ export async function POST(request) {
     if (canProceed == null) canProceed = !hasCriticalIssues;
     if (hasCriticalIssues) canProceed = false;
 
-    const passed = decision === "ACCEPT" && !hasCriticalIssues;
+    const valid = decision === "ACCEPT" && !hasCriticalIssues;
 
     return NextResponse.json({
-      valid: passed,
+      valid,
       canProceed,
       decision,
       score: result.overallResult?.score || 0,
