@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
     <SessionProviders>
       <html lang="en">
         <head>
-          <link rel="icon" href="/images/images.png" />
+          <link rel="icon" href="/images/logo.png" />
         </head>
         <body className={`${gruppo.variable} font-[var(--gruppo)] antialiased`}>
           <Providers>

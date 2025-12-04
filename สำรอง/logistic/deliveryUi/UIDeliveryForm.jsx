@@ -660,7 +660,7 @@ export default function UIDeliveryForm({
             <div className="flex items-end justify-center w-full xl:w-6/12 h-full p-2 gap-2">
               <Button
                 type="button"
-                color="secondary"
+                color="primary"
                 radius="none"
                 className="w-full p-2 gap-2 font-semibold"
                 onPress={() => openCamera("product")}

@@ -838,7 +838,7 @@ export default function UIDeliveryForm({
               subtitle={`${totalProductPhotos} รูปภาพ`}
               action={
                 <Button
-                  color="secondary"
+                  color="primary"
                   variant="flat"
                   radius="full"
                   onPress={() => openCamera("product")}
@@ -858,7 +858,7 @@ export default function UIDeliveryForm({
                   description="เพิ่มรูปภาพสินค้าเพื่อบันทึกหลักฐานการส่งมอบ"
                   action={
                     <Button
-                      color="secondary"
+                      color="primary"
                       variant="flat"
                       radius="full"
                       onPress={() => openCamera("product")}

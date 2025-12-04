@@ -211,7 +211,7 @@ export default function PagesLayout({ children }) {
             </div>
             <div className="xl:flex hidden items-center justify-center w-fit h-fit p-2 gap-2">
               <Image
-                src="/images/images.png"
+                src="/images/logo.png"
                 alt="pic"
                 width={125}
                 height={125}
@@ -248,7 +248,7 @@ export default function PagesLayout({ children }) {
               size="sm"
               isBordered
               color="default"
-              src="/images/images.png"
+              src="/images/logo.png"
             />
           </div>
         </div>
