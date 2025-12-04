@@ -1,5 +1,8 @@
 "use client";
 import UIHeader from "@/components/UIHeader";
+import UIInvoiceValidationResult from "@/components/logistic/delivery/UIInvoiceValidationResult";
+import { useInvoiceValidation } from "@/hooks/useInvoiceValidation";
+import { DELIVERY_COMPANY_OPTIONS } from "@/app/api/logistic/delivery/core/delivery.schema";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   Button,
@@ -13,8 +16,16 @@ import {
   ModalFooter,
   useDisclosure,
   Image,
+  Chip,
 } from "@heroui/react";
-import { Camera, X, RotateCcw, Trash2 } from "lucide-react";
+import {
+  Camera,
+  X,
+  RotateCcw,
+  Trash2,
+  Sparkles,
+  AlertCircle,
+} from "lucide-react";
 
 export default function UIDeliveryForm({
   headerTopic,
@@ -43,6 +54,109 @@ export default function UIDeliveryForm({
   const [localProductPreviewUrls, setLocalProductPreviewUrls] = useState([]);
 
   const pendingResubmitRef = useRef(false);
+
+  const [autoFilledFields, setAutoFilledFields] = useState({
+    companyName: false,
+    invoiceNumber: false,
+  });
+
+  const {
+    isValidating,
+    validationResult,
+    validateInvoice,
+    clearValidation,
+    hasWarnings,
+  } = useInvoiceValidation();
+
+  useEffect(() => {
+    if (validationResult?.extractedData) {
+      const { companyName, invoiceNumber } = validationResult.extractedData;
+
+      const newAutoFilled = { companyName: false, invoiceNumber: false };
+
+      if (
+        companyName &&
+        (!formData.deliveryCompanyName || autoFilledFields.companyName)
+      ) {
+        const normalize = (str) => {
+          return str
+            .toLowerCase()
+            .replace(
+              /บริษัท|จำกัด|มหาชน|\(มหาชน\)|co\.,?\s*ltd\.?|company|limited|inc\.?|corp\.?|industry/gi,
+              ""
+            )
+            .replace(/\s+/g, "")
+            .trim();
+        };
+
+        const normalizedExtracted = normalize(companyName);
+
+        const companyKeywords = {
+          CHH: [
+            "ซื้อฮะฮวด",
+            "ชื้อฮะฮวด",
+            "ฮะฮวด",
+            "chh",
+            "c.h.h",
+            "อุตสาหกรรม",
+          ],
+          DXC: ["ดีไซน์", "เอ็กซ์เช้นจ์", "design", "exchange", "dxc"],
+          WWS: ["เวสท์วินด์", "westwind", "เซอร์วิสเซส", "services", "wws"],
+        };
+
+        let matchedKey = null;
+
+        for (const [key, keywords] of Object.entries(companyKeywords)) {
+          const hasMatch = keywords.some(
+            (keyword) =>
+              normalizedExtracted.includes(normalize(keyword)) ||
+              normalize(keyword).includes(normalizedExtracted) ||
+              companyName.toLowerCase().includes(keyword.toLowerCase())
+          );
+          if (hasMatch) {
+            matchedKey = key;
+            break;
+          }
+        }
+
+        if (!matchedKey) {
+          const matchedCompany = DELIVERY_COMPANY_OPTIONS.find((opt) => {
+            const normalizedLabel = normalize(opt.label);
+            const normalizedKey = normalize(opt.key);
+
+            return (
+              normalizedLabel.includes(normalizedExtracted) ||
+              normalizedExtracted.includes(normalizedLabel) ||
+              normalizedKey.includes(normalizedExtracted) ||
+              normalizedExtracted.includes(normalizedKey)
+            );
+          });
+
+          if (matchedCompany) {
+            matchedKey = matchedCompany.key;
+          }
+        }
+
+        if (matchedKey) {
+          handleChange("deliveryCompanyName")(matchedKey);
+          newAutoFilled.companyName = true;
+        } else {
+          console.log("No match found for company:", companyName);
+          console.log("Available options:", DELIVERY_COMPANY_OPTIONS);
+        }
+      }
+
+      if (
+        invoiceNumber &&
+        (!formData.deliveryInvoiceNumber || autoFilledFields.invoiceNumber)
+      ) {
+        handleChange("deliveryInvoiceNumber")(invoiceNumber);
+        newAutoFilled.invoiceNumber = true;
+      }
+
+      setAutoFilledFields(newAutoFilled);
+    }
+  }, [validationResult]);
 
   useEffect(() => {
     return () => {
@@ -178,11 +292,6 @@ export default function UIDeliveryForm({
     }
   };
 
-  const switchCamera = () => {
-    if (stream) stream.getTracks().forEach((track) => track.stop());
-    setFacingMode((prev) => (prev === "environment" ? "user" : "environment"));
-  };
-
   useEffect(() => {
     if (isOpen && !capturedImage) startCamera();
   }, [facingMode, isOpen]);
@@ -223,18 +332,12 @@ export default function UIDeliveryForm({
   const confirmPhoto = async () => {
     if (!capturedImage) return;
 
-    const invoiceNumber = String(formData.deliveryInvoiceNumber || "").trim();
-    if (!invoiceNumber) {
-      setCameraError("Please enter Invoice Number before taking a photo.");
-      return;
-    }
-
     try {
       const response = await fetch(capturedImage);
       const blob = await response.blob();
 
-      const safeInvoiceNumber = invoiceNumber.replace(/[^a-zA-Z0-9-_]/g, "_");
-      const fileName = `${safeInvoiceNumber}_${captureTarget}_${Date.now()}.jpg`;
+      const timestamp = Date.now();
+      const fileName = `invoice_${timestamp}.jpg`;
       const file = new File([blob], fileName, { type: "image/jpeg" });
 
       if (captureTarget === "invoice") {
@@ -244,6 +347,12 @@ export default function UIDeliveryForm({
 
         handleChange("deliveryFile")(file);
         handleChange("deliveryPicture")(previewUrl);
+
+        setAutoFilledFields({ companyName: false, invoiceNumber: false });
+
+        onClose();
+
+        await validateInvoice(file);
       } else {
         const previewUrl = URL.createObjectURL(file);
         setLocalProductPreviewUrls((prev) => [...prev, previewUrl]);
@@ -252,9 +361,9 @@ export default function UIDeliveryForm({
           ? [...formData.deliveryProductFiles, file]
           : [file];
         handleChange("deliveryProductFiles")(nextFiles);
-      }
 
-      onClose();
+        onClose();
+      }
     } catch {
       setCameraError("Failed to prepare photo. Please try again.");
     }
@@ -288,15 +397,32 @@ export default function UIDeliveryForm({
     });
   };
 
+  const removeInvoicePhoto = () => {
+    if (localInvoicePreviewUrl) URL.revokeObjectURL(localInvoicePreviewUrl);
+    setLocalInvoicePreviewUrl("");
+    handleChange("deliveryFile")(null);
+    handleChange("deliveryPicture")("");
+    clearValidation();
+    setAutoFilledFields({ companyName: false, invoiceNumber: false });
+  };
+
+  const handleRetryValidation = async () => {
+    const file = formData.deliveryFile;
+    if (file) {
+      setAutoFilledFields({ companyName: false, invoiceNumber: false });
+      await validateInvoice(file);
+    }
+  };
+
   const deleteExistingProductPhoto = (photoId) => {
     if (!photoId) return;
 
-    const existing = Array.isArray(formData.deliveryProductPhotos)
-      ? formData.deliveryProductPhotos
+    const existing = Array.isArray(formData.deliveryPhotos)
+      ? formData.deliveryPhotos
       : [];
 
     const nextExisting = existing.filter((p) => p?.deliveryPhotoId !== photoId);
-    handleChange("deliveryProductPhotos")(nextExisting);
+    handleChange("deliveryPhotos")(nextExisting);
 
     const currentDelete = Array.isArray(formData.deliveryDeletePhotoIds)
       ? formData.deliveryDeletePhotoIds
@@ -304,6 +430,16 @@ export default function UIDeliveryForm({
     if (!currentDelete.includes(photoId)) {
       handleChange("deliveryDeletePhotoIds")([...currentDelete, photoId]);
     }
+  };
+
+  const handleCompanyChange = (value) => {
+    setAutoFilledFields((prev) => ({ ...prev, companyName: false }));
+    handleChange("deliveryCompanyName")(value);
+  };
+
+  const handleInvoiceNumberChange = (e) => {
+    setAutoFilledFields((prev) => ({ ...prev, invoiceNumber: false }));
+    handleChange("deliveryInvoiceNumber")(e);
   };
 
   return (
@@ -331,20 +467,170 @@ export default function UIDeliveryForm({
             </div>
           </div>
 
+          <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2">
+            <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+              <Sparkles />
+              <div>
+                ถ่ายรูป Invoice เพื่อเริ่มต้น ระบบจะอ่านข้อมูล
+                <strong>ชื่อบริษัท</strong> และ <strong>เลขที่เอกสาร</strong>
+                จากรูปภาพโดยอัตโนมัติ
+              </div>
+            </div>
+          </div>
+
           <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit p-2 gap-2">
+            <div className="flex items-center justify-center w-full xl:w-6/12 h-full p-2 gap-2">
+              <Button
+                type="button"
+                color="primary"
+                radius="none"
+                className="w-full p-2 gap-2 text-background font-semibold"
+                onPress={() => openCamera("invoice")}
+                startContent={<Camera />}
+                isDisabled={isLoadingLocation || isValidating}
+              >
+                {formData.deliveryPicture
+                  ? "ถ่ายรูป Invoice ใหม่"
+                  : "📸 ถ่ายรูป Invoice"}
+              </Button>
+            </div>
+          </div>
+
+          {formData.deliveryPicture && (
+            <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2">
+              <div className="flex items-center justify-between w-full h-full p-2 gap-2">
+                <span className="text-sm text-gray-500">
+                  Invoice Picture Preview:
+                </span>
+                {localInvoicePreviewUrl && (
+                  <Button
+                    type="button"
+                    color="danger"
+                    variant="light"
+                    startContent={<Trash2 />}
+                    onPress={removeInvoicePhoto}
+                  >
+                    ลบรูป
+                  </Button>
+                )}
+              </div>
+              <div className="flex items-center justify-center w-full h-fit p-2 gap-2">
+                <Image
+                  src={formData.deliveryPicture}
+                  alt="Delivery Invoice Picture"
+                  radius="none"
+                  className="max-h-64 object-contain"
+                  fallbackSrc="https://via.placeholder.com/300x200?text=Image+Not+Found"
+                />
+              </div>
+            </div>
+          )}
+
+          {(isValidating || validationResult) && (
+            <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2">
+              <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+                <UIInvoiceValidationResult
+                  isValidating={isValidating}
+                  validationResult={validationResult}
+                  onRetry={handleRetryValidation}
+                />
+              </div>
+            </div>
+          )}
+
+          {validationResult?.extractedData && (
+            <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2">
+              <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+                <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2">
+                  <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+                    <Sparkles /> ข้อมูลที่อ่านได้จากเอกสาร
+                  </div>
+                  <div className="flex flex-wrap items-center justify-center w-full h-full p-2 gap-2">
+                    {validationResult.extractedData.companyName && (
+                      <Chip
+                        color="success"
+                        variant="flat"
+                        startContent={<span>🏢</span>}
+                      >
+                        บริษัท: {validationResult.extractedData.companyName}
+                      </Chip>
+                    )}
+                    {validationResult.extractedData.invoiceNumber && (
+                      <Chip
+                        color="success"
+                        variant="flat"
+                        startContent={<span>📄</span>}
+                      >
+                        เลขที่: {validationResult.extractedData.invoiceNumber}
+                      </Chip>
+                    )}
+                    {validationResult.extractedData.invoiceDate && (
+                      <Chip
+                        color="default"
+                        variant="flat"
+                        startContent={<span>📅</span>}
+                      >
+                        วันที่: {validationResult.extractedData.invoiceDate}
+                      </Chip>
+                    )}
+                    {validationResult.extractedData.totalAmount && (
+                      <Chip
+                        color="default"
+                        variant="flat"
+                        startContent={<span>💰</span>}
+                      >
+                        ยอดรวม: {validationResult.extractedData.totalAmount}
+                      </Chip>
+                    )}
+                  </div>
+                  {(!validationResult.extractedData.companyName ||
+                    !validationResult.extractedData.invoiceNumber) && (
+                    <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+                      <AlertCircle />
+                      บางข้อมูลไม่สามารถอ่านได้ กรุณากรอกเพิ่มเติมด้านล่าง
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit p-2 gap-2">
+            <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+              <Select
+                name="deliveryCompanyName"
+                labelPlacement="outside"
+                placeholder="Please Select Company"
+                color="default"
+                variant="faded"
+                radius="none"
+                isDisabled
+                selectedKeys={
+                  formData.deliveryCompanyName
+                    ? [formData.deliveryCompanyName]
+                    : []
+                }
+                onSelectionChange={(keys) => handleCompanyChange([...keys][0])}
+                isInvalid={!!errors.deliveryCompanyName}
+                errorMessage={errors.deliveryCompanyName}
+              >
+                {DELIVERY_COMPANY_OPTIONS.map((company) => (
+                  <SelectItem key={company.key}>{company.label}</SelectItem>
+                ))}
+              </Select>
+            </div>
             <div className="flex items-center justify-center w-full h-full p-2 gap-2">
               <Input
                 name="deliveryInvoiceNumber"
                 type="text"
-                label="Invoice Number"
                 color="default"
                 variant="faded"
                 radius="none"
                 labelPlacement="outside"
                 placeholder="Enter Invoice Number"
-                isRequired
+                isDisabled
                 value={formData.deliveryInvoiceNumber || ""}
-                onChange={handleChange("deliveryInvoiceNumber")}
+                onChange={handleInvoiceNumberChange}
                 isInvalid={!!errors.deliveryInvoiceNumber}
                 errorMessage={errors.deliveryInvoiceNumber}
               />
@@ -371,77 +657,46 @@ export default function UIDeliveryForm({
           </div>
 
           <div className="flex flex-col xl:flex-row items-end justify-center w-full h-fit p-2 gap-2">
-            <div className="flex items-end justify-center w-full xl:w-2/12 h-full p-2 gap-2">
-              <Button
-                type="button"
-                color="secondary"
-                radius="none"
-                className="w-full p-2 gap-2 font-semibold"
-                onPress={() => openCamera("invoice")}
-                startContent={<Camera size={16} />}
-                isDisabled={isLoadingLocation}
-              >
-                Take Invoice Photo
-              </Button>
-            </div>
-
-            <div className="flex items-end justify-center w-full xl:w-2/12 h-full p-2 gap-2">
+            <div className="flex items-end justify-center w-full xl:w-6/12 h-full p-2 gap-2">
               <Button
                 type="button"
                 color="secondary"
                 radius="none"
                 className="w-full p-2 gap-2 font-semibold"
                 onPress={() => openCamera("product")}
-                startContent={<Camera size={16} />}
-                isDisabled={isLoadingLocation}
+                startContent={<Camera />}
+                isDisabled={isLoadingLocation || isValidating}
               >
                 Take Product Photo
               </Button>
             </div>
           </div>
 
-          {formData.deliveryPicture && (
-            <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2">
-              <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-sm text-gray-500">
-                Invoice Picture Preview:
-              </div>
-              <div className="flex items-center justify-center w-full xl:w-6/12 h-fit p-2 gap-2">
-                <Image
-                  src={formData.deliveryPicture}
-                  alt="Delivery Invoice Picture"
-                  className="max-h-64 object-contain rounded"
-                  fallbackSrc="https://via.placeholder.com/300x200?text=Image+Not+Found"
-                />
-              </div>
-            </div>
-          )}
-
-          {Array.isArray(formData.deliveryProductPhotos) &&
-            formData.deliveryProductPhotos.length > 0 && (
+          {Array.isArray(formData.deliveryPhotos) &&
+            formData.deliveryPhotos.length > 0 && (
               <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2">
-                <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-sm text-gray-500">
+                <div className="flex items-center justify-start w-full h-full p-2 gap-2">
                   Product Photos (Saved):
                 </div>
 
-                <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 w-full xl:w-10/12 p-2">
-                  {formData.deliveryProductPhotos.map((p) => (
+                <div className="grid grid-cols-2 xl:grid-cols-4 w-full h-full p-2 gap-2">
+                  {formData.deliveryPhotos.map((p) => (
                     <div
                       key={p.deliveryPhotoId}
-                      className="flex flex-col gap-2 p-2 rounded border border-default-200"
+                      className="flex flex-col items-center justify-center w-full h-full p-2 gap-2"
                     >
                       <img
                         src={p.deliveryPhotoPath}
                         alt="Product"
-                        className="w-full h-40 object-cover rounded"
+                        className="flex items-center justify-center w-full h-40 p-2 gap-2 object-cover"
                       />
                       {isUpdate && (
                         <Button
                           type="button"
                           color="danger"
                           radius="none"
-                          variant="flat"
-                          className="w-full font-semibold"
-                          startContent={<Trash2 size={16} />}
+                          className="w-full p-2 gap-2 text-background font-semibold"
+                          startContent={<Trash2 />}
                           onPress={() =>
                             deleteExistingProductPhoto(p.deliveryPhotoId)
                           }
@@ -458,28 +713,27 @@ export default function UIDeliveryForm({
           {Array.isArray(localProductPreviewUrls) &&
             localProductPreviewUrls.length > 0 && (
               <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2">
-                <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-sm text-gray-500">
+                <div className="flex items-center justify-start w-full h-full p-2 gap-2">
                   Product Photos (To Upload):
                 </div>
 
-                <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 w-full xl:w-10/12 p-2">
+                <div className="grid grid-cols-2 xl:grid-cols-4 w-full h-full p-2 gap-2">
                   {localProductPreviewUrls.map((src, idx) => (
                     <div
                       key={`${src}_${idx}`}
-                      className="flex flex-col gap-2 p-2 rounded border border-default-200"
+                      className="flex flex-col items-center justify-center w-full h-full p-2 gap-2"
                     >
                       <img
                         src={src}
                         alt="Product pending"
-                        className="w-full h-40 object-cover rounded"
+                        className="flex items-center justify-center w-full h-40 p-2 gap-2 object-cover"
                       />
                       <Button
                         type="button"
                         color="danger"
                         radius="none"
-                        variant="flat"
-                        className="w-full font-semibold"
-                        startContent={<Trash2 size={16} />}
+                        className="w-full p-2 gap-2 text-background font-semibold"
+                        startContent={<Trash2 />}
                         onPress={() => removeLocalProductFile(idx)}
                       >
                         Remove
@@ -526,6 +780,7 @@ export default function UIDeliveryForm({
                 radius="none"
                 className="w-full p-2 gap-2 text-background font-semibold"
                 isLoading={isLoadingLocation}
+                isDisabled={isValidating}
               >
                 {isLoadingLocation ? "Getting location..." : "Submit"}
               </Button>
@@ -538,7 +793,7 @@ export default function UIDeliveryForm({
                 radius="none"
                 className="w-full p-2 gap-2 font-semibold"
                 onPress={() => history.back()}
-                isDisabled={isLoadingLocation}
+                isDisabled={isLoadingLocation || isValidating}
               >
                 Cancel
               </Button>
@@ -550,20 +805,32 @@ export default function UIDeliveryForm({
       <Modal
         isOpen={isOpen}
         onClose={handleCloseModal}
-        size="2xl"
+        size="5xl"
+        radius="none"
         scrollBehavior="inside"
+        className="flex items-center justify-center w-full h-fit p-2 gap-2"
       >
         <ModalContent>
-          <ModalHeader className="flex flex-col gap-1">
+          <ModalHeader className="flex flex-col items-start justify-center w-full h-full p-2 gap-2">
             {captureTarget === "invoice"
               ? "Take Invoice Photo"
               : "Take Product Photo"}
           </ModalHeader>
 
-          <ModalBody>
-            <div className="flex flex-col items-center justify-center w-full gap-4">
+          <ModalBody className="flex flex-col items-center justify-center w-full h-full p-2 gap-2">
+            <div className="flex flex-col items-center justify-start w-full h-full p-2 gap-2 overflow-auto">
+              {captureTarget === "invoice" && !capturedImage && (
+                <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+                  <div className="flex items-center justify-center w-full h-full p-2 gap-2">
+                    <Sparkles />
+                    ถ่ายรูปให้ชัด
+                    ระบบจะอ่านชื่อบริษัทและเลขที่เอกสารให้อัตโนมัติ
+                  </div>
+                </div>
+              )}
+
               {cameraError && (
-                <div className="w-full p-4 bg-danger-100 text-danger rounded">
+                <div className="flex items-center justify-center w-full h-full p-2 gap-2">
                   {cameraError}
                 </div>
               )}
@@ -575,7 +842,7 @@ export default function UIDeliveryForm({
                     autoPlay
                     playsInline
                     muted
-                    className="w-full max-h-96 bg-black rounded"
+                    className="flex items-center justify-center w-full h-full p-2 gap-2 overflow-auto"
                   />
                   <canvas ref={canvasRef} className="hidden" />
                 </>
@@ -583,28 +850,21 @@ export default function UIDeliveryForm({
                 <img
                   src={capturedImage}
                   alt="Captured"
-                  className="w-full max-h-96 object-contain rounded"
+                  className="flex items-center justify-center w-full h-full p-2 gap-2 overflow-auto"
                 />
               )}
             </div>
           </ModalBody>
 
-          <ModalFooter>
+          <ModalFooter className="flex flex-row items-center justify-center w-full h-full p-2 gap-2">
             {!capturedImage ? (
-              <>
-                <Button
-                  color="default"
-                  variant="light"
-                  onPress={switchCamera}
-                  startContent={<RotateCcw size={16} />}
-                >
-                  Switch Camera
-                </Button>
-
+              <div className="flex flex-row items-center justify-center w-full h-full p-2 gap-2">
                 <Button
                   color="primary"
+                  radius="none"
+                  className="w-full p-2 gap-2 text-background font-semibold"
                   onPress={capturePhoto}
-                  startContent={<Camera size={16} />}
+                  startContent={<Camera />}
                   isDisabled={!stream}
                 >
                   Capture
@@ -612,37 +872,47 @@ export default function UIDeliveryForm({
 
                 <Button
                   color="danger"
-                  variant="light"
+                  radius="none"
+                  className="w-full p-2 gap-2 text-background font-semibold"
                   onPress={handleCloseModal}
-                  startContent={<X size={16} />}
+                  startContent={<X />}
                 >
                   Cancel
                 </Button>
-              </>
+              </div>
             ) : (
-              <>
+              <div className="flex flex-row items-center justify-center w-full h-full p-2 gap-2">
                 <Button
                   color="default"
-                  variant="light"
+                  radius="none"
+                  className="w-full p-2 gap-2 text-background font-semibold"
                   onPress={retakePhoto}
-                  startContent={<RotateCcw size={16} />}
+                  startContent={<RotateCcw />}
                 >
                   Retake
                 </Button>
 
-                <Button color="primary" onPress={confirmPhoto}>
-                  Confirm (Use on Submit)
+                <Button
+                  color="primary"
+                  radius="none"
+                  className="w-full p-2 gap-2 text-background font-semibold"
+                  onPress={confirmPhoto}
+                >
+                  {captureTarget === "invoice"
+                    ? "Confirm & Extract Data"
+                    : "Confirm"}
                 </Button>
 
                 <Button
                   color="danger"
-                  variant="light"
+                  radius="none"
+                  className="w-full p-2 gap-2 text-background font-semibold"
                   onPress={handleCloseModal}
-                  startContent={<X size={16} />}
+                  startContent={<X />}
                 >
                   Cancel
                 </Button>
-              </>
+              </div>
             )}
           </ModalFooter>
         </ModalContent>
