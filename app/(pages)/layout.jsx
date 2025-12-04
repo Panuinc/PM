@@ -10,7 +10,6 @@ import {
   Factory,
   Key,
   Menu,
-  X,
 } from "lucide-react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
@@ -162,13 +161,6 @@ export default function PagesLayout({ children }) {
         }`}
       >
         <div className="flex flex-col items-center justify-between min-w-fit h-full p-2 gap-2 border-1 bg-foreground overflow-auto">
-          <div
-            className="xl:hidden flex items-center justify-center w-full h-fit p-3 gap-2 cursor-pointer text-background hover:bg-background"
-            onClick={toggleMobileMenu}
-          >
-            <X />
-          </div>
-
           <div className="flex items-center justify-center w-full h-fit p-3 gap-2 border-b-1 border-background text-background">
             <Cat />
           </div>
