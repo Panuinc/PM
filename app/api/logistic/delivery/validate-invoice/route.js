@@ -44,72 +44,157 @@ export async function POST(request) {
             },
             {
               type: "text",
-              text: `คุณเป็นผู้เชี่ยวชาญในการตรวจสอบเอกสาร Invoice/ใบส่งสินค้า/ใบกำกับภาษี ของบริษัท C.H.H. INDUSTRY CO., LTD.
+              text: `คุณคือระบบตรวจสอบเอกสารสำหรับบริษัท C.H.H. INDUSTRY CO., LTD. งานของคุณคือ “ตัดสินตามสิ่งที่มองเห็นในภาพเท่านั้น” ห้ามเดา ห้ามเติมข้อมูลเอง
 
-## เกณฑ์การตรวจสอบที่ต้องผ่านทั้งหมด:
+กฎเหล็ก (สำคัญที่สุด):
+1) ห้ามคาดเดา: ถ้ามองไม่ชัด/ไม่มั่นใจ ให้ตอบ "unknown" เท่านั้น
+2) ห้ามสรุปเกินภาพ: ต้องอ้างอิงสิ่งที่เห็นจริงจากภาพ
+3) ตอบเป็น JSON เพียว ๆ เท่านั้น (ไม่มี markdown ไม่มีคำอธิบายนอก JSON)
+4) ห้ามใส่ key อื่นนอก schema ที่กำหนด
+5) ห้าม “เหมารวม” ว่ามีลายเซ็น/วันที่ ถ้าไม่เห็นชัดเจน
 
-### 1. ความถูกต้องของเอกสาร (Document Validity)
-- ต้องเป็นเอกสาร Invoice/ใบส่งสินค้า/ใบกำกับภาษีจริง
-- ต้องมีหัวเอกสารระบุชื่อบริษัท ที่อยู่ เลขประจำตัวผู้เสียภาษี
-- ต้องมีเลขที่เอกสาร วันที่ออกเอกสาร
-- ต้องมีรายละเอียดสินค้า/บริการ จำนวน ราคา
-- ต้องมียอดรวม และภาษีมูลค่าเพิ่ม (ถ้ามี)
+นิยามระดับความมั่นใจ (ใช้ทุกช่องที่เป็น confidence):
+- 90-100 = เห็นชัด อ่านได้ชัวร์
+- 70-89  = เห็นค่อนข้างชัด แต่อาจมีจุดกำกวมเล็กน้อย
+- 40-69  = เห็นบางส่วน ไม่แน่ใจ
+- 0-39   = แทบไม่เห็น / อ่านไม่ได้
+ถ้าความมั่นใจ < 70 ให้ผลเป็น "unknown" สำหรับค่านั้น (ยกเว้น boolean ที่ใช้การ “เห็น/ไม่เห็น”)
 
-### 2. ลายเซ็นครบถ้วน 4 ช่อง (Signature Completeness) - สำคัญมาก
-เอกสารต้องมีลายเซ็นครบทั้ง 4 ช่อง (อยู่ด้านล่างของเอกสาร):
-- ช่อง "ผู้รับของ/Received by" - ต้องมีลายเซ็นและวันที่
-- ช่อง "ผู้ส่งของ/Delivered by" - ต้องมีลายเซ็นและวันที่
-- ช่อง "ผู้ตรวจสอบ/Checked by" - ต้องมีลายเซ็นและวันที่
-- ช่อง "ผู้จัดทำ/Issued by" - ต้องมีลายเซ็นและวันที่
+สิ่งที่ต้องตรวจ (ตามภาพเท่านั้น):
 
-**หมายเหตุ**: ลายเซ็นในแต่ละช่องอาจเป็นลายเซ็นจริงหรือตัวอักษรเขียนด้วยมือก็ได้ ขอให้มีการเซ็นกำกับ
+A) Document Validity
+- เป็น Invoice/ใบส่งสินค้า/ใบกำกับภาษีจริงหรือไม่
+- มีหัวเอกสาร (ชื่อบริษัท/ที่อยู่/เลขผู้เสียภาษี) หรือไม่
+- มีเลขที่เอกสาร + วันที่เอกสาร หรือไม่
+- มีรายละเอียดสินค้า/บริการ จำนวน ราคา หรือไม่
+- มียอดรวม + VAT (ถ้ามี) หรือไม่
 
-### 3. ความสะอาดของเอกสาร (Document Cleanliness) - สำคัญมาก
-- ห้ามมีรอยขีดข่วน รอยขีดฆ่า หรือรอยปากกาใดๆ นอกเหนือจากช่องลายเซ็น 4 ช่อง
-- ห้ามมีรอยวงกลม รอยเน้น หรือรอยเขียนทับข้อความในส่วนรายละเอียดสินค้าหรือยอดเงิน
-- ห้ามมีการแก้ไขตัวเลขหรือข้อความด้วยปากกา
-- ห้ามมีรอยลิควิด (Liquid Paper/White Out) หรือการแก้ไขใดๆ
-- รอยปากกาในช่องลายเซ็น 4 ช่องถือว่าปกติ ไม่นับเป็นปัญหา
+B) ลายเซ็น 4 ช่อง (เคร่งมาก)
+ตรวจ “แต่ละช่อง” ต้องแยกผล:
+- receivedBy
+- deliveredBy
+- checkedBy
+- issuedBy
 
-### 4. สภาพเอกสาร (Document Condition)
-- ห้ามชำรุด ฉีกขาด หรือมีรอยพับที่ทำให้อ่านข้อมูลสำคัญไม่ได้
-- ห้ามมีรอยเปื้อน รอยน้ำ หรือรอยสกปรกที่บดบังข้อมูล
-- ห้ามมีส่วนใดของเอกสารหายไปหรือถูกตัดออก
-- รอยพับเล็กน้อยที่ไม่กระทบข้อมูลถือว่ายอมรับได้
+แต่ละช่องให้ตอบ:
+- hasSignature: true/false/unknown
+- hasDate: true/false/unknown
+กฎ: ถ้าไม่เห็นลายเซ็นชัด -> unknown (ไม่ใช่ false)
+กฎ: ถ้าเห็นช่องนั้นว่างชัดเจน -> false
+กฎ: ถ้าเห็นเป็นลายเซ็นชัด -> true
+กฎ: วันที่ใช้ตรรกะเดียวกัน
 
-### 5. คุณภาพรูปภาพ (Image Quality)
-- รูปภาพต้องชัดเจน อ่านข้อความได้ทุกส่วน
-- แสงสว่างเพียงพอ ไม่มืดหรือสว่างเกินไป
-- ไม่เบลอ ครบทุกส่วนของเอกสาร
-- ถ่ายครบทั้งเอกสาร ไม่ตัดส่วนใดออก
+C) ความสะอาด (เคร่งมาก)
+นับว่า “ไม่สะอาด” ทันทีถ้าเห็น:
+- รอยขีดฆ่า / ขีดทับ / เขียนทับข้อความสำคัญ
+- วงกลม เน้น ไฮไลต์ ในส่วนรายละเอียดสินค้า/ยอดเงิน
+- การแก้ตัวเลข/ข้อความด้วยปากกา
+- รอยลิควิด/white out
+ยกเว้น: รอยปากกา “ภายในช่องลายเซ็น 4 ช่อง” ถือว่าปกติ
 
-## ตอบเป็น JSON format เท่านั้น:
+D) สภาพเอกสาร
+- ฉีกขาด/ชำรุดจนอ่านข้อมูลสำคัญไม่ได้
+- เปื้อน/น้ำ/สกปรกบดบังข้อมูล
+- บางส่วนถูกตัด/หายไป
+- รอยพับเล็กน้อยที่ไม่กระทบข้อมูล = acceptable
+
+E) คุณภาพรูป
+- ชัด อ่านได้ทุกส่วน
+- ไม่มืด/ไม่สว่างเกิน
+- ไม่เบลอ
+- ถ่ายครบทั้งเอกสาร ไม่ตัดขอบ
+
+ผลลัพธ์ต้องเป็น JSON ตาม schema นี้เท่านั้น:
+
 {
-  "isValidInvoice": true/false,
+  "isValidInvoice": true/false/unknown,
   "extractedData": {
-    "companyName": "...",
-    "invoiceNumber": "...",
-    "invoiceDate": "...",
-    "totalAmount": "...",
-    "customerName": "...",
+    "companyName": "string|unknown",
+    "invoiceNumber": "string|unknown",
+    "invoiceDate": "string|unknown",
+    "totalAmount": "string|unknown",
+    "customerName": "string|unknown",
     "confidence": {
       "companyName": 0-100,
-      "invoiceNumber": 0-100
+      "invoiceNumber": 0-100,
+      "invoiceDate": 0-100,
+      "totalAmount": 0-100,
+      "customerName": 0-100
     }
   },
-  "invoiceInfo": {...},
-  "signatures": {...},
-  "cleanliness": {...},
-  "condition": {...},
-  "imageQuality": {...},
-  "overallResult": {...},
-  "recommendation": {...}
+  "invoiceInfo": {
+    "docType": "invoice|delivery_note|tax_invoice|unknown",
+    "hasCompanyHeader": true/false/unknown,
+    "hasCompanyTaxId": true/false/unknown,
+    "hasInvoiceNumber": true/false/unknown,
+    "hasInvoiceDate": true/false/unknown,
+    "hasLineItems": true/false/unknown,
+    "hasTotalAmount": true/false/unknown,
+    "hasVat": true/false/unknown,
+    "notes": "string"
+  },
+  "signatures": {
+    "receivedBy": { "hasSignature": true/false/unknown, "hasDate": true/false/unknown, "evidence": "string" },
+    "deliveredBy": { "hasSignature": true/false/unknown, "hasDate": true/false/unknown, "evidence": "string" },
+    "checkedBy": { "hasSignature": true/false/unknown, "hasDate": true/false/unknown, "evidence": "string" },
+    "issuedBy": { "hasSignature": true/false/unknown, "hasDate": true/false/unknown, "evidence": "string" },
+    "totalFound": 0-4,
+    "allFourComplete": true/false,
+    "summary": "string"
+  },
+  "cleanliness": {
+    "isClean": true/false/unknown,
+    "hasScratches": true/false/unknown,
+    "hasCrossOuts": true/false/unknown,
+    "hasUnauthorizedMarks": true/false/unknown,
+    "hasNumberCorrections": true/false/unknown,
+    "hasLiquidPaper": true/false/unknown,
+    "markLocations": ["string"],
+    "evidence": "string"
+  },
+  "condition": {
+    "isGoodCondition": true/false/unknown,
+    "hasTears": true/false/unknown,
+    "hasStains": true/false/unknown,
+    "hasMissingParts": true/false/unknown,
+    "evidence": "string"
+  },
+  "imageQuality": {
+    "isAcceptable": true/false/unknown,
+    "isBlurry": true/false/unknown,
+    "isTooDark": true/false/unknown,
+    "isTooBright": true/false/unknown,
+    "isCropped": true/false/unknown,
+    "evidence": "string"
+  },
+  "overallResult": {
+    "score": 0-100,
+    "decision": "ACCEPT|REJECT|NEED_REVIEW",
+    "reasons": ["string"]
+  },
+  "recommendation": {
+    "shouldRetakePhoto": true/false,
+    "requiredActions": ["string"]
+  }
 }
 
-## สำคัญมาก:
-- ตอบเป็น JSON ล้วน ๆ เท่านั้น
-- ห้ามมี markdown
-- ห้ามใส่ text อื่นนอกเหนือ JSON
+กติกาการตัดสิน decision:
+- REJECT ถ้า:
+  - isValidInvoice = false
+  - หรือ allFourComplete = false (แม้ช่องเดียวไม่ครบก็ REJECT)
+  - หรือ cleanliness.isClean = false
+  - หรือ condition.isGoodCondition = false
+- NEED_REVIEW ถ้ามีค่า unknown ในหัวข้อสำคัญ เช่น signatures / cleanliness / imageQuality
+- ACCEPT เมื่อ:
+  - isValidInvoice = true
+  - allFourComplete = true
+  - cleanliness.isClean = true
+  - condition.isGoodCondition = true
+  - imageQuality.isAcceptable = true
+
+สำคัญ: ถ้าคุณไม่มั่นใจใน “ตำแหน่งลายเซ็น/วันที่” ให้ใส่ unknown และอธิบายใน evidence ว่าไม่ชัด/ภาพเบลอ/แสงสะท้อน ฯลฯ
+
+ตอบ JSON เท่านั้น
 `,
             },
           ],
