@@ -38,7 +38,7 @@ export default function UIUserForm({
                 label="User Firstname"
                 color="default"
                 variant="faded"
-                radius="none"
+                size="lg"
                 labelPlacement="outside"
                 placeholder="Enter User Firstname"
                 isRequired
@@ -55,7 +55,7 @@ export default function UIUserForm({
                 label="User Lastname"
                 color="default"
                 variant="faded"
-                radius="none"
+                size="lg"
                 labelPlacement="outside"
                 placeholder="Enter User Lastname"
                 isRequired
@@ -75,7 +75,7 @@ export default function UIUserForm({
                 label="User Email"
                 color="default"
                 variant="faded"
-                radius="none"
+                size="lg"
                 labelPlacement="outside"
                 placeholder="Enter User Email"
                 isRequired
@@ -93,7 +93,7 @@ export default function UIUserForm({
                   label="User Password"
                   color="default"
                   variant="faded"
-                  radius="none"
+                  size="lg"
                   labelPlacement="outside"
                   placeholder="Enter Password"
                   isRequired
@@ -116,7 +116,7 @@ export default function UIUserForm({
                   placeholder="Please Select"
                   color="default"
                   variant="faded"
-                  radius="none"
+                  size="lg"
                   isRequired
                   selectedKeys={
                     formData.userStatus ? [formData.userStatus] : []
@@ -139,7 +139,7 @@ export default function UIUserForm({
               <Button
                 type="submit"
                 color="primary"
-                radius="none"
+                size="lg"
                 className="w-full p-2 gap-2 text-background font-semibold"
               >
                 Submit
@@ -149,7 +149,7 @@ export default function UIUserForm({
               <Button
                 type="button"
                 color="danger"
-                radius="none"
+                size="lg"
                 className="w-full p-2 gap-2 font-semibold"
                 onPress={() => history.back()}
               >

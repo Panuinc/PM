@@ -33,7 +33,7 @@ export default function UISignin({
             label="Email"
             color="default"
             variant="faded"
-            radius="none"
+            size="lg"
             labelPlacement="outside"
             placeholder="Enter your email"
             isRequired
@@ -48,7 +48,7 @@ export default function UISignin({
             label="password"
             color="default"
             variant="faded"
-            radius="none"
+            size="lg"
             labelPlacement="outside"
             placeholder="Enter your password"
             isRequired
@@ -61,7 +61,7 @@ export default function UISignin({
             onPress={handleLogin}
             type="submit"
             color="primary"
-            radius="none"
+            size="lg"
             className="w-full p-2 gap-2 text-background font-semibold"
           >
             Signin

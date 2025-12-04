@@ -98,7 +98,7 @@ export default function UIAssignPermission({
                     onValueChange={(checked) =>
                       handleToggle(p.permissionId, checked)
                     }
-                    radius="none"
+                    size="lg"
                   >
                     {p.permissionName}
                   </Checkbox>
@@ -116,7 +116,7 @@ export default function UIAssignPermission({
             <Button
               type="button"
               color="primary"
-              radius="none"
+              size="lg"
               className="w-full p-2 gap-2 text-background font-semibold"
               onPress={handleSubmit}
             >
@@ -128,7 +128,7 @@ export default function UIAssignPermission({
             <Button
               type="button"
               color="danger"
-              radius="none"
+              size="lg"
               className="w-full p-2 gap-2 font-semibold"
               onPress={handleCancel}
             >

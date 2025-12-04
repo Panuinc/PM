@@ -38,7 +38,7 @@ export default function UIDepartmentForm({
                 label="Department Name"
                 color="default"
                 variant="faded"
-                radius="none"
+                size="lg"
                 labelPlacement="outside"
                 placeholder="Enter Department Name"
                 isRequired
@@ -60,7 +60,7 @@ export default function UIDepartmentForm({
                   placeholder="Please Select"
                   color="default"
                   variant="faded"
-                  radius="none"
+                  size="lg"
                   isRequired
                   selectedKeys={
                     formData.departmentStatus ? [formData.departmentStatus] : []
@@ -83,7 +83,7 @@ export default function UIDepartmentForm({
               <Button
                 type="submit"
                 color="primary"
-                radius="none"
+                size="lg"
                 className="w-full p-2 gap-2 text-background font-semibold"
               >
                 Submit
@@ -93,7 +93,7 @@ export default function UIDepartmentForm({
               <Button
                 type="button"
                 color="danger"
-                radius="none"
+                size="lg"
                 className="w-full p-2 gap-2 font-semibold"
                 onPress={() => history.back()}
               >

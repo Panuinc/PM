@@ -177,7 +177,7 @@ export default function DataTable({
           value={filterValue}
           onClear={onClear}
           onValueChange={onSearchChange}
-          radius="none"
+          size="lg"
           variant="faded"
           className="w-full"
         />
@@ -187,7 +187,7 @@ export default function DataTable({
             <Button
               color="default"
               endContent={<ChevronDown />}
-              radius="none"
+              size="lg"
               className="w-full xl:w-32 p-2 gap-2 font-semibold"
             >
               Columns
@@ -215,7 +215,7 @@ export default function DataTable({
               <Button
                 color="default"
                 endContent={<ChevronDown />}
-                radius="none"
+                size="lg"
                 className="w-full xl:w-32 p-2 gap-2 font-semibold"
               >
                 Status
@@ -243,7 +243,7 @@ export default function DataTable({
             startContent={<Plus />}
             color="primary"
             onPress={onAddNew}
-            radius="none"
+            size="lg"
             className="w-full xl:w-32 p-2 gap-2 text-background font-semibold"
           >
             Add New
@@ -279,7 +279,7 @@ export default function DataTable({
           showControls
           showShadow
           color="primary"
-          radius="none"
+          size="lg"
           page={page}
           total={pages}
           onChange={setPage}
@@ -300,7 +300,7 @@ export default function DataTable({
       topContent={topContent}
       topContentPlacement="outside"
       onSortChange={setSortDescriptor}
-      radius="none"
+      size="lg"
       shadow="none"
     >
       <TableHeader columns={headerColumns}>

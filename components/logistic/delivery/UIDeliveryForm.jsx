@@ -65,9 +65,7 @@ const SectionHeader = ({ icon: Icon, title, subtitle, action }) => (
       </div>
       <div>
         <h3 className="text-lg font-semibold text-foreground">{title}</h3>
-        {subtitle && (
-          <p className="text-sm text-default-500">{subtitle}</p>
-        )}
+        {subtitle && <p className="text-sm text-default-500">{subtitle}</p>}
       </div>
     </div>
     {action}
@@ -610,7 +608,9 @@ export default function UIDeliveryForm({
               variant="flat"
               size="sm"
             >
-              {mode === "create" ? `Create By: ${operatedBy}` : `Update By: ${operatedBy}`}
+              {mode === "create"
+                ? `Create By: ${operatedBy}`
+                : `Update By: ${operatedBy}`}
             </Chip>
           </div>
 
@@ -651,7 +651,7 @@ export default function UIDeliveryForm({
                       <Image
                         src={formData.deliveryPicture}
                         alt="Delivery Invoice"
-                        radius="none"
+                        size="lg"
                         className="w-full max-h-80 object-contain bg-default-100"
                         fallbackSrc="https://via.placeholder.com/400x300?text=Image+Not+Found"
                       />
@@ -779,7 +779,8 @@ export default function UIDeliveryForm({
                     radius="lg"
                     size="lg"
                     classNames={{
-                      trigger: "h-14 bg-default-50 hover:bg-default-100 transition-colors",
+                      trigger:
+                        "h-14 bg-default-50 hover:bg-default-100 transition-colors",
                     }}
                     isDisabled
                     selectedKeys={
@@ -787,7 +788,9 @@ export default function UIDeliveryForm({
                         ? [formData.deliveryCompanyName]
                         : []
                     }
-                    onSelectionChange={(keys) => handleCompanyChange([...keys][0])}
+                    onSelectionChange={(keys) =>
+                      handleCompanyChange([...keys][0])
+                    }
                     isInvalid={!!errors.deliveryCompanyName}
                     errorMessage={errors.deliveryCompanyName}
                   >
@@ -817,7 +820,8 @@ export default function UIDeliveryForm({
                     size="lg"
                     classNames={{
                       input: "text-base",
-                      inputWrapper: "h-14 bg-default-50 hover:bg-default-100 transition-colors",
+                      inputWrapper:
+                        "h-14 bg-default-50 hover:bg-default-100 transition-colors",
                     }}
                     isDisabled
                     value={formData.deliveryInvoiceNumber || ""}
@@ -886,7 +890,10 @@ export default function UIDeliveryForm({
                             label="Product"
                             onRemove={
                               isUpdate
-                                ? () => deleteExistingProductPhoto(p.deliveryPhotoId)
+                                ? () =>
+                                    deleteExistingProductPhoto(
+                                      p.deliveryPhotoId
+                                    )
                                 : null
                             }
                           />
@@ -1029,7 +1036,9 @@ export default function UIDeliveryForm({
             </div>
             <div>
               <h3 className="text-lg font-semibold">
-                {captureTarget === "invoice" ? "Capture Invoice" : "Capture Product"}
+                {captureTarget === "invoice"
+                  ? "Capture Invoice"
+                  : "Capture Product"}
               </h3>
               {captureTarget === "invoice" && !capturedImage && (
                 <p className="text-sm text-default-500 flex items-center gap-1">

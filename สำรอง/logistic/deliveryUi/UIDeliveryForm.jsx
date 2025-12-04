@@ -483,7 +483,7 @@ export default function UIDeliveryForm({
               <Button
                 type="button"
                 color="primary"
-                radius="none"
+                size="lg"
                 className="w-full p-2 gap-2 text-background font-semibold"
                 onPress={() => openCamera("invoice")}
                 startContent={<Camera />}
@@ -518,7 +518,7 @@ export default function UIDeliveryForm({
                 <Image
                   src={formData.deliveryPicture}
                   alt="Delivery Invoice Picture"
-                  radius="none"
+                  size="lg"
                   className="max-h-64 object-contain"
                   fallbackSrc="https://via.placeholder.com/300x200?text=Image+Not+Found"
                 />
@@ -603,7 +603,7 @@ export default function UIDeliveryForm({
                 placeholder="Please Select Company"
                 color="default"
                 variant="faded"
-                radius="none"
+                size="lg"
                 isDisabled
                 selectedKeys={
                   formData.deliveryCompanyName
@@ -625,7 +625,7 @@ export default function UIDeliveryForm({
                 type="text"
                 color="default"
                 variant="faded"
-                radius="none"
+                size="lg"
                 labelPlacement="outside"
                 placeholder="Enter Invoice Number"
                 isDisabled
@@ -645,7 +645,7 @@ export default function UIDeliveryForm({
                 label="Location (auto on submit)"
                 color="default"
                 variant="faded"
-                radius="none"
+                size="lg"
                 labelPlacement="outside"
                 placeholder="Will be fetched when you press Submit"
                 value={formData.deliveryLocation || ""}
@@ -661,7 +661,7 @@ export default function UIDeliveryForm({
               <Button
                 type="button"
                 color="primary"
-                radius="none"
+                size="lg"
                 className="w-full p-2 gap-2 font-semibold"
                 onPress={() => openCamera("product")}
                 startContent={<Camera />}
@@ -694,7 +694,7 @@ export default function UIDeliveryForm({
                         <Button
                           type="button"
                           color="danger"
-                          radius="none"
+                          size="lg"
                           className="w-full p-2 gap-2 text-background font-semibold"
                           startContent={<Trash2 />}
                           onPress={() =>
@@ -731,7 +731,7 @@ export default function UIDeliveryForm({
                       <Button
                         type="button"
                         color="danger"
-                        radius="none"
+                        size="lg"
                         className="w-full p-2 gap-2 text-background font-semibold"
                         startContent={<Trash2 />}
                         onPress={() => removeLocalProductFile(idx)}
@@ -754,7 +754,7 @@ export default function UIDeliveryForm({
                   placeholder="Please Select"
                   color="default"
                   variant="faded"
-                  radius="none"
+                  size="lg"
                   isRequired
                   selectedKeys={
                     formData.deliveryStatus ? [formData.deliveryStatus] : []
@@ -777,7 +777,7 @@ export default function UIDeliveryForm({
               <Button
                 type="submit"
                 color="primary"
-                radius="none"
+                size="lg"
                 className="w-full p-2 gap-2 text-background font-semibold"
                 isLoading={isLoadingLocation}
                 isDisabled={isValidating}
@@ -790,7 +790,7 @@ export default function UIDeliveryForm({
               <Button
                 type="button"
                 color="danger"
-                radius="none"
+                size="lg"
                 className="w-full p-2 gap-2 font-semibold"
                 onPress={() => history.back()}
                 isDisabled={isLoadingLocation || isValidating}
@@ -806,7 +806,6 @@ export default function UIDeliveryForm({
         isOpen={isOpen}
         onClose={handleCloseModal}
         size="5xl"
-        radius="none"
         scrollBehavior="inside"
         className="flex items-center justify-center w-full h-fit p-2 gap-2"
       >
@@ -861,7 +860,7 @@ export default function UIDeliveryForm({
               <div className="flex flex-row items-center justify-center w-full h-full p-2 gap-2">
                 <Button
                   color="primary"
-                  radius="none"
+                  size="lg"
                   className="w-full p-2 gap-2 text-background font-semibold"
                   onPress={capturePhoto}
                   startContent={<Camera />}
@@ -872,7 +871,7 @@ export default function UIDeliveryForm({
 
                 <Button
                   color="danger"
-                  radius="none"
+                  size="lg"
                   className="w-full p-2 gap-2 text-background font-semibold"
                   onPress={handleCloseModal}
                   startContent={<X />}
@@ -884,7 +883,7 @@ export default function UIDeliveryForm({
               <div className="flex flex-row items-center justify-center w-full h-full p-2 gap-2">
                 <Button
                   color="default"
-                  radius="none"
+                  size="lg"
                   className="w-full p-2 gap-2 text-background font-semibold"
                   onPress={retakePhoto}
                   startContent={<RotateCcw />}
@@ -894,7 +893,7 @@ export default function UIDeliveryForm({
 
                 <Button
                   color="primary"
-                  radius="none"
+                  size="lg"
                   className="w-full p-2 gap-2 text-background font-semibold"
                   onPress={confirmPhoto}
                 >
@@ -905,7 +904,7 @@ export default function UIDeliveryForm({
 
                 <Button
                   color="danger"
-                  radius="none"
+                  size="lg"
                   className="w-full p-2 gap-2 text-background font-semibold"
                   onPress={handleCloseModal}
                   startContent={<X />}
