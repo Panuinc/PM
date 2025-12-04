@@ -169,7 +169,7 @@ export default function PagesLayout({ children }) {
             <X />
           </div>
 
-          <div className="flex items-center justify-center w-full h-fit p-3 gap-2 border-b-2 border-background text-background">
+          <div className="flex items-center justify-center w-full h-fit p-3 gap-2 border-b-1 border-background text-background">
             <Cat />
           </div>
 
@@ -187,7 +187,7 @@ export default function PagesLayout({ children }) {
           </div>
 
           <div
-            className="flex items-center justify-center w-full h-fit p-3 gap-2 border-t-2 border-background cursor-pointer text-background"
+            className="flex items-center justify-center w-full h-fit p-3 gap-2 border-t-1 border-background cursor-pointer text-background"
             onClick={toggleSidebar}
           >
             {isCollapsed ? <ChevronRight /> : <ChevronLeft />}
@@ -195,8 +195,8 @@ export default function PagesLayout({ children }) {
         </div>
 
         {!isCollapsed && (
-          <div className="flex flex-col items-center justify-start w-full h-full py-2 gap-2 border-1 overflow-auto">
-            <div className="flex items-center justify-start w-full h-fit p-3 gap-2 border-b-2">
+          <div className="flex flex-col items-center justify-start w-full h-full p-2 gap-2 border-1 overflow-auto">
+            <div className="flex items-center justify-start w-full h-fit p-3 gap-2 border-b-1">
               <Factory /> {menuData[selectedMenu]?.label || "Menu"}
             </div>
             <div className="flex flex-col items-center justify-start w-full h-full p-2 gap-2 overflow-auto">
@@ -220,7 +220,7 @@ export default function PagesLayout({ children }) {
             </div>
             <div
               onClick={() => signOut({ callbackUrl: "/" })}
-              className="flex items-center justify-start w-full h-fit p-3 gap-2 border-t-2 cursor-pointer"
+              className="flex items-center justify-start w-full h-fit p-3 gap-2 border-t-1 cursor-pointer"
             >
               <Key className="hover:scale-150" /> Logout
             </div>
@@ -254,7 +254,7 @@ export default function PagesLayout({ children }) {
         </div>
 
         <div className="flex flex-col items-stretch justify-start w-full flex-1 p-2 gap-2 border-1 overflow-y-auto overflow-x-hidden">
-          {children}
+          {/* {children} */}1
         </div>
       </div>
     </div>
