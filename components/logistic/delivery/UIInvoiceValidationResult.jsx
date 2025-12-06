@@ -77,7 +77,7 @@ const StatusBadge = ({ status, score }) => {
 
   return (
     <div className="flex items-center gap-3">
-      <div className={`p-2 rounded-xl ${config.bg} text-white shadow-lg`}>
+      <div className={`p-2 rounded-xl ${config.bg} text-white shadow-md`}>
         <Icon size={20} />
       </div>
       <div>
@@ -291,7 +291,7 @@ const DetailChip = ({ icon: Icon, label, status, statusText }) => {
     <div
       className={`
         inline-flex items-center gap-2 px-3 py-2 rounded-xl
-        ${style.bg} transition-all duration-200 hover:shadow-sm
+        ${style.bg} transition-all duration-200 hover:shadow-md
       `}
     >
       <Icon size={16} className={style.icon} />
@@ -403,7 +403,7 @@ export default function UIInvoiceValidationResult({
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
               <div className="relative">
-                <div className="p-3 rounded-2xl bg-success-500 text-white shadow-lg shadow-success-500/30">
+                <div className="p-3 rounded-2xl bg-success-500 text-white shadow-md shadow-success-500/30">
                   <ShieldCheck size={28} />
                 </div>
                 <div className="absolute -top-1 -right-1 w-4 h-4 bg-success-400 rounded-full animate-ping" />
@@ -505,13 +505,9 @@ export default function UIInvoiceValidationResult({
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <div
-                className={`p-3 rounded-2xl ${headerStyles.iconBg} text-white shadow-lg`}
+                className={`p-3 rounded-2xl ${headerStyles.iconBg} text-white shadow-md`}
               >
-                {isRejected ? (
-                  <ShieldX size={28} />
-                ) : (
-                  <ShieldAlert size={28} />
-                )}
+                {isRejected ? <ShieldX size={28} /> : <ShieldAlert size={28} />}
               </div>
               <div>
                 <div className={`text-xl font-bold ${headerStyles.titleColor}`}>
@@ -538,9 +534,7 @@ export default function UIInvoiceValidationResult({
             </div>
 
             <div className="flex items-center gap-3">
-              {decision && (
-                <StatusBadge status={decision} score={score} />
-              )}
+              {decision && <StatusBadge status={decision} score={score} />}
               {onRetry && (
                 <Button
                   variant="flat"
@@ -569,7 +563,11 @@ export default function UIInvoiceValidationResult({
               />
               <div className="space-y-3">
                 {errorWarnings.map((issue, idx) => (
-                  <IssueCard key={`critical-${idx}`} issue={issue} severity="error" />
+                  <IssueCard
+                    key={`critical-${idx}`}
+                    issue={issue}
+                    severity="error"
+                  />
                 ))}
               </div>
             </div>
@@ -605,7 +603,11 @@ export default function UIInvoiceValidationResult({
               />
               <div className="space-y-3">
                 {infoWarnings.map((warning, idx) => (
-                  <IssueCard key={`info-${idx}`} issue={warning} severity="info" />
+                  <IssueCard
+                    key={`info-${idx}`}
+                    issue={warning}
+                    severity="info"
+                  />
                 ))}
               </div>
             </div>
@@ -616,7 +618,9 @@ export default function UIInvoiceValidationResult({
             <div className="p-6 bg-default-50/50">
               <SectionHeader
                 icon={Signature}
-                title={`สถานะลายเซ็น (${details.signatures.totalFound || 0}/4 ช่อง)`}
+                title={`สถานะลายเซ็น (${
+                  details.signatures.totalFound || 0
+                }/4 ช่อง)`}
               />
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <SignatureCard
@@ -661,7 +665,9 @@ export default function UIInvoiceValidationResult({
                           : "danger"
                       }
                       statusText={
-                        details.invoiceInfo.hasCompanyHeader ? "ถูกต้อง" : "ไม่พบ"
+                        details.invoiceInfo.hasCompanyHeader
+                          ? "ถูกต้อง"
+                          : "ไม่พบ"
                       }
                     />
                   )}
@@ -669,8 +675,12 @@ export default function UIInvoiceValidationResult({
                     <DetailChip
                       icon={Sparkles}
                       label="ความสะอาด"
-                      status={details.cleanliness.isClean ? "success" : "danger"}
-                      statusText={details.cleanliness.isClean ? "สะอาด" : "มีรอย"}
+                      status={
+                        details.cleanliness.isClean ? "success" : "danger"
+                      }
+                      statusText={
+                        details.cleanliness.isClean ? "สะอาด" : "มีรอย"
+                      }
                     />
                   )}
                   {details.condition && (
@@ -678,10 +688,14 @@ export default function UIInvoiceValidationResult({
                       icon={FileCheck}
                       label="สภาพเอกสาร"
                       status={
-                        details.condition.isGoodCondition ? "success" : "warning"
+                        details.condition.isGoodCondition
+                          ? "success"
+                          : "warning"
                       }
                       statusText={
-                        details.condition.isGoodCondition ? "ดี" : "มีความเสียหาย"
+                        details.condition.isGoodCondition
+                          ? "ดี"
+                          : "มีความเสียหาย"
                       }
                     />
                   )}
@@ -690,7 +704,9 @@ export default function UIInvoiceValidationResult({
                       icon={ImageOff}
                       label="คุณภาพรูป"
                       status={
-                        details.imageQuality.isAcceptable ? "success" : "warning"
+                        details.imageQuality.isAcceptable
+                          ? "success"
+                          : "warning"
                       }
                       statusText={
                         details.imageQuality.isAcceptable ? "ดี" : "ไม่ชัด"
@@ -820,7 +836,9 @@ export default function UIInvoiceValidationResult({
               )}
               {reason && (
                 <div>
-                  <span className="font-semibold text-foreground">เหตุผล: </span>
+                  <span className="font-semibold text-foreground">
+                    เหตุผล:{" "}
+                  </span>
                   <span className="text-default-600">{reason}</span>
                 </div>
               )}

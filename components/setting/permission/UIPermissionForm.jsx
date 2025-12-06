@@ -22,8 +22,8 @@ export default function UIPermissionForm({
         className="flex flex-col items-center justify-start w-full h-full overflow-auto"
       >
         <div className="flex flex-col items-center justify-start w-full h-fit gap-2 overflow-auto">
-          <div className="flex flex-row items-center justify-center w-full h-fit p-2 gap-2">
-            <div className="flex items-center justify-end w-full h-full p-2 gap-2">
+          <div className="flex flex-row items-center justify-end w-full h-fit p-2 gap-2">
+            <div className="flex items-center justify-center h-full p-2 gap-2 bg-foreground text-background rounded-xl border-1 border-foreground">
               {mode === "create"
                 ? `Create By : ${operatedBy}`
                 : `Update By : ${operatedBy}`}
@@ -87,17 +87,6 @@ export default function UIPermissionForm({
                 className="w-full p-2 gap-2 text-background font-semibold"
               >
                 Submit
-              </Button>
-            </div>
-            <div className="flex items-center justify-center w-full xl:w-2/12 h-full p-2 gap-2">
-              <Button
-                type="button"
-                color="danger"
-                size="lg"
-                className="w-full p-2 gap-2 font-semibold"
-                onPress={() => history.back()}
-              >
-                Cancel
               </Button>
             </div>
           </div>

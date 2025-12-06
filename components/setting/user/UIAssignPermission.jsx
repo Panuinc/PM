@@ -12,7 +12,6 @@ export default function UIAssignPermission({
   selectedIds,
   handleToggle,
   handleSubmit,
-  handleCancel,
 }) {
   function groupPermissions(list) {
     const groups = {};
@@ -46,8 +45,8 @@ export default function UIAssignPermission({
       <UIHeader header={headerTopic} />
 
       <div className="flex flex-col items-center justify-start w-full h-full gap-2 overflow-auto">
-        <div className="flex flex-row items-center justify-center w-full h-fit p-2 gap-2">
-          <div className="flex items-center justify-end w-full h-full p-2 gap-2">
+        <div className="flex flex-row items-center justify-end w-full h-fit p-2 gap-2">
+          <div className="flex items-center justify-center h-full p-2 gap-2 bg-foreground text-background rounded-xl border-1 border-foreground">
             Update By : {userName}
           </div>
         </div>
@@ -61,7 +60,7 @@ export default function UIAssignPermission({
           </div>
         </div>
 
-        <div className="flex flex-col xl:flex-row items-start justify-center w-full h-fit overflow-auto border-1 border-default">
+        <div className="flex flex-col xl:flex-row items-start justify-center w-full h-fit overflow-auto border-1 border-default rounded-xl">
           <div className="flex flex-col items-center justify-center w-full xl:w-3/12 h-fit p-2 gap-2 border-r-1 border-default">
             <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-xl border-b-1 border-default">
               Categories
@@ -71,9 +70,9 @@ export default function UIAssignPermission({
               <div
                 key={c}
                 onClick={() => setActiveCategory(c)}
-                className={`flex items-center justify-start w-full h-fit p-2 gap-2 ${
+                className={`flex items-center justify-start w-full h-fit p-4 gap-2 ${
                   activeCategory === c
-                    ? "bg-primary text-white"
+                    ? "bg-primary text-white rounded-xl"
                     : "hover:bg-default"
                 }`}
               >
@@ -99,6 +98,7 @@ export default function UIAssignPermission({
                       handleToggle(p.permissionId, checked)
                     }
                     size="lg"
+                    className="text-background"
                   >
                     {p.permissionName}
                   </Checkbox>
@@ -121,18 +121,6 @@ export default function UIAssignPermission({
               onPress={handleSubmit}
             >
               Save
-            </Button>
-          </div>
-
-          <div className="flex items-center justify-center w-full xl:w-2/12 h-full p-2 gap-2">
-            <Button
-              type="button"
-              color="danger"
-              size="lg"
-              className="w-full p-2 gap-2 font-semibold"
-              onPress={handleCancel}
-            >
-              Cancel
             </Button>
           </div>
         </div>

@@ -54,8 +54,6 @@ export default function UserPermissionAssignPage() {
     await submitUserPermissions(Array.from(selectedIds));
   };
 
-  const handleCancel = () => router.back();
-
   if (loading || loadingUser) return <UILoading />;
 
   const headerTopic = useMemo(
@@ -73,7 +71,6 @@ export default function UserPermissionAssignPage() {
       selectedIds={selectedIds}
       handleToggle={handleToggle}
       handleSubmit={handleSubmit}
-      handleCancel={handleCancel}
     />
   );
 }

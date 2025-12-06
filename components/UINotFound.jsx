@@ -21,7 +21,7 @@ export default function UINotFound() {
               repeatType: "mirror",
               ease: "easeInOut",
             }}
-            className="flex items-center justify-center w-full h-full p-2 gap-2 text-black text-[200px]"
+            className="flex items-center justify-center w-full h-full p-2 gap-2 text-danger text-[200px]"
           >
             404
           </motion.div>
@@ -33,30 +33,21 @@ export default function UINotFound() {
           Oops! The page you're looking for seems to have wandered off. Let's
           get you back on track.
         </div>
-        <div className="flex flex-row items-center justify-center w-6/12 h-fit p-2 gap-2">
+        <div className="flex flex-row items-center justify-center w-2/12 h-fit p-2 gap-2">
           <div className="flex items-center justify-center w-full h-full p-2 gap-2">
             <Link
               href="/home"
               className="flex items-center justify-center w-full h-full p-2 gap-2"
             >
               <Button
-                color="default"
-                className="w-6/12 p-2 gap-2 font-semibold"
+                color="danger"
+                size="lg"
+                className="w-full p-2 gap-2 text-background font-semibold"
               >
                 <Home />
                 Go Home
               </Button>
             </Link>
-          </div>
-          <div className="flex items-center justify-center w-full h-full p-2 gap-2">
-            <Button
-              color="default"
-              onPress={() => window.history.back()}
-              className="w-6/12 p-2 gap-2 font-semibold"
-            >
-              <ArrowLeft />
-              Go Back
-            </Button>
           </div>
         </div>
       </div>

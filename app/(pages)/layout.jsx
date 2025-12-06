@@ -16,8 +16,8 @@ function MainMenu({ icons, content, onClick, isActive, isMobile }) {
     <div
       className={`flex items-center justify-center w-full aspect-square p-4 gap-2 text-background cursor-pointer ${
         isActive
-          ? "bg-background shadow-xl rounded-xl text-primary"
-          : "hover:bg-background hover:shadow-xl hover:rounded-xl hover:text-primary"
+          ? "bg-background shadow-md rounded-xl text-primary"
+          : "hover:bg-background hover:shadow-md hover:rounded-xl hover:text-primary"
       }`}
       onClick={onClick}
     >
@@ -51,8 +51,8 @@ function SubMenu({ text, onClick, path }) {
     <div
       className={`flex items-center justify-start w-full h-fit p-4 gap-2 cursor-pointer ${
         isActive
-          ? "bg-foreground shadow-xl rounded-xl text-background"
-          : "hover:bg-foreground hover:shadow-xl hover:rounded-xl hover:text-background"
+          ? "bg-foreground shadow-md rounded-xl text-background"
+          : "hover:bg-foreground hover:shadow-md hover:rounded-xl hover:text-background"
       }`}
       onClick={onClick}
     >
@@ -147,7 +147,7 @@ export default function PagesLayout({ children }) {
         }`}
       >
         <div className="flex flex-col items-center justify-between min-w-fit h-full p-2 gap-2 bg-primary overflow-auto">
-          <div className="flex items-center justify-center w-full h-fit p-4 gap-2 bg-background shadow-xl rounded-xl text-primary cursor-pointer">
+          <div className="flex items-center justify-center w-full h-fit p-4 gap-2 bg-background shadow-md rounded-xl text-primary cursor-pointer">
             <Cat />
           </div>
 
@@ -229,7 +229,7 @@ export default function PagesLayout({ children }) {
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-start w-full py-2 px-4 gap-2 overflow-y-auto overflow-x-hidden">
+        <div className="flex flex-col items-center justify-start w-full py-2 px-4 gap-6 overflow-y-auto overflow-x-hidden">
           {children}
         </div>
       </div>

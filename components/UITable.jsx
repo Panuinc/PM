@@ -309,7 +309,7 @@ export default function DataTable({
             key={column.uid}
             align={column.uid === "actions" ? "center" : "start"}
             allowsSorting={column.sortable}
-            className="border-t-2 border-b-2 p-4 gap-2"
+            className="border-t-2 border-b-2 border-default p-4 gap-2"
           >
             {column.name}
           </TableColumn>
@@ -319,7 +319,7 @@ export default function DataTable({
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => (
-              <TableCell className="border-b-1">
+              <TableCell className="border-b-1 border-default">
                 {renderCell(item, columnKey)}
               </TableCell>
             )}

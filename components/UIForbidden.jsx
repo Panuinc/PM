@@ -21,7 +21,7 @@ export default function UIForbidden() {
               repeatType: "mirror",
               ease: "easeInOut",
             }}
-            className="flex items-center justify-center w-full h-full p-2 gap-2 text-danger text-[200px]"
+            className="flex items-center justify-center w-full h-full p-2 gap-2 text-warning text-[200px]"
           >
             403
           </motion.div>
@@ -34,30 +34,21 @@ export default function UIForbidden() {
           You don't have permission to access this page. Please reach out to
           your admin if you think this was done in error.
         </div>
-        <div className="flex flex-row items-center justify-center w-6/12 h-fit p-2 gap-2">
+        <div className="flex flex-row items-center justify-center w-2/12 h-fit p-2 gap-2">
           <div className="flex items-center justify-center w-full h-full p-2 gap-2">
             <Link
               href="/home"
               className="flex items-center justify-center w-full h-full p-2 gap-2"
             >
               <Button
-                color="default"
-                className="w-6/12 p-2 gap-2 font-semibold"
+                color="warning"
+                size="lg"
+                className="w-full p-2 gap-2 text-background font-semibold"
               >
                 <Home />
                 Go Home
               </Button>
             </Link>
-          </div>
-          <div className="flex items-center justify-center w-full h-full p-2 gap-2">
-            <Button
-              color="default"
-              onPress={() => window.history.back()}
-              className="w-6/12 p-2 gap-2 font-semibold"
-            >
-              <ArrowLeft />
-              Go Back
-            </Button>
           </div>
         </div>
       </div>

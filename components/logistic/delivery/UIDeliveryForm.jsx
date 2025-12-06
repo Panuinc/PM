@@ -46,7 +46,7 @@ const SectionCard = ({ children, className = "", animate = true }) => (
   <Card
     className={`
       w-full border border-default-200 bg-content1/80 backdrop-blur-sm
-      shadow-sm hover:shadow-md transition-all duration-300
+      shadow-md hover:shadow-md transition-all duration-300
       ${animate ? "animate-fadeIn" : ""}
       ${className}
     `}
@@ -106,7 +106,7 @@ const PhotoThumbnail = ({ src, onRemove, label, isNew = false }) => (
         color="danger"
         variant="solid"
         size="sm"
-        className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg"
+        className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-md"
         onPress={onRemove}
       >
         <Trash2 size={16} />
@@ -633,7 +633,7 @@ export default function UIDeliveryForm({
                       color="primary"
                       size="lg"
                       radius="full"
-                      className="font-semibold shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300"
+                      className="font-semibold shadow-md-lg shadow-md-primary/25 hover:shadow-md hover:shadow-md-primary/30 transition-all duration-300"
                       onPress={() => openCamera("invoice")}
                       startContent={<Camera size={20} />}
                       isDisabled={isLoadingLocation || isValidating}
@@ -647,7 +647,7 @@ export default function UIDeliveryForm({
                 <div className="space-y-6">
                   {/* Invoice Preview */}
                   <div className="relative group">
-                    <div className="overflow-hidden rounded-2xl border-2 border-default-200 shadow-lg">
+                    <div className="overflow-hidden rounded-2xl border-2 border-default-200 shadow-md">
                       <Image
                         src={formData.deliveryPicture}
                         alt="Delivery Invoice"
@@ -662,7 +662,7 @@ export default function UIDeliveryForm({
                         variant="solid"
                         size="sm"
                         radius="full"
-                        className="shadow-lg"
+                        className="shadow-md"
                         onPress={() => openCamera("invoice")}
                         startContent={<RotateCcw size={14} />}
                         isDisabled={isLoadingLocation || isValidating}
@@ -675,7 +675,7 @@ export default function UIDeliveryForm({
                           variant="solid"
                           size="sm"
                           radius="full"
-                          className="shadow-lg"
+                          className="shadow-md"
                           onPress={removeInvoicePhoto}
                           startContent={<Trash2 size={14} />}
                         >
@@ -995,7 +995,7 @@ export default function UIDeliveryForm({
               color="primary"
               radius="full"
               size="lg"
-              className="w-full sm:w-auto min-w-40 font-semibold shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300"
+              className="w-full sm:w-auto min-w-40 font-semibold shadow-md shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300"
               isLoading={isLoadingLocation}
               isDisabled={isValidating}
             >
@@ -1104,7 +1104,7 @@ export default function UIDeliveryForm({
                   onPress={capturePhoto}
                   startContent={<Camera size={18} />}
                   isDisabled={!stream}
-                  className="min-w-40 font-semibold shadow-lg shadow-primary/25"
+                  className="min-w-40 font-semibold shadow-md shadow-primary/25"
                 >
                   Capture
                 </Button>
@@ -1137,7 +1137,7 @@ export default function UIDeliveryForm({
                   radius="full"
                   size="lg"
                   onPress={confirmPhoto}
-                  className="min-w-48 font-semibold shadow-lg shadow-primary/25"
+                  className="min-w-48 font-semibold shadow-md shadow-primary/25"
                 >
                   {captureTarget === "invoice" ? (
                     <>
