@@ -1,4 +1,4 @@
-import { Forklift, LayoutDashboard, Settings } from "lucide-react";
+import { Forklift, LayoutDashboard, Settings, ShieldBan } from "lucide-react";
 
 export const menuConfig = {
   dashboard: {
@@ -45,6 +45,18 @@ export const menuConfig = {
         text: "Delivery",
         path: "/logistic/delivery",
         requiredPermissions: ["delivery.read"],
+      },
+    ],
+  },
+  security: {
+    icon: <ShieldBan />,
+    label: "Security",
+    requiredPermissions: ["menu.security"],
+    subMenus: [
+      {
+        text: "Visitor",
+        path: "/security/visitor",
+        requiredPermissions: ["visitor.read"],
       },
     ],
   },
