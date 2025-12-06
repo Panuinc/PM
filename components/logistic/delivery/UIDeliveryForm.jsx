@@ -59,7 +59,7 @@ const SectionCard = ({ children, className = "", animate = true }) => (
 // Section Header Component
 const SectionHeader = ({ icon: Icon, title, subtitle, action }) => (
   <CardHeader className="flex flex-row items-center justify-between px-6 py-4 bg-gradient-to-r from-default-50 to-transparent">
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-4">
       <div className="p-2 rounded-xl bg-primary/10 text-primary">
         <Icon size={20} />
       </div>
@@ -582,7 +582,7 @@ export default function UIDeliveryForm({
         }
       `}</style>
 
-      <div className="min-h-screen bg-gradient-to-br from-default-50 via-background to-primary-50/30">
+      <div className="from-default-50 via-background to-primary-50/30 w-full min-h-screen overflow-auto">
         <UIHeader header={headerTopic} />
 
         <form
@@ -622,7 +622,7 @@ export default function UIDeliveryForm({
               subtitle="ถ่ายรูป Invoice เพื่อดึงข้อมูลอัตโนมัติ"
             />
             <Divider />
-            <CardBody className="p-6">
+            <CardBody className="p-4">
               {!formData.deliveryPicture ? (
                 <EmptyState
                   icon={Camera}
@@ -696,16 +696,16 @@ export default function UIDeliveryForm({
 
                   {/* Extracted Data Display */}
                   {validationResult?.extractedData && (
-                    <div className="p-5 rounded-2xl bg-gradient-to-r from-success-50 to-primary-50 border border-success-200">
+                    <div className="p-4 rounded-2xl bg-gradient-to-r from-success-50 to-primary-50 border border-success-200">
                       <div className="flex items-center gap-2 mb-4">
-                        <div className="p-1.5 rounded-lg bg-success-500 text-white">
+                        <div className="p-2 rounded-lg bg-success-500 text-white">
                           <CheckCircle2 size={16} />
                         </div>
                         <span className="font-semibold text-success-700">
                           ข้อมูลที่อ่านได้จากเอกสาร
                         </span>
                       </div>
-                      <div className="flex flex-wrap gap-3">
+                      <div className="flex flex-wrap gap-4">
                         {validationResult.extractedData.companyName && (
                           <DataChip
                             icon="🏢"
@@ -737,7 +737,7 @@ export default function UIDeliveryForm({
                       </div>
                       {(!validationResult.extractedData.companyName ||
                         !validationResult.extractedData.invoiceNumber) && (
-                        <div className="flex items-center gap-2 mt-4 p-3 rounded-xl bg-warning-100 text-warning-700">
+                        <div className="flex items-center gap-2 mt-4 p-4 rounded-xl bg-warning-100 text-warning-700">
                           <AlertCircle size={18} />
                           <span className="text-sm">
                             บางข้อมูลไม่สามารถอ่านได้ กรุณากรอกเพิ่มเติมด้านล่าง
@@ -759,8 +759,8 @@ export default function UIDeliveryForm({
               subtitle="ข้อมูลบริษัทและเลขที่เอกสาร"
             />
             <Divider />
-            <CardBody className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <CardBody className="p-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 text-sm font-medium text-default-700">
                     <Building2 size={16} />
@@ -854,7 +854,7 @@ export default function UIDeliveryForm({
               }
             />
             <Divider />
-            <CardBody className="p-6">
+            <CardBody className="p-4">
               {totalProductPhotos === 0 ? (
                 <EmptyState
                   icon={Package}
@@ -936,7 +936,7 @@ export default function UIDeliveryForm({
                 subtitle="อัพเดทสถานะการจัดส่ง"
               />
               <Divider />
-              <CardBody className="p-6">
+              <CardBody className="p-4">
                 <Select
                   name="deliveryStatus"
                   label="Status"
@@ -977,7 +977,7 @@ export default function UIDeliveryForm({
           )}
 
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-end gap-3 pt-4">
+          <div className="flex flex-col sm:flex-row items-center justify-end gap-4 pt-4">
             <Button
               type="button"
               color="default"
@@ -1030,7 +1030,7 @@ export default function UIDeliveryForm({
         }}
       >
         <ModalContent>
-          <ModalHeader className="flex items-center gap-3">
+          <ModalHeader className="flex items-center gap-4">
             <div className="p-2 rounded-xl bg-primary/10 text-primary">
               <Camera size={20} />
             </div>
@@ -1041,7 +1041,7 @@ export default function UIDeliveryForm({
                   : "Capture Product"}
               </h3>
               {captureTarget === "invoice" && !capturedImage && (
-                <p className="text-sm text-default-500 flex items-center gap-1">
+                <p className="text-sm text-default-500 flex items-center gap-2">
                   <Sparkles size={14} />
                   ถ่ายรูปให้ชัด ระบบจะอ่านข้อมูลอัตโนมัติ
                 </p>
@@ -1049,9 +1049,9 @@ export default function UIDeliveryForm({
             </div>
           </ModalHeader>
 
-          <ModalBody className="p-6">
+          <ModalBody className="p-4">
             {cameraError && (
-              <div className="flex items-center gap-3 p-4 rounded-xl bg-danger-50 text-danger-700 border border-danger-200">
+              <div className="flex items-center gap-4 p-4 rounded-xl bg-danger-50 text-danger-700 border border-danger-200">
                 <AlertCircle size={20} />
                 <span>{cameraError}</span>
               </div>
@@ -1084,7 +1084,7 @@ export default function UIDeliveryForm({
             </div>
           </ModalBody>
 
-          <ModalFooter className="flex flex-wrap justify-center gap-3 p-4">
+          <ModalFooter className="flex flex-wrap justify-center gap-4 p-4">
             {!capturedImage ? (
               <>
                 <Button

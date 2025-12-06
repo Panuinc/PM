@@ -30,7 +30,7 @@ import {
 // Animated Loading Skeleton
 const LoadingSkeleton = () => (
   <div className="space-y-3">
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-4">
       <div className="w-10 h-10 rounded-xl bg-primary/20 animate-pulse" />
       <div className="flex-1 space-y-2">
         <div className="h-4 bg-primary/20 rounded-full w-3/4 animate-pulse" />
@@ -76,7 +76,7 @@ const StatusBadge = ({ status, score }) => {
   const Icon = config.icon;
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-4">
       <div className={`p-2 rounded-xl ${config.bg} text-white shadow-md`}>
         <Icon size={20} />
       </div>
@@ -154,7 +154,7 @@ const IssueCard = ({ issue, severity = "warning" }) => {
   return (
     <div
       className={`
-        flex items-start gap-3 p-4 rounded-xl border
+        flex items-start gap-4 p-4 rounded-xl border
         ${style.bg} ${style.border}
         transition-all duration-200 hover:shadow-md
       `}
@@ -170,7 +170,7 @@ const IssueCard = ({ issue, severity = "warning" }) => {
           </div>
         )}
         {issue.locations && issue.locations.length > 0 && (
-          <div className="flex items-center gap-1 mt-2 text-sm text-default-500">
+          <div className="flex items-center gap-2 mt-2 text-sm text-default-500">
             <ScanLine size={14} />
             <span>ตำแหน่ง: {issue.locations.join(", ")}</span>
           </div>
@@ -190,7 +190,7 @@ const SignatureCard = ({ label, sublabel, data }) => {
             <div className="font-medium text-default-600">{label}</div>
             <div className="text-xs text-default-400">{sublabel}</div>
           </div>
-          <div className="p-1.5 rounded-lg bg-default-200">
+          <div className="p-2 rounded-lg bg-default-200">
             <Signature size={16} className="text-default-400" />
           </div>
         </div>
@@ -233,7 +233,7 @@ const SignatureCard = ({ label, sublabel, data }) => {
           <div className={`font-medium ${styles.labelColor}`}>{label}</div>
           <div className="text-xs text-default-500">{sublabel}</div>
         </div>
-        <div className={`p-1.5 rounded-lg ${styles.iconBg} text-white`}>
+        <div className={`p-2 rounded-lg ${styles.iconBg} text-white`}>
           {isComplete ? (
             <CheckCircle size={16} />
           ) : hasSignature ? (
@@ -243,9 +243,9 @@ const SignatureCard = ({ label, sublabel, data }) => {
           )}
         </div>
       </div>
-      <div className="flex gap-3">
+      <div className="flex gap-4">
         <div
-          className={`flex items-center gap-1 text-sm ${
+          className={`flex items-center gap-2 text-sm ${
             hasSignature ? "text-success-600" : "text-danger-600"
           }`}
         >
@@ -253,7 +253,7 @@ const SignatureCard = ({ label, sublabel, data }) => {
           <span>ลายเซ็น</span>
         </div>
         <div
-          className={`flex items-center gap-1 text-sm ${
+          className={`flex items-center gap-2 text-sm ${
             hasDate ? "text-success-600" : "text-warning-600"
           }`}
         >
@@ -314,7 +314,7 @@ const SectionHeader = ({ icon: Icon, title, color = "default" }) => {
 
   return (
     <div className="flex items-center gap-2 mb-3">
-      <div className={`p-1.5 rounded-lg ${colors[color]}`}>
+      <div className={`p-2 rounded-lg ${colors[color]}`}>
         <Icon size={16} />
       </div>
       <span className="font-semibold text-foreground">{title}</span>
@@ -336,8 +336,8 @@ export default function UIInvoiceValidationResult({
         className={`w-full border border-primary-200 bg-gradient-to-br from-primary-50 to-white overflow-hidden ${className}`}
         radius="lg"
       >
-        <CardBody className="p-6">
-          <div className="flex items-center gap-3 mb-4">
+        <CardBody className="p-4">
+          <div className="flex items-center gap-4 mb-4">
             <div className="p-2.5 rounded-xl bg-primary-500 text-white animate-pulse">
               <Sparkles size={20} />
             </div>
@@ -398,12 +398,12 @@ export default function UIInvoiceValidationResult({
         className={`w-full border-2 border-success-200 bg-gradient-to-br from-success-50 via-white to-success-50/30 overflow-hidden ${className}`}
         radius="lg"
       >
-        <CardBody className="p-6">
+        <CardBody className="p-4">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
               <div className="relative">
-                <div className="p-3 rounded-2xl bg-success-500 text-white shadow-md shadow-success-500/30">
+                <div className="p-4 rounded-2xl bg-success-500 text-white shadow-md shadow-success-500/30">
                   <ShieldCheck size={28} />
                 </div>
                 <div className="absolute -top-1 -right-1 w-4 h-4 bg-success-400 rounded-full animate-ping" />
@@ -437,7 +437,7 @@ export default function UIInvoiceValidationResult({
                 title={`ลายเซ็นครบ ${details.signatures.totalFound}/4 ช่อง`}
                 color="success"
               />
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <SignatureCard
                   label="ผู้รับของ"
                   sublabel="Received by"
@@ -501,11 +501,11 @@ export default function UIInvoiceValidationResult({
     >
       <CardBody className="p-0">
         {/* Header Section */}
-        <div className="p-6 pb-4">
+        <div className="p-4 pb-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <div
-                className={`p-3 rounded-2xl ${headerStyles.iconBg} text-white shadow-md`}
+                className={`p-4 rounded-2xl ${headerStyles.iconBg} text-white shadow-md`}
               >
                 {isRejected ? <ShieldX size={28} /> : <ShieldAlert size={28} />}
               </div>
@@ -533,7 +533,7 @@ export default function UIInvoiceValidationResult({
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               {decision && <StatusBadge status={decision} score={score} />}
               {onRetry && (
                 <Button
@@ -555,7 +555,7 @@ export default function UIInvoiceValidationResult({
         <div className="space-y-0 divide-y divide-default-200">
           {/* Critical Issues */}
           {errorWarnings.length > 0 && (
-            <div className="p-6 bg-danger-50/50">
+            <div className="p-4 bg-danger-50/50">
               <SectionHeader
                 icon={XCircle}
                 title="ปัญหาร้ายแรง (ต้องแก้ไข)"
@@ -575,7 +575,7 @@ export default function UIInvoiceValidationResult({
 
           {/* Warnings */}
           {normalWarnings.length > 0 && (
-            <div className="p-6 bg-warning-50/50">
+            <div className="p-4 bg-warning-50/50">
               <SectionHeader
                 icon={AlertTriangle}
                 title="ข้อควรระวัง"
@@ -595,7 +595,7 @@ export default function UIInvoiceValidationResult({
 
           {/* Info */}
           {infoWarnings.length > 0 && (
-            <div className="p-6 bg-primary-50/50">
+            <div className="p-4 bg-primary-50/50">
               <SectionHeader
                 icon={Info}
                 title="ข้อมูลเพิ่มเติม"
@@ -615,14 +615,14 @@ export default function UIInvoiceValidationResult({
 
           {/* Signatures */}
           {details?.signatures && (
-            <div className="p-6 bg-default-50/50">
+            <div className="p-4 bg-default-50/50">
               <SectionHeader
                 icon={Signature}
                 title={`สถานะลายเซ็น (${
                   details.signatures.totalFound || 0
                 }/4 ช่อง)`}
               />
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <SignatureCard
                   label="ผู้รับของ"
                   sublabel="Received by"
@@ -652,7 +652,7 @@ export default function UIInvoiceValidationResult({
             (details.cleanliness ||
               details.condition ||
               details.imageQuality) && (
-              <div className="p-6 bg-default-50/50">
+              <div className="p-4 bg-default-50/50">
                 <SectionHeader icon={FileSearch} title="รายละเอียดการตรวจสอบ" />
                 <div className="flex flex-wrap gap-2">
                   {details.invoiceInfo && (
@@ -722,7 +722,7 @@ export default function UIInvoiceValidationResult({
             !details.signatures &&
             (details.hasSignature !== undefined ||
               details.hasScratches !== undefined) && (
-              <div className="p-6 bg-default-50/50">
+              <div className="p-4 bg-default-50/50">
                 <SectionHeader icon={FileSearch} title="รายละเอียดการตรวจสอบ" />
                 <div className="flex flex-wrap gap-2">
                   {details.hasSignature !== undefined && (
@@ -763,7 +763,7 @@ export default function UIInvoiceValidationResult({
 
           {/* Failed Criteria */}
           {failedCriteria.length > 0 && (
-            <div className="p-6 bg-danger-50/30">
+            <div className="p-4 bg-danger-50/30">
               <SectionHeader
                 icon={XCircle}
                 title="เกณฑ์ที่ไม่ผ่าน"
@@ -785,7 +785,7 @@ export default function UIInvoiceValidationResult({
 
           {/* Required Actions */}
           {requiredActions.length > 0 && (
-            <div className="p-6 bg-primary-50/50">
+            <div className="p-4 bg-primary-50/50">
               <SectionHeader
                 icon={FileWarning}
                 title="สิ่งที่ต้องแก้ไข"
@@ -795,7 +795,7 @@ export default function UIInvoiceValidationResult({
                 {requiredActions.map((action, idx) => (
                   <li
                     key={`action-${idx}`}
-                    className="flex items-start gap-3 text-primary-700"
+                    className="flex items-start gap-4 text-primary-700"
                   >
                     <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary-500 text-white text-sm flex items-center justify-center font-medium">
                       {idx + 1}
@@ -809,7 +809,7 @@ export default function UIInvoiceValidationResult({
 
           {/* Suggestions */}
           {suggestions && suggestions.length > 0 && (
-            <div className="p-6 bg-default-50/50">
+            <div className="p-4 bg-default-50/50">
               <SectionHeader icon={Lightbulb} title="คำแนะนำ" />
               <ul className="space-y-2">
                 {suggestions.map((suggestion, idx) => (
@@ -827,7 +827,7 @@ export default function UIInvoiceValidationResult({
 
           {/* Summary & Reason */}
           {(summary || reason) && (
-            <div className="p-6 bg-default-50/50">
+            <div className="p-4 bg-default-50/50">
               {summary && (
                 <div className="mb-2">
                   <span className="font-semibold text-foreground">สรุป: </span>
@@ -853,7 +853,7 @@ export default function UIInvoiceValidationResult({
                 : "bg-gradient-to-r from-danger-50 to-danger-100/50"
             }`}
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               {canProceed !== false ? (
                 <>
                   <div className="p-2 rounded-xl bg-primary-500 text-white">
