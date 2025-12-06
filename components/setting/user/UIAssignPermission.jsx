@@ -61,9 +61,9 @@ export default function UIAssignPermission({
           </div>
         </div>
 
-        <div className="flex flex-col xl:flex-row items-start justify-center w-full h-fit overflow-auto border-1 border-foreground">
-          <div className="flex flex-col items-center justify-center w-full xl:w-3/12 h-fit p-2 gap-2 border-r-1 border-foreground">
-            <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-xl border-b-1 border-foreground">
+        <div className="flex flex-col xl:flex-row items-start justify-center w-full h-fit overflow-auto border-1 border-default">
+          <div className="flex flex-col items-center justify-center w-full xl:w-3/12 h-fit p-2 gap-2 border-r-1 border-default">
+            <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-xl border-b-1 border-default">
               Categories
             </div>
 
@@ -83,7 +83,7 @@ export default function UIAssignPermission({
           </div>
 
           <div className="flex flex-col items-center justify-center w-full xl:w-9/12 h-fit p-2 gap-2">
-            <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-xl border-b-1 border-foreground">
+            <div className="flex items-center justify-start w-full h-full p-2 gap-2 text-xl border-b-1 border-default">
               {activeCategory}
             </div>
 

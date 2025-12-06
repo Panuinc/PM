@@ -8,7 +8,7 @@ export default function UIHome({ headerTopic, user }) {
       <UIHeader header={headerTopic} />
 
       <div className="flex flex-col items-center justify-start w-full h-full gap-2 overflow-auto">
-        <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2 border-b-1 border-foreground">
+        <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2 border-b-1 border-default">
           <h1 className="flex items-center justify-center w-full h-full p-2 gap-2 text-4xl">
             Welcome, {user?.userFirstName} {user?.userLastName} 🎉
           </h1>
@@ -17,7 +17,7 @@ export default function UIHome({ headerTopic, user }) {
           </p>
         </div>
 
-        <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2 border-b-1 border-foreground">
+        <div className="flex flex-col items-center justify-center w-full h-fit p-2 gap-2 border-b-1 border-default">
           <h2 className="flex items-center justify-center w-full h-full p-2 gap-2 text-3xl">
             Your Personal Information
           </h2>
