@@ -22,6 +22,21 @@ enum DeliveryStatus {
   Approved
 }
 
+enum VisitorStatus {
+  CheckIn
+  Confirmed
+  CheckOut
+}
+
+enum visitorContactReason {
+  Shipping
+  BillingChequeCollection
+  JobApplication
+  ProductPresentation
+  Meeting
+  Other
+}
+
 model User {
   userId        String     @id @default(cuid())
   userFirstName String
@@ -45,6 +60,10 @@ model User {
 
   createdDeliverys Delivery[] @relation("DeliveryCreatedByUser")
   updatedDeliverys Delivery[] @relation("DeliveryUpdatedByUser")
+
+  createdVisitors Visitor[] @relation("VisitorCreatedByUser")
+  updatedVisitors Visitor[] @relation("VisitorUpdatedByUser")
+  contactVisitors Visitor[] @relation("VisitorContactUserRelation")
 
   createdPermissions Permission[] @relation("PermissionCreatedByUser")
   updatedPermissions Permission[] @relation("PermissionUpdatedByUser")
@@ -145,4 +164,30 @@ model DeliveryPhoto {
   delivery Delivery @relation(fields: [deliveryPhotoDeliveryId], references: [deliveryId], onDelete: Cascade)
 
   @@index([deliveryPhotoDeliveryId])
+}
+
+model Visitor {
+  visitorId              String        @id @default(cuid())
+  visitorFirstName       String
+  visitorLastName        String
+  visitorCompany         String
+  visitorCarRegistration String
+  visitorProvince        String
+  visitorContactUserId   String
+  visitorContactReason   visitorContactReason
+  visitorPhoto           String
+  visitorDocumentPhotos  String
+  visitorStatus          VisitorStatus @default(CheckIn)
+  visitorCreatedBy       String
+  visitorCreatedAt       DateTime
+  visitorUpdatedBy       String?
+  visitorUpdatedAt       DateTime?
+
+  contactUser   User? @relation("VisitorContactUserRelation", fields: [visitorContactUserId], references: [userId])
+  createdByUser User? @relation("VisitorCreatedByUser", fields: [visitorCreatedBy], references: [userId])
+  updatedByUser User? @relation("VisitorUpdatedByUser", fields: [visitorUpdatedBy], references: [userId])
+
+  @@index([visitorContactUserId])
+  @@index([visitorCreatedBy])
+  @@index([visitorUpdatedBy])
 }
