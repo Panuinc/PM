@@ -1,3 +1,5 @@
+// app/api/security/visitor/core/visitor.repository.js
+
 import prisma from "@/lib/prisma";
 
 export const VisitorRepository = {
@@ -61,6 +63,9 @@ export const VisitorRepository = {
       data,
       include: {
         contactUser: {
+          select: { userId: true, userFirstName: true, userLastName: true },
+        },
+        createdByUser: {
           select: { userId: true, userFirstName: true, userLastName: true },
         },
         updatedByUser: {

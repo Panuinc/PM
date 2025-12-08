@@ -1,3 +1,5 @@
+// app/api/security/visitor/usecases/visitor.usecase.js
+
 import { VisitorService } from "@/app/api/security/visitor/core/visitor.service";
 import {
   visitorPostSchema,
@@ -5,6 +7,10 @@ import {
 } from "@/app/api/security/visitor/core/visitor.schema";
 import { getLocalNow } from "@/lib/getLocalNow";
 import logger from "@/lib/logger.node";
+import {
+  notifyVisitorCheckIn,
+  notifyVisitorStatusUpdate,
+} from "@/lib/lineNotify";
 
 export async function GetAllVisitorUseCase(page = 1, limit = 1000000) {
   const skip = (page - 1) * limit;
@@ -62,6 +68,14 @@ export async function CreateVisitorUseCase(data) {
       visitorId: visitor.visitorId,
     });
 
+    notifyVisitorCheckIn(visitor, visitor.contactUser).catch((err) => {
+      logger.error({
+        message: "LINE check-in notification failed",
+        error: err.message,
+        visitorId: visitor.visitorId,
+      });
+    });
+
     return visitor;
   } catch (error) {
     logger.error({
@@ -107,6 +121,8 @@ export async function UpdateVisitorUseCase(data) {
   }
 
   const { visitorId, ...rest } = parsed.data;
+  const previousStatus = existing.visitorStatus;
+  const newStatus = rest.visitorStatus;
 
   try {
     const updatedVisitor = await VisitorService.update(visitorId, {
@@ -118,6 +134,21 @@ export async function UpdateVisitorUseCase(data) {
       message: "UpdateVisitorUseCase success",
       visitorId,
     });
+
+    if (previousStatus !== newStatus) {
+      notifyVisitorStatusUpdate(
+        updatedVisitor,
+        updatedVisitor.contactUser,
+        newStatus
+      ).catch((err) => {
+        logger.error({
+          message: "LINE status update notification failed",
+          error: err.message,
+          visitorId: visitorId,
+          newStatus: newStatus,
+        });
+      });
+    }
 
     return updatedVisitor;
   } catch (error) {
