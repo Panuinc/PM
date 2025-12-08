@@ -54,7 +54,6 @@ export default function UIVisitorForm({
     (user) => user.userStatus === "Enable"
   );
 
-  // Camera modal state
   const { isOpen, onOpen, onClose } = useDisclosure();
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -64,11 +63,9 @@ export default function UIVisitorForm({
   const [facingMode, setFacingMode] = useState("environment");
   const [captureTarget, setCaptureTarget] = useState("visitor");
 
-  // Local preview URLs
   const [localVisitorPhotoUrl, setLocalVisitorPhotoUrl] = useState("");
   const [localDocumentUrls, setLocalDocumentUrls] = useState([]);
 
-  // Cleanup object URLs
   useEffect(() => {
     return () => {
       if (localVisitorPhotoUrl) URL.revokeObjectURL(localVisitorPhotoUrl);
@@ -76,7 +73,6 @@ export default function UIVisitorForm({
     };
   }, [localVisitorPhotoUrl, localDocumentUrls]);
 
-  // Stop camera when modal closes
   useEffect(() => {
     if (!isOpen && stream) {
       stream.getTracks().forEach((track) => track.stop());
@@ -248,7 +244,6 @@ export default function UIVisitorForm({
         className="flex flex-col items-center justify-start w-full h-full overflow-auto"
       >
         <div className="flex flex-col items-center justify-start w-full h-fit gap-2 overflow-auto">
-          {/* Header */}
           <div className="flex flex-row items-center justify-end w-full h-fit p-2 gap-2">
             <div className="flex items-center justify-center h-full p-2 gap-2 bg-foreground text-background rounded-xl border-1 border-foreground">
               {mode === "create"
@@ -257,7 +252,6 @@ export default function UIVisitorForm({
             </div>
           </div>
 
-          {/* Visitor Photo */}
           <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit p-2 gap-2">
             <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-2">
               <label className="text-sm font-medium">
@@ -316,7 +310,6 @@ export default function UIVisitorForm({
             </div>
           </div>
 
-          {/* Visitor Name */}
           <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit p-2 gap-2">
             <div className="flex items-center justify-center w-full h-full p-2 gap-2">
               <Input
@@ -354,7 +347,6 @@ export default function UIVisitorForm({
             </div>
           </div>
 
-          {/* Company */}
           <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit p-2 gap-2">
             <div className="flex items-center justify-center w-full h-full p-2 gap-2">
               <Input
@@ -375,7 +367,6 @@ export default function UIVisitorForm({
             </div>
           </div>
 
-          {/* Car Registration & Province */}
           <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit p-2 gap-2">
             <div className="flex items-center justify-center w-full h-full p-2 gap-2">
               <Input
@@ -413,7 +404,6 @@ export default function UIVisitorForm({
             </div>
           </div>
 
-          {/* Contact Person & Reason */}
           <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit p-2 gap-2">
             <div className="flex items-center justify-center w-full h-full p-2 gap-2">
               <Select
@@ -471,7 +461,6 @@ export default function UIVisitorForm({
             </div>
           </div>
 
-          {/* Document Photos */}
           <div className="flex flex-col xl:flex-row items-center justify-center w-full h-fit p-2 gap-2">
             <div className="flex flex-col items-start justify-center w-full h-full p-2 gap-2">
               <div className="flex items-center justify-between w-full">
@@ -485,7 +474,6 @@ export default function UIVisitorForm({
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 w-full">
-                {/* Existing Photos */}
                 {formData.visitorDocumentPhotosArray?.map((src, idx) => (
                   <div
                     key={`existing-${idx}`}
@@ -512,7 +500,6 @@ export default function UIVisitorForm({
                   </div>
                 ))}
 
-                {/* New Photos */}
                 {localDocumentUrls.map((src, idx) => (
                   <div
                     key={`new-${idx}`}
@@ -545,7 +532,6 @@ export default function UIVisitorForm({
                   </div>
                 ))}
 
-                {/* Add Photo Button */}
                 <div
                   onClick={() => openCamera("document")}
                   className="flex flex-col items-center justify-center aspect-square border-2 border-dashed border-default-300 rounded-xl cursor-pointer hover:border-primary hover:bg-primary/5 transition-all"
@@ -565,7 +551,6 @@ export default function UIVisitorForm({
             </div>
           </div>
 
-          {/* Status (Update only) */}
           {isUpdate && (
             <div className="flex flex-col xl:flex-row items-center justify-end w-full h-fit p-2 gap-2">
               <div className="flex items-center justify-center w-full xl:w-6/12 h-full p-2 gap-2">
@@ -595,7 +580,6 @@ export default function UIVisitorForm({
             </div>
           )}
 
-          {/* Submit Button */}
           <div className="flex flex-row items-center justify-end w-full h-fit p-2 gap-2">
             <div className="flex items-center justify-center w-full xl:w-2/12 h-full p-2 gap-2">
               <Button
@@ -611,7 +595,6 @@ export default function UIVisitorForm({
         </div>
       </form>
 
-      {/* Camera Modal */}
       <Modal
         isOpen={isOpen}
         onClose={handleCloseModal}

@@ -42,7 +42,6 @@ export default function VisitorUpdate() {
       visitorContactUserId: "",
       visitorContactReason: "",
       visitorStatus: "",
-      // Photo fields
       visitorPhoto: "",
       visitorPhotoFile: null,
       visitorDocumentPhotos: "",

@@ -36,7 +36,6 @@ export default function VisitorCreate() {
       visitorProvince: "",
       visitorContactUserId: "",
       visitorContactReason: "",
-      // Photo fields
       visitorPhoto: "",
       visitorPhotoFile: null,
       visitorDocumentPhotos: "",

@@ -119,28 +119,39 @@ export async function createVisitor(request) {
       const visitorFirstName = String(formData.get("visitorFirstName") || "");
       const visitorLastName = String(formData.get("visitorLastName") || "");
       const visitorCompany = String(formData.get("visitorCompany") || "");
-      const visitorCarRegistration = String(formData.get("visitorCarRegistration") || "");
+      const visitorCarRegistration = String(
+        formData.get("visitorCarRegistration") || ""
+      );
       const visitorProvince = String(formData.get("visitorProvince") || "");
-      const visitorContactUserId = String(formData.get("visitorContactUserId") || "");
-      const visitorContactReason = String(formData.get("visitorContactReason") || "");
+      const visitorContactUserId = String(
+        formData.get("visitorContactUserId") || ""
+      );
+      const visitorContactReason = String(
+        formData.get("visitorContactReason") || ""
+      );
       const visitorCreatedBy = String(formData.get("visitorCreatedBy") || "");
 
-      // Create folder structure
       const timestamp = Date.now();
-      const visitorFolder = sanitizeBaseName(`${visitorFirstName}_${visitorLastName}_${timestamp}`);
+      const visitorFolder = sanitizeBaseName(
+        `${visitorFirstName}_${visitorLastName}_${timestamp}`
+      );
       const folder = `visitor/${visitorFolder}`;
 
-      // Handle visitor photo (single)
       const visitorPhotoFile = formData.get("visitorPhotoFile");
       let visitorPhoto = String(formData.get("visitorPhoto") || "");
-      
+
       if (visitorPhotoFile && visitorPhotoFile.size > 0) {
         const baseName = `photo_${timestamp}`;
-        visitorPhoto = await validateAndSaveImageFile(visitorPhotoFile, folder, baseName);
+        visitorPhoto = await validateAndSaveImageFile(
+          visitorPhotoFile,
+          folder,
+          baseName
+        );
       }
 
-      // Handle document photos (multiple)
-      const documentFiles = formData.getAll("visitorDocumentFiles").filter(Boolean);
+      const documentFiles = formData
+        .getAll("visitorDocumentFiles")
+        .filter(Boolean);
       const documentPhotoPaths = [];
 
       for (let i = 0; i < documentFiles.length; i++) {
@@ -152,9 +163,8 @@ export async function createVisitor(request) {
         }
       }
 
-      const visitorDocumentPhotos = documentPhotoPaths.length > 0 
-        ? JSON.stringify(documentPhotoPaths) 
-        : "";
+      const visitorDocumentPhotos =
+        documentPhotoPaths.length > 0 ? JSON.stringify(documentPhotoPaths) : "";
 
       const visitor = await CreateVisitorUseCase({
         visitorFirstName,
@@ -178,7 +188,6 @@ export async function createVisitor(request) {
       );
     }
 
-    // JSON fallback
     const data = await request.json();
     const visitor = await CreateVisitorUseCase(data);
     return NextResponse.json(
@@ -203,36 +212,51 @@ export async function updateVisitor(request, visitorId) {
       const visitorFirstName = String(formData.get("visitorFirstName") || "");
       const visitorLastName = String(formData.get("visitorLastName") || "");
       const visitorCompany = String(formData.get("visitorCompany") || "");
-      const visitorCarRegistration = String(formData.get("visitorCarRegistration") || "");
+      const visitorCarRegistration = String(
+        formData.get("visitorCarRegistration") || ""
+      );
       const visitorProvince = String(formData.get("visitorProvince") || "");
-      const visitorContactUserId = String(formData.get("visitorContactUserId") || "");
-      const visitorContactReason = String(formData.get("visitorContactReason") || "");
+      const visitorContactUserId = String(
+        formData.get("visitorContactUserId") || ""
+      );
+      const visitorContactReason = String(
+        formData.get("visitorContactReason") || ""
+      );
       const visitorStatus = String(formData.get("visitorStatus") || "");
       const visitorUpdatedBy = String(formData.get("visitorUpdatedBy") || "");
 
-      // Get existing visitor for folder structure
       const existing = await GetVisitorByIdUseCase(visitorId);
-      
+
       const timestamp = Date.now();
-      const visitorFolder = sanitizeBaseName(`${visitorFirstName}_${visitorLastName}_${visitorId}`);
+      const visitorFolder = sanitizeBaseName(
+        `${visitorFirstName}_${visitorLastName}_${visitorId}`
+      );
       const folder = `visitor/${visitorFolder}`;
 
-      // Handle visitor photo
       const visitorPhotoFile = formData.get("visitorPhotoFile");
-      let visitorPhoto = String(formData.get("visitorPhoto") || existing?.visitorPhoto || "");
-      
+      let visitorPhoto = String(
+        formData.get("visitorPhoto") || existing?.visitorPhoto || ""
+      );
+
       if (visitorPhotoFile && visitorPhotoFile.size > 0) {
         const baseName = `photo_${timestamp}`;
-        visitorPhoto = await validateAndSaveImageFile(visitorPhotoFile, folder, baseName);
+        visitorPhoto = await validateAndSaveImageFile(
+          visitorPhotoFile,
+          folder,
+          baseName
+        );
       }
 
-      // Handle new document photos
-      const documentFiles = formData.getAll("visitorDocumentFiles").filter(Boolean);
-      
-      // Parse existing document photos
+      const documentFiles = formData
+        .getAll("visitorDocumentFiles")
+        .filter(Boolean);
+
       let existingDocPhotos = [];
       try {
-        const existingStr = formData.get("visitorDocumentPhotos") || existing?.visitorDocumentPhotos || "";
+        const existingStr =
+          formData.get("visitorDocumentPhotos") ||
+          existing?.visitorDocumentPhotos ||
+          "";
         if (existingStr) {
           existingDocPhotos = JSON.parse(existingStr);
         }
@@ -240,7 +264,6 @@ export async function updateVisitor(request, visitorId) {
         existingDocPhotos = [];
       }
 
-      // Add new document photos
       for (let i = 0; i < documentFiles.length; i++) {
         const f = documentFiles[i];
         if (f && f.size > 0) {
@@ -250,9 +273,8 @@ export async function updateVisitor(request, visitorId) {
         }
       }
 
-      const visitorDocumentPhotos = existingDocPhotos.length > 0 
-        ? JSON.stringify(existingDocPhotos) 
-        : "";
+      const visitorDocumentPhotos =
+        existingDocPhotos.length > 0 ? JSON.stringify(existingDocPhotos) : "";
 
       const visitor = await UpdateVisitorUseCase({
         visitorId,
@@ -275,7 +297,6 @@ export async function updateVisitor(request, visitorId) {
       });
     }
 
-    // JSON fallback
     const data = await request.json();
     const visitor = await UpdateVisitorUseCase({ ...data, visitorId });
     return NextResponse.json({
