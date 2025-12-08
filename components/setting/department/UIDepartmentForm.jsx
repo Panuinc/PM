@@ -23,7 +23,7 @@ export default function UIDepartmentForm({
       >
         <div className="flex flex-col items-center justify-start w-full h-fit gap-2 overflow-auto">
           <div className="flex flex-row items-center justify-end w-full h-fit p-2 gap-2">
-            <div className="flex items-center justify-center h-full p-2 gap-2 bg-foreground text-background rounded-xl border-1 border-foreground">
+            <div className="flex items-center justify-center h-full p-2 gap-2 bg-foreground text-background rounded-xl">
               {mode === "create"
                 ? `Create By : ${operatedBy}`
                 : `Update By : ${operatedBy}`}
