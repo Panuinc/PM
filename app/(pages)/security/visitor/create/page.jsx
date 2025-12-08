@@ -3,8 +3,10 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import UIVisitorForm from "@/components/security/visitor/UIVisitorForm";
+import UILoading from "@/components/UILoading";
 import { useSessionUser } from "@/hooks/useSessionUser";
 import { useSubmitVisitor } from "@/app/api/security/visitor/hooks";
+import { useUsers } from "@/app/api/setting/user/hooks";
 import { useFormHandler } from "@/hooks/useFormHandler";
 import { useSePermission } from "@/hooks/useSePermission";
 
@@ -12,6 +14,7 @@ export default function VisitorCreate() {
   const router = useRouter();
   const { can } = useSePermission();
   const { userId, userName } = useSessionUser();
+  const { users, loading: usersLoading } = useUsers();
 
   useEffect(() => {
     if (!can("visitor.create")) {
@@ -21,22 +24,33 @@ export default function VisitorCreate() {
 
   const submitVisitor = useSubmitVisitor({
     mode: "create",
-    currentVisitorId: userId,
+    currentUserId: userId,
   });
 
   const formHandler = useFormHandler(
     {
-      visitorName: "",
+      visitorFirstName: "",
+      visitorLastName: "",
+      visitorCompany: "",
+      visitorCarRegistration: "",
+      visitorProvince: "",
+      visitorContactUserId: "",
+      visitorContactReason: "",
+      visitorPhoto: "",
+      visitorDocumentPhotos: "",
     },
     submitVisitor
   );
 
+  if (usersLoading) return <UILoading />;
+
   return (
     <UIVisitorForm
-      headerTopic="Visitor Create"
+      headerTopic="Visitor Check-In"
       formHandler={formHandler}
       mode="create"
       operatedBy={userName}
+      contactUsers={users}
     />
   );
 }

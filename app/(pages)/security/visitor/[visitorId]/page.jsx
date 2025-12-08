@@ -5,10 +5,8 @@ import { useParams, useRouter } from "next/navigation";
 import UIVisitorForm from "@/components/security/visitor/UIVisitorForm";
 import UILoading from "@/components/UILoading";
 import { useSessionUser } from "@/hooks/useSessionUser";
-import {
-  useVisitor,
-  useSubmitVisitor,
-} from "@/app/api/security/visitor/hooks";
+import { useVisitor, useSubmitVisitor } from "@/app/api/security/visitor/hooks";
+import { useUsers } from "@/app/api/setting/user/hooks";
 import { useFormHandler } from "@/hooks/useFormHandler";
 import { useSePermission } from "@/hooks/useSePermission";
 
@@ -19,8 +17,8 @@ export default function VisitorUpdate() {
   const { visitorId } = useParams();
   const { userId: sessionUserId, userName } = useSessionUser();
 
-  const { visitor, loading: visitorLoading } =
-    useVisitor(visitorId);
+  const { visitor, loading: visitorLoading } = useVisitor(visitorId);
+  const { users, loading: usersLoading } = useUsers();
 
   useEffect(() => {
     if (!can("visitor.update")) {
@@ -31,12 +29,20 @@ export default function VisitorUpdate() {
   const submitVisitor = useSubmitVisitor({
     mode: "update",
     visitorId,
-    currentVisitorId: sessionUserId,
+    currentUserId: sessionUserId,
   });
 
   const formHandler = useFormHandler(
     {
-      visitorName: "",
+      visitorFirstName: "",
+      visitorLastName: "",
+      visitorCompany: "",
+      visitorCarRegistration: "",
+      visitorProvince: "",
+      visitorContactUserId: "",
+      visitorContactReason: "",
+      visitorPhoto: "",
+      visitorDocumentPhotos: "",
       visitorStatus: "",
     },
     submitVisitor
@@ -46,7 +52,7 @@ export default function VisitorUpdate() {
     if (visitor) formHandler.setFormData(visitor);
   }, [visitor]);
 
-  if (visitorLoading) return <UILoading />;
+  if (visitorLoading || usersLoading) return <UILoading />;
 
   return (
     <UIVisitorForm
@@ -54,6 +60,7 @@ export default function VisitorUpdate() {
       formHandler={formHandler}
       mode="update"
       operatedBy={userName}
+      contactUsers={users}
       isUpdate
     />
   );
