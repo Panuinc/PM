@@ -269,11 +269,11 @@ export default function UIVisitorForm({
                   </span>
                 </div>
               ) : (
-                <div className="relative w-full max-w-sm">
+                <div className="relative w-full max-w-lg">
                   <Image
                     src={formData.visitorPhoto}
                     alt="Visitor Photo"
-                    className="w-full h-48 object-cover rounded-xl border-2 border-default-200"
+                    className="w-96 aspect-square object-cover rounded-xl border-2 border-default-200"
                   />
                   <div className="absolute top-2 right-2 flex gap-1">
                     <Button
