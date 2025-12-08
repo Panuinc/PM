@@ -7,10 +7,21 @@ import { useRouter } from "next/navigation";
 function formatVisitorFromApi(visitor, index) {
   if (!visitor) return null;
 
+  // Parse document photos JSON
+  let documentPhotos = [];
+  try {
+    if (visitor.visitorDocumentPhotos) {
+      documentPhotos = JSON.parse(visitor.visitorDocumentPhotos);
+    }
+  } catch {
+    documentPhotos = [];
+  }
+
   return {
     ...visitor,
     visitorIndex: index != null ? index + 1 : undefined,
     visitorFullName: `${visitor.visitorFirstName} ${visitor.visitorLastName}`,
+    visitorDocumentPhotosArray: documentPhotos,
     visitorContactUserName: visitor.contactUser
       ? `${visitor.contactUser.userFirstName} ${visitor.contactUser.userLastName}`
       : "-",
@@ -131,11 +142,6 @@ export function useSubmitVisitor({
       const byField =
         mode === "create" ? "visitorCreatedBy" : "visitorUpdatedBy";
 
-      const payload = {
-        ...formData,
-        [byField]: currentUserId,
-      };
-
       const url =
         mode === "create"
           ? "/api/security/visitor"
@@ -144,6 +150,78 @@ export function useSubmitVisitor({
       const method = mode === "create" ? "POST" : "PUT";
 
       try {
+        // Check if we have files to upload
+        const hasVisitorPhotoFile = !!formData?.visitorPhotoFile;
+        const hasDocumentFiles =
+          Array.isArray(formData?.visitorDocumentFiles) &&
+          formData.visitorDocumentFiles.length > 0;
+
+        if (hasVisitorPhotoFile || hasDocumentFiles) {
+          // Use FormData for file uploads
+          const fd = new FormData();
+
+          fd.append("visitorFirstName", formData.visitorFirstName || "");
+          fd.append("visitorLastName", formData.visitorLastName || "");
+          fd.append("visitorCompany", formData.visitorCompany || "");
+          fd.append("visitorCarRegistration", formData.visitorCarRegistration || "");
+          fd.append("visitorProvince", formData.visitorProvince || "");
+          fd.append("visitorContactUserId", formData.visitorContactUserId || "");
+          fd.append("visitorContactReason", formData.visitorContactReason || "");
+          
+          if (mode === "update") {
+            fd.append("visitorStatus", formData.visitorStatus || "");
+          }
+
+          fd.append(byField, currentUserId || "");
+
+          // Visitor photo file
+          if (hasVisitorPhotoFile) {
+            fd.append("visitorPhotoFile", formData.visitorPhotoFile);
+          }
+          
+          // Existing visitor photo URL (for update mode)
+          if (formData.visitorPhoto) {
+            fd.append("visitorPhoto", formData.visitorPhoto);
+          }
+
+          // Document photo files
+          for (const f of formData.visitorDocumentFiles || []) {
+            if (f) fd.append("visitorDocumentFiles", f);
+          }
+
+          // Existing document photos (for update mode)
+          if (formData.visitorDocumentPhotos) {
+            fd.append("visitorDocumentPhotos", formData.visitorDocumentPhotos);
+          }
+
+          const res = await fetch(url, {
+            method,
+            credentials: "include",
+            body: fd,
+          });
+
+          const result = await res.json().catch(() => ({}));
+
+          if (res.ok) {
+            showToast("success", result.message || "Success");
+            setTimeout(() => router.push("/security/visitor"), 1500);
+          } else {
+            setErrors(
+              result.details && typeof result.details === "object"
+                ? result.details
+                : {}
+            );
+            showToast("danger", result.error || "Failed to submit Visitor.");
+          }
+          return;
+        }
+
+        // JSON fallback (no files)
+        const payload = {
+          ...formData,
+          [byField]: currentUserId,
+        };
+
         const res = await fetch(url, {
           method,
           headers: {

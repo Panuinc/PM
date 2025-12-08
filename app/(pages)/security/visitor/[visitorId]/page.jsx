@@ -24,7 +24,7 @@ export default function VisitorUpdate() {
     if (!can("visitor.update")) {
       router.replace("/forbidden");
     }
-  }, [can]);
+  }, [can, router]);
 
   const submitVisitor = useSubmitVisitor({
     mode: "update",
@@ -41,15 +41,35 @@ export default function VisitorUpdate() {
       visitorProvince: "",
       visitorContactUserId: "",
       visitorContactReason: "",
-      visitorPhoto: "",
-      visitorDocumentPhotos: "",
       visitorStatus: "",
+      // Photo fields
+      visitorPhoto: "",
+      visitorPhotoFile: null,
+      visitorDocumentPhotos: "",
+      visitorDocumentFiles: [],
+      visitorDocumentPhotosArray: [],
     },
     submitVisitor
   );
 
   useEffect(() => {
-    if (visitor) formHandler.setFormData(visitor);
+    if (visitor) {
+      formHandler.setFormData({
+        visitorFirstName: visitor.visitorFirstName || "",
+        visitorLastName: visitor.visitorLastName || "",
+        visitorCompany: visitor.visitorCompany || "",
+        visitorCarRegistration: visitor.visitorCarRegistration || "",
+        visitorProvince: visitor.visitorProvince || "",
+        visitorContactUserId: visitor.visitorContactUserId || "",
+        visitorContactReason: visitor.visitorContactReason || "",
+        visitorStatus: visitor.visitorStatus || "",
+        visitorPhoto: visitor.visitorPhoto || "",
+        visitorPhotoFile: null,
+        visitorDocumentPhotos: visitor.visitorDocumentPhotos || "",
+        visitorDocumentFiles: [],
+        visitorDocumentPhotosArray: visitor.visitorDocumentPhotosArray || [],
+      });
+    }
   }, [visitor]);
 
   if (visitorLoading || usersLoading) return <UILoading />;

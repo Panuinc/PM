@@ -20,7 +20,7 @@ export default function VisitorCreate() {
     if (!can("visitor.create")) {
       router.replace("/forbidden");
     }
-  }, [can]);
+  }, [can, router]);
 
   const submitVisitor = useSubmitVisitor({
     mode: "create",
@@ -36,8 +36,11 @@ export default function VisitorCreate() {
       visitorProvince: "",
       visitorContactUserId: "",
       visitorContactReason: "",
+      // Photo fields
       visitorPhoto: "",
+      visitorPhotoFile: null,
       visitorDocumentPhotos: "",
+      visitorDocumentFiles: [],
     },
     submitVisitor
   );
