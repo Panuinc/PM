@@ -58,8 +58,8 @@ model User {
   createdDepartments Department[] @relation("DepartmentCreatedByUser")
   updatedDepartments Department[] @relation("DepartmentUpdatedByUser")
 
-  createdDeliverys Delivery[] @relation("DeliveryCreatedByUser")
-  updatedDeliverys Delivery[] @relation("DeliveryUpdatedByUser")
+  createdDeliveries Delivery[] @relation("DeliveryCreatedByUser")
+  updatedDeliveries Delivery[] @relation("DeliveryUpdatedByUser")
 
   createdVisitors Visitor[] @relation("VisitorCreatedByUser")
   updatedVisitors Visitor[] @relation("VisitorUpdatedByUser")
@@ -167,7 +167,7 @@ model DeliveryPhoto {
 }
 
 model Visitor {
-  visitorId              String        @id @default(cuid())
+  visitorId              String               @id @default(cuid())
   visitorFirstName       String
   visitorLastName        String
   visitorCompany         String
@@ -177,7 +177,7 @@ model Visitor {
   visitorContactReason   visitorContactReason
   visitorPhoto           String
   visitorDocumentPhotos  String
-  visitorStatus          VisitorStatus @default(CheckIn)
+  visitorStatus          VisitorStatus        @default(CheckIn)
   visitorCreatedBy       String
   visitorCreatedAt       DateTime
   visitorUpdatedBy       String?
