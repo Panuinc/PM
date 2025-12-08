@@ -1,5 +1,3 @@
-// app/api/security/visitor/core/visitor.repository.js
-
 import prisma from "@/lib/prisma";
 
 export const VisitorRepository = {

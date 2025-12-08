@@ -1,5 +1,3 @@
-// app/api/security/visitor/usecases/visitor.usecase.js
-
 import { VisitorService } from "@/app/api/security/visitor/core/visitor.service";
 import {
   visitorPostSchema,
