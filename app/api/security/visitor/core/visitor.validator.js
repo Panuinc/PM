@@ -1,15 +1,14 @@
 import { VisitorRepository } from "@/app/api/security/visitor/core/visitor.repository";
 
 export const VisitorValidator = {
-  async isDuplicateVisitorName(visitorName) {
-    if (!visitorName || typeof visitorName !== "string") {
+  async exists(visitorId) {
+    if (!visitorId || typeof visitorId !== "string") {
       throw {
         status: 400,
-        message: "Invalid visitorName",
+        message: "Invalid visitorId",
       };
     }
-
-    const existing = await VisitorRepository.findByVisitorName(visitorName);
+    const existing = await VisitorRepository.findById(visitorId);
     return !!existing;
   },
 };

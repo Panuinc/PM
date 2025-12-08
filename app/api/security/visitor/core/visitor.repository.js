@@ -7,11 +7,14 @@ export const VisitorRepository = {
       take,
       orderBy: { visitorCreatedAt: "asc" },
       include: {
+        contactUser: {
+          select: { userId: true, userFirstName: true, userLastName: true },
+        },
         createdByUser: {
-          select: {userId: true, userFirstName: true, userLastName: true },
+          select: { userId: true, userFirstName: true, userLastName: true },
         },
         updatedByUser: {
-          select: {userId: true, userFirstName: true, userLastName: true },
+          select: { userId: true, userFirstName: true, userLastName: true },
         },
       },
     });
@@ -25,19 +28,16 @@ export const VisitorRepository = {
     return prisma.visitor.findUnique({
       where: { visitorId },
       include: {
+        contactUser: {
+          select: { userId: true, userFirstName: true, userLastName: true },
+        },
         createdByUser: {
-          select: {userId: true, userFirstName: true, userLastName: true },
+          select: { userId: true, userFirstName: true, userLastName: true },
         },
         updatedByUser: {
-          select: {userId: true, userFirstName: true, userLastName: true },
+          select: { userId: true, userFirstName: true, userLastName: true },
         },
       },
-    });
-  },
-
-  findByVisitorName: async (visitorName) => {
-    return prisma.visitor.findUnique({
-      where: { visitorName },
     });
   },
 
@@ -45,8 +45,11 @@ export const VisitorRepository = {
     return prisma.visitor.create({
       data,
       include: {
+        contactUser: {
+          select: { userId: true, userFirstName: true, userLastName: true },
+        },
         createdByUser: {
-          select: {userId: true, userFirstName: true, userLastName: true },
+          select: { userId: true, userFirstName: true, userLastName: true },
         },
       },
     });
@@ -57,8 +60,11 @@ export const VisitorRepository = {
       where: { visitorId },
       data,
       include: {
+        contactUser: {
+          select: { userId: true, userFirstName: true, userLastName: true },
+        },
         updatedByUser: {
-          select: {userId: true, userFirstName: true, userLastName: true },
+          select: { userId: true, userFirstName: true, userLastName: true },
         },
       },
     });

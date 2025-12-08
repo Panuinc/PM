@@ -10,10 +10,14 @@ function formatVisitorFromApi(visitor, index) {
   return {
     ...visitor,
     visitorIndex: index != null ? index + 1 : undefined,
-    visitorCreatedBy: visitor.createdByUser
+    visitorFullName: `${visitor.visitorFirstName} ${visitor.visitorLastName}`,
+    visitorContactUserName: visitor.contactUser
+      ? `${visitor.contactUser.userFirstName} ${visitor.contactUser.userLastName}`
+      : "-",
+    visitorCreatedByName: visitor.createdByUser
       ? `${visitor.createdByUser.userFirstName} ${visitor.createdByUser.userLastName}`
       : "-",
-    visitorUpdatedBy: visitor.updatedByUser
+    visitorUpdatedByName: visitor.updatedByUser
       ? `${visitor.updatedByUser.userFirstName} ${visitor.updatedByUser.userLastName}`
       : "-",
   };
@@ -41,7 +45,9 @@ export function useVisitors(apiUrl = "/api/security/visitor") {
         if (!active) return;
 
         const formatted = Array.isArray(data.visitors)
-          ? data.visitors.map((u, i) => formatVisitorFromApi(u, i)).filter(Boolean)
+          ? data.visitors
+              .map((u, i) => formatVisitorFromApi(u, i))
+              .filter(Boolean)
           : [];
 
         setVisitors(formatted);
@@ -113,20 +119,27 @@ export function useVisitor(visitorId) {
   return { visitor, loading };
 }
 
-export function useSubmitVisitor({ mode = "create", visitorId, currentVisitorId }) {
+export function useSubmitVisitor({
+  mode = "create",
+  visitorId,
+  currentUserId,
+}) {
   const router = useRouter();
 
   return useCallback(
     async (formRef, formData, setErrors) => {
-      const byField = mode === "create" ? "visitorCreatedBy" : "visitorUpdatedBy";
+      const byField =
+        mode === "create" ? "visitorCreatedBy" : "visitorUpdatedBy";
 
       const payload = {
         ...formData,
-        [byField]: currentVisitorId,
+        [byField]: currentUserId,
       };
 
       const url =
-        mode === "create" ? "/api/security/visitor" : `/api/security/visitor/${visitorId}`;
+        mode === "create"
+          ? "/api/security/visitor"
+          : `/api/security/visitor/${visitorId}`;
 
       const method = mode === "create" ? "POST" : "PUT";
 
@@ -161,6 +174,6 @@ export function useSubmitVisitor({ mode = "create", visitorId, currentVisitorId 
         );
       }
     },
-    [mode, visitorId, currentVisitorId, router]
+    [mode, visitorId, currentUserId, router]
   );
 }

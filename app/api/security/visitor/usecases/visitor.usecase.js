@@ -3,7 +3,6 @@ import {
   visitorPostSchema,
   visitorPutSchema,
 } from "@/app/api/security/visitor/core/visitor.schema";
-import { VisitorValidator } from "@/app/api/security/visitor/core/visitor.validator";
 import { getLocalNow } from "@/lib/getLocalNow";
 import logger from "@/lib/logger.node";
 
@@ -31,7 +30,8 @@ export async function GetVisitorByIdUseCase(visitorId) {
 export async function CreateVisitorUseCase(data) {
   logger.info({
     message: "CreateVisitorUseCase start",
-    visitorName: data?.visitorName,
+    visitorFirstName: data?.visitorFirstName,
+    visitorLastName: data?.visitorLastName,
     visitorCreatedBy: data?.visitorCreatedBy,
   });
 
@@ -51,25 +51,9 @@ export async function CreateVisitorUseCase(data) {
     };
   }
 
-  const normalizedVisitorName = parsed.data.visitorName.trim().toLowerCase();
-
-  const duplicate = await VisitorValidator.isDuplicateVisitorName(normalizedVisitorName);
-  if (duplicate) {
-    logger.warn({
-      message: "CreateVisitorUseCase duplicate visitorName",
-      visitorName: normalizedVisitorName,
-    });
-
-    throw {
-      status: 409,
-      message: `visitorName '${normalizedVisitorName}' already exists`,
-    };
-  }
-
   try {
     const visitor = await VisitorService.create({
       ...parsed.data,
-      visitorName: normalizedVisitorName,
       visitorCreatedAt: getLocalNow(),
     });
 
@@ -80,19 +64,6 @@ export async function CreateVisitorUseCase(data) {
 
     return visitor;
   } catch (error) {
-    if (error && typeof error === "object" && error.code === "P2002") {
-      logger.warn({
-        message:
-          "CreateVisitorUseCase unique constraint violation on visitorName (P2002)",
-        visitorName: normalizedVisitorName,
-      });
-
-      throw {
-        status: 409,
-        message: `visitorName '${normalizedVisitorName}' already exists`,
-      };
-    }
-
     logger.error({
       message: "CreateVisitorUseCase error",
       error,
@@ -106,7 +77,6 @@ export async function UpdateVisitorUseCase(data) {
   logger.info({
     message: "UpdateVisitorUseCase start",
     visitorId: data?.visitorId,
-    visitorName: data?.visitorName,
     visitorUpdatedBy: data?.visitorUpdatedBy,
   });
 
@@ -136,32 +106,11 @@ export async function UpdateVisitorUseCase(data) {
     throw { status: 404, message: "Visitor not found" };
   }
 
-  const normalizedVisitorName = parsed.data.visitorName.trim().toLowerCase();
-  const existingVisitorNameNormalized = existing.visitorName
-    ? existing.visitorName.trim().toLowerCase()
-    : "";
-
-  if (normalizedVisitorName !== existingVisitorNameNormalized) {
-    const duplicate = await VisitorValidator.isDuplicateVisitorName(normalizedVisitorName);
-    if (duplicate) {
-      logger.warn({
-        message: "UpdateVisitorUseCase duplicate visitorName",
-        visitorName: normalizedVisitorName,
-      });
-
-      throw {
-        status: 409,
-        message: `visitorName '${normalizedVisitorName}' already exists`,
-      };
-    }
-  }
-
   const { visitorId, ...rest } = parsed.data;
 
   try {
     const updatedVisitor = await VisitorService.update(visitorId, {
       ...rest,
-      visitorName: normalizedVisitorName,
       visitorUpdatedAt: getLocalNow(),
     });
 
@@ -172,19 +121,6 @@ export async function UpdateVisitorUseCase(data) {
 
     return updatedVisitor;
   } catch (error) {
-    if (error && typeof error === "object" && error.code === "P2002") {
-      logger.warn({
-        message:
-          "UpdateVisitorUseCase unique constraint violation on visitorName (P2002)",
-        visitorName: normalizedVisitorName,
-      });
-
-      throw {
-        status: 409,
-        message: `visitorName '${normalizedVisitorName}' already exists`,
-      };
-    }
-
     logger.error({
       message: "UpdateVisitorUseCase error",
       error,

@@ -13,10 +13,6 @@ export class VisitorService {
     return VisitorRepository.findById(visitorId);
   }
 
-  static async getByVisitorName(visitorName) {
-    return VisitorRepository.findByVisitorName(visitorName);
-  }
-
   static async create(data) {
     if (!data) {
       throw {
@@ -39,7 +35,6 @@ export class VisitorService {
         message: "VisitorService.update called without data",
       };
     }
-
     return VisitorRepository.update(visitorId, data);
   }
 }
