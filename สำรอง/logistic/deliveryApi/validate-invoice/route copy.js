@@ -481,7 +481,6 @@ export async function POST(request) {
       decision: decision,
       score: result.overallResult?.score || 0,
 
-      // NEW: Extracted data for auto-fill
       extractedData: result.extractedData || null,
 
       criticalIssues: criticalIssues,

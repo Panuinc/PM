@@ -41,7 +41,6 @@ import {
   SwitchCamera,
 } from "lucide-react";
 
-// Reusable Section Card Component
 const SectionCard = ({ children, className = "", animate = true }) => (
   <Card
     className={`
@@ -56,7 +55,6 @@ const SectionCard = ({ children, className = "", animate = true }) => (
   </Card>
 );
 
-// Section Header Component
 const SectionHeader = ({ icon: Icon, title, subtitle, action }) => (
   <CardHeader className="flex flex-row items-center justify-between px-6 py-4 bg-gradient-to-r from-default-50 to-transparent">
     <div className="flex items-center gap-4">
@@ -72,7 +70,6 @@ const SectionHeader = ({ icon: Icon, title, subtitle, action }) => (
   </CardHeader>
 );
 
-// Empty State Component
 const EmptyState = ({ icon: Icon, title, description, action }) => (
   <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
     <div className="p-4 rounded-full bg-default-100 mb-4">
@@ -84,7 +81,6 @@ const EmptyState = ({ icon: Icon, title, description, action }) => (
   </div>
 );
 
-// Photo Thumbnail Component
 const PhotoThumbnail = ({ src, onRemove, label, isNew = false }) => (
   <div className="group relative overflow-hidden rounded-xl border-2 border-default-200 hover:border-primary transition-all duration-300">
     <img
@@ -115,7 +111,6 @@ const PhotoThumbnail = ({ src, onRemove, label, isNew = false }) => (
   </div>
 );
 
-// Extracted Data Chip Component
 const DataChip = ({ icon, label, value, color = "success" }) => (
   <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-default-100 border border-default-200">
     <span className="text-lg">{icon}</span>
@@ -167,7 +162,6 @@ export default function UIDeliveryForm({
     hasWarnings,
   } = useInvoiceValidation();
 
-  // Effect: Auto-fill form fields from validation result
   useEffect(() => {
     if (validationResult?.extractedData) {
       const { companyName, invoiceNumber } = validationResult.extractedData;
@@ -255,7 +249,6 @@ export default function UIDeliveryForm({
     }
   }, [validationResult]);
 
-  // Cleanup object URLs
   useEffect(() => {
     return () => {
       if (localInvoicePreviewUrl) URL.revokeObjectURL(localInvoicePreviewUrl);
@@ -265,7 +258,6 @@ export default function UIDeliveryForm({
     };
   }, [localInvoicePreviewUrl, localProductPreviewUrls]);
 
-  // Stop camera stream when modal closes
   useEffect(() => {
     if (!isOpen && stream) {
       stream.getTracks().forEach((track) => track.stop());
@@ -321,7 +313,6 @@ export default function UIDeliveryForm({
     });
   }, []);
 
-  // Auto-resubmit after location is fetched
   useEffect(() => {
     const loc = String(formData?.deliveryLocation || "").trim();
     if (!pendingResubmitRef.current) return;
@@ -556,7 +547,6 @@ export default function UIDeliveryForm({
 
   return (
     <>
-      {/* Custom Styles */}
       <style jsx global>{`
         @keyframes fadeIn {
           from {
@@ -597,7 +587,6 @@ export default function UIDeliveryForm({
             readOnly
           />
 
-          {/* Header Info Bar */}
           <div className="flex items-center justify-between px-4 py-3 rounded-xl bg-default-100/50 border border-default-200">
             <div className="flex items-center gap-2 text-sm text-default-600">
               <MapPin size={16} />
@@ -614,7 +603,6 @@ export default function UIDeliveryForm({
             </Chip>
           </div>
 
-          {/* Invoice Section */}
           <SectionCard className="animation-delay-100">
             <SectionHeader
               icon={FileText}
@@ -645,7 +633,6 @@ export default function UIDeliveryForm({
                 />
               ) : (
                 <div className="space-y-6">
-                  {/* Invoice Preview */}
                   <div className="relative group">
                     <div className="overflow-hidden rounded-2xl border-2 border-default-200 shadow-md">
                       <Image
@@ -685,7 +672,6 @@ export default function UIDeliveryForm({
                     </div>
                   </div>
 
-                  {/* Validation Status */}
                   {(isValidating || validationResult) && (
                     <UIInvoiceValidationResult
                       isValidating={isValidating}
@@ -694,7 +680,6 @@ export default function UIDeliveryForm({
                     />
                   )}
 
-                  {/* Extracted Data Display */}
                   {validationResult?.extractedData && (
                     <div className="p-4 rounded-2xl bg-gradient-to-r from-success-50 to-primary-50 border border-success-200">
                       <div className="flex items-center gap-2 mb-4">
@@ -751,7 +736,6 @@ export default function UIDeliveryForm({
             </CardBody>
           </SectionCard>
 
-          {/* Form Fields Section */}
           <SectionCard className="animation-delay-200">
             <SectionHeader
               icon={Building2}
@@ -834,7 +818,6 @@ export default function UIDeliveryForm({
             </CardBody>
           </SectionCard>
 
-          {/* Product Photos Section */}
           <SectionCard className="animation-delay-300">
             <SectionHeader
               icon={Package}
@@ -875,7 +858,6 @@ export default function UIDeliveryForm({
                 />
               ) : (
                 <div className="space-y-6">
-                  {/* Existing Photos */}
                   {existingPhotosCount > 0 && (
                     <div className="space-y-3">
                       <div className="flex items-center gap-2 text-sm text-default-600">
@@ -902,7 +884,6 @@ export default function UIDeliveryForm({
                     </div>
                   )}
 
-                  {/* New Photos */}
                   {newPhotosCount > 0 && (
                     <div className="space-y-3">
                       <div className="flex items-center gap-2 text-sm text-default-600">
@@ -927,7 +908,6 @@ export default function UIDeliveryForm({
             </CardBody>
           </SectionCard>
 
-          {/* Status Section (Update Mode) */}
           {isUpdate && (
             <SectionCard>
               <SectionHeader
@@ -976,7 +956,6 @@ export default function UIDeliveryForm({
             </SectionCard>
           )}
 
-          {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-end gap-4 pt-4">
             <Button
               type="button"
@@ -1015,7 +994,6 @@ export default function UIDeliveryForm({
         </form>
       </div>
 
-      {/* Camera Modal */}
       <Modal
         isOpen={isOpen}
         onClose={handleCloseModal}
@@ -1067,7 +1045,6 @@ export default function UIDeliveryForm({
                     muted
                     className="w-full h-full object-cover"
                   />
-                  {/* Camera Overlay Guide */}
                   <div className="absolute inset-0 pointer-events-none">
                     <div className="absolute inset-8 border-2 border-white/30 rounded-xl" />
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 border-2 border-white/50 rounded-full" />

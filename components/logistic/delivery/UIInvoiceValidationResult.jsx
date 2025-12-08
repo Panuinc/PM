@@ -27,7 +27,6 @@ import {
   Clock,
 } from "lucide-react";
 
-// Animated Loading Skeleton
 const LoadingSkeleton = () => (
   <div className="space-y-3">
     <div className="flex items-center gap-4">
@@ -49,7 +48,6 @@ const LoadingSkeleton = () => (
   </div>
 );
 
-// Status Badge Component
 const StatusBadge = ({ status, score }) => {
   const configs = {
     ACCEPT: {
@@ -90,7 +88,6 @@ const StatusBadge = ({ status, score }) => {
   );
 };
 
-// Issue Card Component
 const IssueCard = ({ issue, severity = "warning" }) => {
   const severityStyles = {
     error: {
@@ -180,7 +177,6 @@ const IssueCard = ({ issue, severity = "warning" }) => {
   );
 };
 
-// Signature Status Card Component
 const SignatureCard = ({ label, sublabel, data }) => {
   if (!data) {
     return (
@@ -265,7 +261,6 @@ const SignatureCard = ({ label, sublabel, data }) => {
   );
 };
 
-// Detail Chip Component
 const DetailChip = ({ icon: Icon, label, status, statusText }) => {
   const colors = {
     success: {
@@ -302,7 +297,6 @@ const DetailChip = ({ icon: Icon, label, status, statusText }) => {
   );
 };
 
-// Section Header Component
 const SectionHeader = ({ icon: Icon, title, color = "default" }) => {
   const colors = {
     danger: "text-danger-600 bg-danger-100",
@@ -322,14 +316,12 @@ const SectionHeader = ({ icon: Icon, title, color = "default" }) => {
   );
 };
 
-// Main Component
 export default function UIInvoiceValidationResult({
   isValidating,
   validationResult,
   onRetry,
   className = "",
 }) {
-  // Loading State
   if (isValidating) {
     return (
       <Card
@@ -391,7 +383,6 @@ export default function UIInvoiceValidationResult({
     (valid && decision === "ACCEPT" && criticalIssues.length === 0) ||
     (valid && (!warnings || warnings.length === 0) && !decision);
 
-  // Success State
   if (isFullyPassed) {
     return (
       <Card
@@ -399,7 +390,6 @@ export default function UIInvoiceValidationResult({
         radius="lg"
       >
         <CardBody className="p-4">
-          {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
               <div className="relative">
@@ -429,7 +419,6 @@ export default function UIInvoiceValidationResult({
             )}
           </div>
 
-          {/* Signatures */}
           {details?.signatures && (
             <div className="pt-4 border-t border-success-200">
               <SectionHeader
@@ -466,7 +455,6 @@ export default function UIInvoiceValidationResult({
     );
   }
 
-  // Warning/Error State
   const allWarnings = allIssues.length > 0 ? allIssues : warnings;
   const errorWarnings =
     criticalIssues.length > 0
@@ -500,7 +488,6 @@ export default function UIInvoiceValidationResult({
       radius="lg"
     >
       <CardBody className="p-0">
-        {/* Header Section */}
         <div className="p-4 pb-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -551,9 +538,7 @@ export default function UIInvoiceValidationResult({
           </div>
         </div>
 
-        {/* Issues Sections */}
         <div className="space-y-0 divide-y divide-default-200">
-          {/* Critical Issues */}
           {errorWarnings.length > 0 && (
             <div className="p-4 bg-danger-50/50">
               <SectionHeader
@@ -573,7 +558,6 @@ export default function UIInvoiceValidationResult({
             </div>
           )}
 
-          {/* Warnings */}
           {normalWarnings.length > 0 && (
             <div className="p-4 bg-warning-50/50">
               <SectionHeader
@@ -593,7 +577,6 @@ export default function UIInvoiceValidationResult({
             </div>
           )}
 
-          {/* Info */}
           {infoWarnings.length > 0 && (
             <div className="p-4 bg-primary-50/50">
               <SectionHeader
@@ -613,7 +596,6 @@ export default function UIInvoiceValidationResult({
             </div>
           )}
 
-          {/* Signatures */}
           {details?.signatures && (
             <div className="p-4 bg-default-50/50">
               <SectionHeader
@@ -647,7 +629,6 @@ export default function UIInvoiceValidationResult({
             </div>
           )}
 
-          {/* Document Details */}
           {details &&
             (details.cleanliness ||
               details.condition ||
@@ -717,7 +698,6 @@ export default function UIInvoiceValidationResult({
               </div>
             )}
 
-          {/* Legacy Details Format */}
           {details &&
             !details.signatures &&
             (details.hasSignature !== undefined ||
@@ -761,7 +741,6 @@ export default function UIInvoiceValidationResult({
               </div>
             )}
 
-          {/* Failed Criteria */}
           {failedCriteria.length > 0 && (
             <div className="p-4 bg-danger-50/30">
               <SectionHeader
@@ -783,7 +762,6 @@ export default function UIInvoiceValidationResult({
             </div>
           )}
 
-          {/* Required Actions */}
           {requiredActions.length > 0 && (
             <div className="p-4 bg-primary-50/50">
               <SectionHeader
@@ -807,7 +785,6 @@ export default function UIInvoiceValidationResult({
             </div>
           )}
 
-          {/* Suggestions */}
           {suggestions && suggestions.length > 0 && (
             <div className="p-4 bg-default-50/50">
               <SectionHeader icon={Lightbulb} title="คำแนะนำ" />
@@ -825,7 +802,6 @@ export default function UIInvoiceValidationResult({
             </div>
           )}
 
-          {/* Summary & Reason */}
           {(summary || reason) && (
             <div className="p-4 bg-default-50/50">
               {summary && (
@@ -845,7 +821,6 @@ export default function UIInvoiceValidationResult({
             </div>
           )}
 
-          {/* Footer Action Bar */}
           <div
             className={`p-4 ${
               canProceed !== false
